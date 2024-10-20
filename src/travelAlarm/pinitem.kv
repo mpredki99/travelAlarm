@@ -1,0 +1,105 @@
+#: import PinItem pinitem
+
+<PinItem@BoxLayout+MagicBehavior>:
+    # Customize spacing between elements
+    spacing: "3dp"
+
+    # Set value
+    pin_id: root.pin_id
+
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [8, 8, 8, 8]
+
+    MDCheckbox:
+        # Customize size and position
+        size_hint_x: .1
+        pos_hint: {"center_y": .5}
+        padding: 0
+
+        # Set value
+        active: root.is_active
+
+        # Checkbox actions
+        on_active: root.on_checkbox_click(self.active)
+
+    MDTextField:
+        id: address_field
+
+        # Customize size and position
+        size_hint_x: .4
+        pos_hint: {"center_y": .5}
+
+        # Set value
+        text: root.address
+
+        # Customize text field
+        multiline: False
+        hint_text: "Address"
+        required: True
+        mode: "fill"
+        halign: "center"
+        font_size: "14sp"
+        radius: [8, 8, 8, 8]
+
+        # Text field actions
+        on_text_validate: root.on_address_edit(self.text)
+
+    MDTextField:
+        id: buffer_size_field
+
+        # Customize size and position
+        size_hint_x: .2
+        pos_hint: {"center_y": .5}
+
+        # Set value
+        text: str(root.buffer_size)
+
+        # Customize text field
+        input_filter: "float"
+        multiline: False
+        hint_text: "Buffer"
+        required: True
+        mode: "fill"
+        halign: "center"
+        font_size: "14sp"
+        radius: [8, 8, 8, 8]
+
+        # Text field actions
+        on_text_validate: root.on_buffer_size_edit(self.text)
+
+    MDRectangleFlatIconButton:
+        id: buffer_unit_menu_button
+
+        # Customize size and position
+        size_hint_x: .15
+        pos_hint: {"center_y": .5}
+        padding: 0
+        horizontal_margins: 0
+
+        # Set value
+        text: root.buffer_unit
+        font_size: "12sp"
+
+        # Icon customization
+        icon: "arrow-down-drop-circle-outline"
+
+        # Button actions
+        on_release: root.buffer_unit_menu.open()
+
+    MDIconButton:
+        id: three_dots_menu_button
+
+        # Customize size and position
+        size_hint_x: .1
+        pos_hint: {"center_y": .5}
+
+        # Icon customization
+        icon: "dots-vertical"
+
+        # Button actions
+        on_release: root.three_dots_menu.open()

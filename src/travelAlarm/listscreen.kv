@@ -1,0 +1,54 @@
+#:import ListScreen listscreen
+#: include pinitem.kv
+
+<ListScreen@Screen>:
+    name: "ListScreen"
+
+    BoxLayout:
+        id: box_layout
+        orientation: 'vertical'
+        spacing: dp(5)
+        padding: dp(5)
+
+        MDRectangleFlatIconButton:
+            id: sort_menu_button
+
+            # Customize size and position
+            size_hint_x: 1
+            pos_hint: {"center_x": .5}
+
+            # Icon customization
+            icon: "arrow-down-drop-circle-outline"
+
+            # Button actions
+            on_release: root.list_order_menu.open()
+
+        RecycleView:
+            id: pins_list
+            viewclass: 'PinItem'
+            pos_hint: {"center_x": .5}
+            data: root.get_pins_list()
+
+            RecycleBoxLayout:
+                orientation: 'vertical'
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(5)
+                padding: dp(0), dp(5)
+
+        MDTextField:
+            id: add_pin_text_field
+
+            # Customize text field
+            multiline: False
+            hint_text: "Add Pin"
+            mode: "fill"
+            pos_hint: {"center_x": .5,}
+            font_size: "14sp"
+            radius: [8, 8, 8, 8]
+
+            # Field actions
+            on_focus: root.prepare_search_view()
+            on_text: root.on_address_typing(self.text)

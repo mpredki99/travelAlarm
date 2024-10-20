@@ -1,0 +1,12 @@
+#:import MapScreen mapscreen
+
+<MapScreen@Screen>:
+    name: "MapScreen"
+
+    MDIconButton:
+        theme_icon_color: "Custom"
+        icon_color: 0, 0, 0, .87
+
+        pos_hint: {"right": .2, "top": .08}
+        icon: "crosshairs-gps"
+        on_release: root.center_mapview_on_user_location()

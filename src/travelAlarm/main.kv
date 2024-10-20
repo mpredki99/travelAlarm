@@ -1,0 +1,58 @@
+#:include mapscreen.kv
+#:include listscreen.kv
+#:include settingsscreen.kv
+#:include addresseslist.kv
+
+FloatLayout:
+
+    ScreenManager:
+        id: screen_manager
+
+        # Screens in screen_manager
+        MapScreen:
+
+        ListScreen:
+            size_hint_y: .92
+
+        SettingsScreen:
+            size_hint_y: .92
+
+
+    BoxLayout:  # Toolbar on the top of the screen
+        size_hint_y: .08
+        pos_hint: {"top": 1}
+
+        MDIconButton:  # Change to ListScreen button
+            size_hint: 0.3, 1
+
+            icon: "format-list-checks"
+
+            theme_icon_color: "Custom"
+            icon_color: [0, 0, 0, .87] if screen_manager.current == "MapScreen" else app.theme_cls.text_color
+
+            on_release:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "ListScreen"
+                screen_manager.get_screen("ListScreen").hide_search_view()
+
+        MDFillRoundFlatIconButton:  # Change to MapScreen button
+            size_hint: 0.4, 1
+
+            icon: "map"
+            text: "Map"
+
+            on_release:
+                screen_manager.transition.direction = "left" if screen_manager.current == "ListScreen" else "right"
+                screen_manager.current = "MapScreen"
+
+        MDIconButton:  # Change to SettingsScreen button
+            size_hint: 0.3, 1
+
+            theme_icon_color: "Custom"
+            icon_color: [0, 0, 0, .87] if screen_manager.current == "MapScreen" else app.theme_cls.text_color
+
+            icon: "cog"
+
+            on_release:
+                screen_manager.transition.direction = "left"
+                screen_manager.current = "SettingsScreen"
