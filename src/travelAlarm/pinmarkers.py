@@ -166,6 +166,12 @@ class AddPinMarker(MapMarkerPopup):
             # Close map marker popups except the added one
             map_screen.close_map_marker_popups(pin_id)
 
+            # Get list screen instance
+            list_screen = self.app.root.ids.screen_manager.get_screen('ListScreen')
+
+            # Refresh pins list in list screen
+            list_screen.refresh_pins_list()
+
             # Remove add pin marker
             self.remove_marker()
 

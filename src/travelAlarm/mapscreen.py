@@ -1,5 +1,6 @@
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
+import plyer
 
 
 class MapScreen(Screen):
