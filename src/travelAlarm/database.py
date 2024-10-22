@@ -9,12 +9,12 @@ from buffer import Buffer
 
 class Database:
     def __init__(self, db_filename):
-        # Initialize connection to database and cursor
+        # Initialize connection to database
         self.connection = sqlite3.connect(db_filename)
         self.cursor = self.connection.cursor()
 
         # Get map_widget instance
-        self.mapview = MDApp.get_running_app().map_widget
+        self.map_widget = MDApp.get_running_app().map_widget
 
         # Initialize database tables
         self.init_pins_table()
@@ -207,14 +207,14 @@ class Database:
         self.pins[pin_id]['marker'] = PinMarker(pin_id, is_active, address, buffer_size, buffer_unit, lat=latitude, lon=longitude)
 
         # Add new buffer and marker to map_widget
-        self.mapview.add_layer(self.pins[pin_id]['buffer'])
-        self.mapview.add_marker(self.pins[pin_id]['marker'])
+        self.map_widget.add_layer(self.pins[pin_id]['buffer'])
+        self.map_widget.add_marker(self.pins[pin_id]['marker'])
 
     def erase_mapview_buffer(self, pin_id):
         """Remove pin marker buffer and pin marker popup from map_widget."""
         # Remove buffer and marker from map_widget
-        self.mapview.remove_layer(self.pins[pin_id]['buffer'])
-        self.mapview.remove_marker(self.pins[pin_id]['marker'])
+        self.map_widget.remove_layer(self.pins[pin_id]['buffer'])
+        self.map_widget.remove_marker(self.pins[pin_id]['marker'])
 
     def update_mapview_buffer(self, pin_id):
         """Update pin marker buffer and pin marker popup on map_widget."""
@@ -227,7 +227,7 @@ class Database:
         """Save current map_widget state to database."""
         self.cursor.execute(
             'REPLACE INTO customizations (key,value) VALUES ("mapstate", ?);',
-            (f'{self.mapview.lat} {self.mapview.lon} {self.mapview.zoom}',)
+            (f'{self.map_widget.lat} {self.map_widget.lon} {self.map_widget.zoom}',)
         )
         self.connection.commit()
 
@@ -245,8 +245,8 @@ class Database:
             latitude, longitude, zoom = 50.053756, 19.940927, 10
 
         # Set map_widget initial state
-        self.mapview.zoom = int(zoom)
-        self.mapview.center_on(float(latitude), float(longitude))
+        self.map_widget.zoom = int(zoom)
+        self.map_widget.center_on(float(latitude), float(longitude))
 
     def update_list_order(self, new_order_by):
         """Update list order in database."""
@@ -318,3 +318,9 @@ class Database:
         """Close the database connection."""
         self.cursor.close()
         self.connection.close()
+
+    def connect(self, db_filename):
+        """Close the database connection."""
+        # Initialize connection to database and cursor
+        self.connection = sqlite3.connect(db_filename)
+        self.cursor = self.connection.cursor()

@@ -1,4 +1,4 @@
-from kivy_garden.mapview import MapView
+from kivy_garden.mapview import MapView, MapSource
 from kivy.clock import Clock
 
 from pinmarkers import AddPinMarker
@@ -7,6 +7,9 @@ from pinmarkers import AddPinMarker
 class MapWidget(MapView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        # Set min zoom value as 3
+        self.map_source = MapSource(min_zoom=3)
 
         # Initialize clock variable
         self.clock = None

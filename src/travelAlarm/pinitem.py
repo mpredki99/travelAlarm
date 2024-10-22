@@ -6,6 +6,8 @@ from kivy.properties import NumericProperty, BooleanProperty, StringProperty
 from kivymd.uix.behaviors.magic_behavior import MagicBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 
+from buffer import Buffer
+
 
 class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
 
@@ -113,7 +115,7 @@ class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
     def on_buffer_size_edit(self, new_buffer_size):
         """Update buffer_size attribute regarding value of text field."""
         # Check if provided value is different to previous one
-        if new_buffer_size == "" or self.buffer_size == float(new_buffer_size):
+        if new_buffer_size == "" or self.buffer_size == float(new_buffer_size) or not self.valid_buffer_size(new_buffer_size, self.buffer_unit):
             # If empty restore text field to previous value
             self.ids.buffer_size_field.text = str(self.buffer_size)
             return False
@@ -133,7 +135,7 @@ class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
     def on_buffer_unit_edit(self, new_buffer_unit):
         """Update buffer_unit attribute regarding value of text field."""
         # Check if provided value is different to previous one
-        if self.buffer_unit == new_buffer_unit:
+        if self.buffer_unit == new_buffer_unit or not self.valid_buffer_size(self.buffer_size, new_buffer_unit):
             # Close drop down menu if click on the same unit
             self.buffer_unit_menu.dismiss()
             return False
@@ -152,6 +154,15 @@ class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
 
         # Close marker popup if edited on ListScreen
         self.close_marker_popup()
+
+    @staticmethod
+    def valid_buffer_size(buffer_size, buffer_unit):
+        buffer_size = float(buffer_size)
+        if Buffer.unit_mult[buffer_unit] * buffer_size < 1:
+            toast("Buffer size to small")
+            return False
+        else:
+            return True
 
     def on_delete_pin(self):
         """Delete pin from list and database."""

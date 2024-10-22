@@ -44,10 +44,10 @@ requirements = python3, kivy, kivymd, kivy_garden, mapview, geopy, certifi, plye
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = src/travelAlarm/icons/travelAlarm.png
 
 # (str) Icon of the application
-#icon.filename = src/travelAlarm/icons/travelAlarm.png
+icon.filename = src/travelAlarm/icons/travelAlarm.png
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse

@@ -1,6 +1,7 @@
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
-import plyer
+
+from gpsmarker import GpsMarker
 
 
 class MapScreen(Screen):

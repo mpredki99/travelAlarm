@@ -13,7 +13,7 @@ class TravelAlarmApp(MDApp):
         self.map_widget = MapWidget()
 
         # Create database instance
-        self.pins_db = Database("pins.db")
+        self.pins_db = Database('pins.db')
 
     def on_stop(self):
         """Save map_widget state and disconnect from database."""
@@ -22,6 +22,16 @@ class TravelAlarmApp(MDApp):
 
         # Close connection with database while turn off the app
         self.pins_db.disconnect()
+
+    def on_pause(self):
+        """Prepare app to close."""
+        # Save the map state and disconnect the database
+        self.on_stop()
+
+    def on_resume(self):
+        """Return database connection."""
+        # Reconnect to the database and reload the map state
+        self.pins_db.connect('pins.db')
 
     def build(self):
         """Build app."""

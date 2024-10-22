@@ -17,7 +17,7 @@ class Buffer(MapLayer):
         self.app = MDApp.get_running_app()
 
         # Get map_widget instance
-        self.mapview = self.app.map_widget
+        self.map_widget = self.app.map_widget
 
         # Assign buffer attributes
         self.is_active = is_active
@@ -34,7 +34,7 @@ class Buffer(MapLayer):
     def draw_buffer(self):
         """Draw buffer on map_widget."""
         # Compute position and size of the buffer circle in pixels
-        pos_x, pos_y = self.mapview.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.mapview.zoom)
+        pos_x, pos_y = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
         buffer_size_px = self.calculate_buffer_radius()
 
         center_x = pos_x - buffer_size_px
@@ -58,7 +58,7 @@ class Buffer(MapLayer):
         """Calculate the buffer radius in pixels based on buffer size, buffer unit, and current zoom level."""
 
         # Get map_widget zoom
-        zoom_level = self.mapview.zoom
+        zoom_level = self.map_widget.zoom
 
         # Recalculate buffer latitude to radians
         lat_radian = radians(self.latitude)
