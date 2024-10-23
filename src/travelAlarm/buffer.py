@@ -2,7 +2,7 @@ from math import radians, cos
 
 from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse, Line
-from kivy_garden.mapview import MapLayer
+from kivy_garden.mapview import MapLayer, MarkerMapLayer
 
 
 class Buffer(MapLayer):
@@ -35,10 +35,10 @@ class Buffer(MapLayer):
         """Draw buffer on map_widget."""
         # Compute position and size of the buffer circle in pixels
         pos_x, pos_y = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
-        buffer_size_px = self.calculate_buffer_radius()
+        buffer_size_dp = self.calculate_buffer_radius()
 
-        center_x = pos_x - buffer_size_px
-        center_y = pos_y - buffer_size_px
+        center_x = pos_x - buffer_size_dp
+        center_y = pos_y - buffer_size_dp
 
         # Determine colors of buffer fill and outline
         theme_rgb = self.app.theme_cls.primary_color[:3]
@@ -48,17 +48,20 @@ class Buffer(MapLayer):
         with self.canvas.before:
             # Draw the buffer circle
             Color(*ellipse_color) if self.is_active else Color(1, 0, 0, 0.1)
-            self.buffer = Ellipse(pos=(center_x, center_y), size=(buffer_size_px * 2, buffer_size_px * 2))
+            self.buffer = Ellipse(pos=(center_x, center_y), size=(buffer_size_dp * 2, buffer_size_dp * 2))
 
             # Draw the buffer outline
             Color(*line_color) if self.is_active else Color(1, 0, 0, 0.2)
-            self.buffer = Line(width=1.5, circle=(pos_x, pos_y, buffer_size_px))
+            self.buffer = Line(width=1.5, circle=(pos_x, pos_y, buffer_size_dp))
 
     def calculate_buffer_radius(self):
         """Calculate the buffer radius in pixels based on buffer size, buffer unit, and current zoom level."""
 
         # Get map_widget zoom
         zoom_level = self.map_widget.zoom
+
+        # Get scaled tile size
+        dp_tile_size = self.map_widget.map_source.dp_tile_size
 
         # Recalculate buffer latitude to radians
         lat_radian = radians(self.latitude)
@@ -67,7 +70,7 @@ class Buffer(MapLayer):
         earth_circumference = 40075017
 
         # Calculate factor to calculate the buffer size
-        meters_per_pixel = (earth_circumference * cos(lat_radian)) / (2**zoom_level * 256)
+        meters_per_pixel = (earth_circumference * cos(lat_radian)) / (dp_tile_size * 2**zoom_level)
 
         return self.buffer_size / meters_per_pixel
 

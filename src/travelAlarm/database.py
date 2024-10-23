@@ -6,6 +6,8 @@ from geocode import geocode_by_address
 from pinmarkers import PinMarker
 from buffer import Buffer
 
+from kivy_garden.mapview import MapLayer
+
 
 class Database:
     def __init__(self, db_filename):
@@ -15,6 +17,8 @@ class Database:
 
         # Get map_widget instance
         self.map_widget = MDApp.get_running_app().map_widget
+
+        self.buffer_layer = MapLayer()
 
         # Initialize database tables
         self.init_pins_table()
@@ -207,8 +211,8 @@ class Database:
         self.pins[pin_id]['marker'] = PinMarker(pin_id, is_active, address, buffer_size, buffer_unit, lat=latitude, lon=longitude)
 
         # Add new buffer and marker to map_widget
-        self.map_widget.add_layer(self.pins[pin_id]['buffer'])
         self.map_widget.add_marker(self.pins[pin_id]['marker'])
+        self.map_widget.add_layer(self.pins[pin_id]['buffer'])
 
     def erase_mapview_buffer(self, pin_id):
         """Remove pin marker buffer and pin marker popup from map_widget."""

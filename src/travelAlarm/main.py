@@ -25,8 +25,11 @@ class TravelAlarmApp(MDApp):
 
     def on_pause(self):
         """Prepare app to close."""
-        # Save the map state and disconnect the database
-        self.on_stop()
+        # Save current map_widget state
+        self.pins_db.save_mapview_state()
+
+        # Close connection with database while turn off the app
+        self.pins_db.disconnect()
 
     def on_resume(self):
         """Return database connection."""
