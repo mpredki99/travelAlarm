@@ -4,6 +4,7 @@ from kivy.lang import Builder
 from database import Database
 from mapwidget import MapWidget
 
+
 class TravelAlarmApp(MDApp):
 
     def __init__(self, **kwargs):
@@ -25,11 +26,8 @@ class TravelAlarmApp(MDApp):
 
     def on_pause(self):
         """Prepare app to close."""
-        # Save current map_widget state
-        self.pins_db.save_mapview_state()
-
-        # Close connection with database while turn off the app
-        self.pins_db.disconnect()
+        # Call on_stop method if returns False
+        return False
 
     def on_resume(self):
         """Return database connection."""

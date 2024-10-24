@@ -89,7 +89,10 @@
         icon: "arrow-down-drop-circle-outline"
 
         # Button actions
-        on_release: root.buffer_unit_menu.open()
+        on_release:
+            root.buffer_unit_menu.open()
+            root.buffer_unit_menu.width = dp(80)
+            root.buffer_unit_menu.x = self.last_touch.x if self.last_touch.x + root.buffer_unit_menu.width < root.width else self.last_touch.x - root.buffer_unit_menu.width
 
     MDIconButton:
         id: three_dots_menu_button
@@ -102,4 +105,7 @@
         icon: "dots-vertical"
 
         # Button actions
-        on_release: root.three_dots_menu.open()
+        on_release:
+            root.three_dots_menu.open()
+            root.three_dots_menu.width = dp(80)
+            root.three_dots_menu.x = self.last_touch.x if self.last_touch.x + root.three_dots_menu.width < root.width else self.last_touch.x - root.three_dots_menu.width

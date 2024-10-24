@@ -51,6 +51,7 @@ class ListScreen(Screen):
         self.ids.sort_menu_button.text = 'Sort by: ' + map_db_attribute[db_attribute]
 
     def build_list_order_menu(self):
+        from kivy.metrics import dp
         """Build list order dropdown menu."""
         # Create list of menu items
         order_items = [
@@ -64,6 +65,7 @@ class ListScreen(Screen):
 
     def on_list_order_menu(self, new_order_by):
         """Sort list by new attribute."""
+        print(self.list_order_menu.width)
         # Check if different value was clicked
         if self.ids.sort_menu_button.text == 'Sort by: ' + new_order_by:
             # Close drop down menu if click on the same unit

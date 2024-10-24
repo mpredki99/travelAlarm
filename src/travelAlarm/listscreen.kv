@@ -21,7 +21,10 @@
             icon: "arrow-down-drop-circle-outline"
 
             # Button actions
-            on_release: root.list_order_menu.open()
+            on_release:
+                root.list_order_menu.open()
+                root.list_order_menu.width = min(dp(150), self.width * .8)
+                root.list_order_menu.x = self.last_touch.x if self.last_touch.x + root.list_order_menu.width < root.width else self.last_touch.x - root.list_order_menu.width
 
         RecycleView:
             id: pins_list
