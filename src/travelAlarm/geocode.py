@@ -6,7 +6,7 @@ from geopy.geocoders import Nominatim
 # Initialize ssl context
 ssl_context = ssl.create_default_context(cafile=certifi.where())
 # Get geolocator instance
-geolocator = Nominatim(user_agent="travelAlarm", ssl_context=ssl_context)
+geolocator = Nominatim(user_agent="travelAlarm")
 
 
 def geocode_by_address(address_to_geocoding, exactly_one=True, limit=1):

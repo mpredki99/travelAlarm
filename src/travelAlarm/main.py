@@ -26,8 +26,10 @@ class TravelAlarmApp(MDApp):
 
     def on_pause(self):
         """Prepare app to close."""
-        # Call on_stop method if returns False
-        return False
+        # Save map_widget state and close connection to database
+        self.on_stop()
+
+        return True
 
     def on_resume(self):
         """Return database connection."""
