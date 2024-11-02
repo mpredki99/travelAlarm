@@ -29,6 +29,21 @@ class MapScreen(Screen):
             pin = self.pins_db.pins[pin_id].get('marker')
             if pin: pin.close_marker_popup()
 
+        # Initialize gps marker
+        self.gps_marker = None
+
+        # If gps permission granted, add gps marker to map widget
+        if self.app.gps_permission():
+            self.add_gps_marker()
+
+    def add_gps_marker(self):
+        """Add gps marker to map widget."""
+        # Initialize gps marker object
+        self.gps_marker = GpsMarker()
+
+        # Add gps marker to map widget
+        self.map_widget.add_layer(self.gps_marker)
+
     def close_map_marker_popups(self, pin_id=None):
         """Close pin marker popups. Skip for pin with provided pin id."""
         for key, value in self.pins_db.pins.items():
@@ -42,17 +57,17 @@ class MapScreen(Screen):
 
     def center_mapview_on_user_location(self):
         """Center the map_widget on user GPS position."""
-        # Get user location
-        user_lat, user_lon = self.get_user_location()
+        if self.gps_marker is not None:
+            # Get user location
+            user_lat, user_lon = self.gps_marker.latitude, self.gps_marker.longitude
 
-        # Center the map on the user's location
-        self.center_mapview_on_lat_lon(user_lat, user_lon)
+            # Center the map on the user's location
+            self.center_mapview_on_lat_lon(user_lat, user_lon)
+            return True
+        else:
+            return False
 
     def center_mapview_on_lat_lon(self, latitude, longitude):
         """Center map_widget on provided latitude and longitude."""
         self.map_widget.center_on(latitude, longitude)
         self.map_widget.zoom = 11
-
-    def get_user_location(self):
-        # GPS Functionality - temporary fixed value
-        return 50.061947, 19.936856

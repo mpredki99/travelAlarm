@@ -16,6 +16,10 @@ class TravelAlarmApp(MDApp):
         # Create database instance
         self.pins_db = Database('pins.db')
 
+    def gps_permission(self):
+        """Check gps permission and request it if not granted."""
+        return True
+
     def on_stop(self):
         """Save map_widget state and disconnect from database."""
         # Save current map_widget state

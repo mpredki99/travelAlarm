@@ -2,7 +2,7 @@ from math import radians, cos
 
 from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse, Line
-from kivy_garden.mapview import MapLayer, MarkerMapLayer
+from kivy_garden.mapview import MapLayer
 
 
 class Buffer(MapLayer):
