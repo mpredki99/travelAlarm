@@ -1,5 +1,6 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
+from kivy import platform
 
 from database import Database
 from mapwidget import MapWidget
@@ -16,9 +17,19 @@ class TravelAlarmApp(MDApp):
         # Create database instance
         self.pins_db = Database('pins.db')
 
-    def gps_permission(self):
-        """Check gps permission and request it if not granted."""
-        return True
+    def check_gps_permission(self):
+        if platform == 'android':
+            from android.permissions import Permission, check_permission
+            return check_permission(Permission.ACCESS_FINE_LOCATION)
+        elif platform == 'ios':
+            return True
+        else:
+            return False
+
+    def request_location_permission(self):
+        if platform == 'android' and not self.check_gps_permission():
+            from android.permissions import Permission, request_permissions
+            request_permissions([Permission.ACCESS_FINE_LOCATION])
 
     def on_stop(self):
         """Save map_widget state and disconnect from database."""

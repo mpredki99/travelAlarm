@@ -33,7 +33,7 @@ class MapScreen(Screen):
         self.gps_marker = None
 
         # If gps permission granted, add gps marker to map widget
-        if self.app.gps_permission():
+        if self.app.check_gps_permission():
             self.add_gps_marker()
 
     def add_gps_marker(self):
