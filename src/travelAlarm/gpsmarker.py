@@ -32,9 +32,8 @@ class GpsMarker(MapLayer):
         self.longitude = None
 
         # Configure and start GPS service
-        gps.configure(on_location=self.on_location, on_status=self.on_status)
+        gps.configure(on_location=self.on_location)
         gps.start(minTime=1000, minDistance=1)
-
 
     def on_location(self, *kwargs):
         # Marker position
