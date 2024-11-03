@@ -31,14 +31,21 @@ class GpsMarker(MapLayer):
         self.latitude = None
         self.longitude = None
 
-        # Configure and start GPS service
-        gps.configure(on_location=self.on_location)
-        gps.start(minTime=1000, minDistance=1)
+        try:
+            # Try to start GPS; if it fails, prompt the user
+            gps.configure(on_location=self.on_location, on_status=self.on_status)
+            gps.start(minTime=1000, minDistance=1)
+        except NotImplementedError:
+            # Plyer raises NotImplementedError if the GPS provider is not available
+            self.prompt_enable_gps()
+
+    def prompt_enable_gps(self):
+        toast(text=str("Turn on localization."))
 
     def on_location(self, *kwargs):
         # Marker position
-        self.latitude = 50 # kwargs['lat']
-        self.longitude = 20 # kwargs['lon']
+        self.latitude = kwargs['lat']
+        self.longitude = kwargs['lon']
         self.update_marker()
 
     def on_status(self, status):
