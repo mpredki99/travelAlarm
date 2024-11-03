@@ -34,6 +34,7 @@ class GpsMarker(MapLayer):
         try:
             gps.configure(on_location=self.on_location, on_status=self.on_status)
             gps.start(minTime=1000, minDistance=1)
+            toast(text=str("GPS configure"))
         except NotImplementedError:
             self.prompt_enable_gps()
         except Exception as e:
