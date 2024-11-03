@@ -1,12 +1,7 @@
-# import ssl
-# import certifi
-
 from geopy.geocoders import Nominatim
 
-# Initialize ssl context
-# ssl_context = ssl.create_default_context(cafile=certifi.where())
-# # Get geolocator instance
-# geolocator = Nominatim(user_agent="travelAlarm", ssl_context=ssl_context)
+
+# Get geolocator instance
 geolocator = Nominatim(user_agent="travelAlarm")
 
 

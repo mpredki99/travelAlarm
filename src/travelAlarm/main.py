@@ -23,8 +23,8 @@ class TravelAlarmApp(MDApp):
             return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
         elif platform == 'ios':
             return True
-        else:
-            return False
+
+        return False
 
     def request_location_permission(self):
         if platform == 'android' and not self.check_gps_permission():

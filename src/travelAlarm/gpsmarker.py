@@ -34,28 +34,19 @@ class GpsMarker(MapLayer):
         try:
             gps.configure(on_location=self.on_location, on_status=self.on_status)
             gps.start(minTime=1000, minDistance=1)
-            toast(text=str("GPS configure"))
         except NotImplementedError:
             self.enable_gps()
 
     def enable_gps(self):
-        toast(text=str("Turn on localization."))
+        toast(text=str("enable_gps"))
 
     def on_location(self, **kwargs):
-        toast(text=str("Location update"))
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
         self.update_marker()
 
     def on_status(self, stype, status):
-        toast(text=str(status))
-        if status == 'provider-disabled':
-            self.enable_gps()
-        elif status == 'provider-enabled':
-            gps.start(minTime=1000, minDistance=1)
-            toast(text=str("GPS enabled."))
-        elif status == 'location-unavailable':
-            toast(text=str("GPS unavailable."))
+        toast(text=str(f'{stype}, {status}'))
 
     def draw_marker(self):
         if self.latitude is None or self.longitude is None:
