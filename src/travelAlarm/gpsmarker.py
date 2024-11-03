@@ -43,7 +43,7 @@ class GpsMarker(MapLayer):
     def prompt_enable_gps(self):
         toast(text=str("Turn on localization."))
 
-    def on_location(self, *kwargs):
+    def on_location(self, **kwargs):
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
         self.update_marker()
