@@ -1,8 +1,10 @@
+from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
+from plyer import gps
 
 
 class GpsMarker(MapLayer):
@@ -25,10 +27,30 @@ class GpsMarker(MapLayer):
         self.blinker_color = None
         self.blinker_center = None
 
-        # Marker position
-        self.latitude, self.longitude = 50, 20
+        # Initialize marker positions
+        self.latitude = None
+        self.longitude = None
 
-        self.draw_marker()
+        # Configure and start GPS service
+        gps.configure(on_location=self.on_location, on_status=self.on_status)
+        gps.start(minTime=1000, minDistance=1)
+
+
+    def on_location(self, *kwargs):
+
+        # Marker position
+        self.latitude = kwargs['lat']
+        self.longitude = kwargs['lon']
+        self.update_marker()
+
+    def on_status(self, status):
+        # This will be triggered when there is a change in the GPS status.
+        if status == 'provider-disabled':
+            toast(text=str("GPS has been disabled by the user."))
+        elif status == 'provider-enabled':
+            toast(text=str("GPS is now enabled."))
+        elif status == 'location-unavailable':
+            toast(text=str("GPS is temporarily unavailable."))
 
     def draw_marker(self):
         pos_x, pos_y = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
