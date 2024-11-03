@@ -36,11 +36,9 @@ class GpsMarker(MapLayer):
             gps.start(minTime=1000, minDistance=1)
             toast(text=str("GPS configure"))
         except NotImplementedError:
-            self.prompt_enable_gps()
-        except Exception as e:
-            toast(text=str("Localization unavailable."))
+            self.enable_gps()
 
-    def prompt_enable_gps(self):
+    def enable_gps(self):
         toast(text=str("Turn on localization."))
 
     def on_location(self, **kwargs):
@@ -48,17 +46,15 @@ class GpsMarker(MapLayer):
         self.longitude = kwargs['lon']
         self.update_marker()
 
-    def on_status(self, status):
-        # This will be triggered when there is a change in the GPS status.
+    def on_status(self, stype, status):
+        toast(text=str(status))
         if status == 'provider-disabled':
-            gps.stop()
-            toast(text=str("GPS has been disabled by the user."))
+            self.enable_gps()
         elif status == 'provider-enabled':
             gps.start(minTime=1000, minDistance=1)
-            toast(text=str("GPS is now enabled."))
+            toast(text=str("GPS enabled."))
         elif status == 'location-unavailable':
-            gps.stop()
-            toast(text=str("GPS is temporarily unavailable."))
+            toast(text=str("GPS unavailable."))
 
     def draw_marker(self):
         if self.latitude is None or self.longitude is None:
