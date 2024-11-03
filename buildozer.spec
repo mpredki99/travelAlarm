@@ -36,8 +36,8 @@ version = 0.10
 # version.filename = %(source.dir)s/main.py
 
 # (list) Application requirements
-# comma separated e.g. requirements = sqlite3,kivy,certifi,plyer,mapview
-requirements = python3, kivy, kivymd, kivy_garden, geopy, openssl, sqlite3, android, https://github.com/HyTurtle/plyer/archive/master.zip
+# comma separated e.g. requirements = sqlite3,kivy,certifi,plyer,
+requirements = python3, kivy, kivymd, kivy_garden, mapview, geopy, openssl, sqlite3, android, https://github.com/HyTurtle/plyer/archive/master.zip
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
