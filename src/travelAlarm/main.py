@@ -29,7 +29,7 @@ class TravelAlarmApp(MDApp):
     def request_location_permission(self):
         if platform == 'android' and not self.check_gps_permission():
             from android.permissions import Permission, request_permissions
-            request_permissions([Permission.ACCESS_FINE_LOCATION])
+            request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
 
     def on_stop(self):
         """Save map_widget state and disconnect from database."""
