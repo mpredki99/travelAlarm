@@ -31,13 +31,13 @@ class GpsMarker(MapLayer):
         self.latitude = None
         self.longitude = None
 
-        try:
-            gps.configure(on_location=self.on_location, on_status=self.on_status)
-            gps.start(minTime=1000, minDistance=1)
-        except NotImplementedError:
-            self.prompt_enable_gps()
-        except Exception as e:
-            toast(text=str("Localization unavailable."))
+        # try:
+        #     gps.configure(on_location=self.on_location, on_status=self.on_status)
+        #     gps.start(minTime=1000, minDistance=1)
+        # except NotImplementedError:
+        #     self.prompt_enable_gps()
+        # except Exception as e:
+        #     toast(text=str("Localization unavailable."))
 
     def prompt_enable_gps(self):
         toast(text=str("Turn on localization."))

@@ -66,10 +66,15 @@ class MapScreen(Screen):
             # Get user location
             user_lat, user_lon = self.gps_marker.latitude, self.gps_marker.longitude
 
+            # if GPS marker have no location data
+            if user_lat is None or user_lon is None:
+                return False
+
             # Center the map on the user's location
             self.center_mapview_on_lat_lon(user_lat, user_lon)
             return True
         else:
+            # If no instance of GPS marker
             return False
 
     def center_mapview_on_lat_lon(self, latitude, longitude):
