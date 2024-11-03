@@ -1,10 +1,10 @@
-from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
 from plyer import gps
+from kivymd.toast import toast
 
 
 class GpsMarker(MapLayer):
