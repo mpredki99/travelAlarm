@@ -60,6 +60,9 @@ class GpsMarker(MapLayer):
             toast(text=str("GPS is temporarily unavailable."))
 
     def draw_marker(self):
+        if self.latitude is None or self.longitude is None:
+            return False
+
         pos_x, pos_y = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
         self.blinker_center = (pos_x, pos_y)
 
