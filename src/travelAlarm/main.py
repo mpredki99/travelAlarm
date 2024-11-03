@@ -57,6 +57,9 @@ class TravelAlarmApp(MDApp):
         self.theme_cls.theme_style = self.pins_db.theme_style
         self.theme_cls.primary_palette = self.pins_db.primary_palette
 
+        # Request location permissions
+        self.request_location_permission()
+
         return Builder.load_file("main.kv")
 
 
