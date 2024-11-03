@@ -37,10 +37,9 @@ class GpsMarker(MapLayer):
 
 
     def on_location(self, *kwargs):
-
         # Marker position
-        self.latitude = kwargs['lat']
-        self.longitude = kwargs['lon']
+        self.latitude = 50 # kwargs['lat']
+        self.longitude = 20 # kwargs['lon']
         self.update_marker()
 
     def on_status(self, status):
