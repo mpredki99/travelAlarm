@@ -37,7 +37,7 @@ version = 0.10
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3, kivy, kivymd, kivy_garden, mapview, geopy, certifi, ssl, sqlite3, plyer, android, https://github.com/HyTurtle/plyer/archive/master.zip
+requirements = python3, kivy, kivymd, kivy_garden, mapview, geopy, certifi, openssl, sqlite3, plyer, android, https://github.com/HyTurtle/plyer/archive/master.zip
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
