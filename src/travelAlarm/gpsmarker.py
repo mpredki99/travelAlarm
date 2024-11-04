@@ -28,8 +28,8 @@ class GpsMarker(MapLayer):
         self.blinker_center = None
 
         # Initialize marker positions
-        self.latitude = 50 #None
-        self.longitude = 20 #None
+        self.latitude = None
+        self.longitude = None
 
         try:
             gps.configure(on_location=self.update_lat_lon, on_status=self.on_status)
