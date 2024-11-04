@@ -32,7 +32,7 @@ class GpsMarker(MapLayer):
         self.longitude = None
 
         try:
-            gps.configure(on_location=self.on_location, on_status=self.on_status)
+            gps.configure(on_location=self.update_lat_lon, on_status=self.on_status)
             gps.start(minTime=1000, minDistance=1)
         except NotImplementedError:
             self.enable_gps()
@@ -40,10 +40,13 @@ class GpsMarker(MapLayer):
     def enable_gps(self):
         toast(text=str("enable_gps"))
 
-    def on_location(self, **kwargs):
+    def update_lat_lon(self, **kwargs):
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
-        self.update_marker()
+
+        # If marker did not draw yet
+        if self.blinker is None:
+            self.draw_marker()
 
     def on_status(self, stype, status):
         toast(text=str(f'{stype}, {status}'))
@@ -80,16 +83,12 @@ class GpsMarker(MapLayer):
         self.blinker.pos = (self.blinker_center[0] - new_size[0] / 2, self.blinker_center[1] - new_size[1] / 2)
 
     def blink(self):
-        anim_color = Animation(a=0) + Animation(a=1, duration=0)
-        anim_color.repeat = True
+        anim_color = Animation(a=0)
         anim_color.start(self.blinker_color)
 
         # Animation for size change to create a pulsing effect and keep it centered
         anim_size = Animation(
             size=(self.base_size * 3, self.base_size * 3)
-        ) + Animation(
-            size=(self.base_size, self.base_size), duration=0
         )
-        anim_size.bind(on_progress=self.update_blinker_position)
-        anim_size.repeat = True
+        anim_size.bind(on_progress=self.update_blinker_position, on_complete=self.update_marker)
         anim_size.start(self.blinker)
