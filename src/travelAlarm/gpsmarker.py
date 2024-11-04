@@ -44,7 +44,9 @@ class GpsMarker(MapLayer):
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
 
-        self.update_marker()
+        if self.blinker_color is None and self.blinker is None:
+            self.draw_marker()
+        # self.update_marker()
 
     def on_status(self, stype, status):
         toast(text=str(f'{stype}, {status}'))
