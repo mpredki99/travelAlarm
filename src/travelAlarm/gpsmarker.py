@@ -28,8 +28,8 @@ class GpsMarker(MapLayer):
         self.blinker_center = None
 
         # Initialize marker positions
-        self.latitude = None
-        self.longitude = None
+        self.latitude = 50 #None
+        self.longitude = 20 #None
 
         try:
             gps.configure(on_location=self.update_lat_lon, on_status=self.on_status)
@@ -44,9 +44,7 @@ class GpsMarker(MapLayer):
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
 
-        # If marker did not draw yet
-        if self.blinker is None:
-            self.draw_marker()
+        self.update_marker()
 
     def on_status(self, stype, status):
         toast(text=str(f'{stype}, {status}'))
@@ -70,7 +68,11 @@ class GpsMarker(MapLayer):
 
         self.blink()
 
-    def update_marker(self):
+    def update_marker(self, *args):
+        # Cancel animations before drawing new marker
+        Animation.cancel_all(self.blinker_color)
+        Animation.cancel_all(self.blinker)
+
         # Clear any existing circle drawing
         self.canvas.before.clear()
         self.draw_marker()
@@ -87,8 +89,6 @@ class GpsMarker(MapLayer):
         anim_color.start(self.blinker_color)
 
         # Animation for size change to create a pulsing effect and keep it centered
-        anim_size = Animation(
-            size=(self.base_size * 3, self.base_size * 3)
-        )
+        anim_size = Animation(size=(self.base_size * 3, self.base_size * 3))
         anim_size.bind(on_progress=self.update_blinker_position, on_complete=self.update_marker)
         anim_size.start(self.blinker)
