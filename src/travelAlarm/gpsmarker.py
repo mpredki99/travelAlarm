@@ -1,4 +1,3 @@
-from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
@@ -7,7 +6,6 @@ from kivy.metrics import dp
 from plyer import gps
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivymd.toast import toast
 
 
 class GpsMarker(MapLayer):
@@ -44,7 +42,6 @@ class GpsMarker(MapLayer):
             self.enable_gps()
 
     def enable_gps(self):
-        toast(text=str("Enable GPS"))
         dialog = MDDialog(
                 title="Enable Localization",
                 text="Localization is required for the application to work properly.",
@@ -52,9 +49,9 @@ class GpsMarker(MapLayer):
                     MDFlatButton(
                         text="OK",
                         theme_text_color="Custom",
-                        text_color=self.theme_cls.primary_color,
-                    ),
-                ],
+                        text_color=self.app.theme_cls.primary_color,
+                    )
+                ]
             )
         dialog.open()
 
