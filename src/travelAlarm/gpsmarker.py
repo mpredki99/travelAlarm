@@ -44,7 +44,7 @@ class GpsMarker(MapLayer):
             self.enable_gps()
 
     def enable_gps(self):
-        toast(text=str("Enable GPS"))
+        toast(text=str("Enable Localization"))
         self.dialog = MDDialog(
                 title="Enable Localization",
                 text="Localization is required for the application to work properly.",
@@ -63,7 +63,7 @@ class GpsMarker(MapLayer):
         self.longitude = kwargs['lon']
 
         # if self.blinker_color is None and self.blinker is None:
-        self.draw_marker()
+        self.update_marker()
 
     def on_status(self, stype, status):
         if stype == 'provider-disabled' and stype != self.provider:
