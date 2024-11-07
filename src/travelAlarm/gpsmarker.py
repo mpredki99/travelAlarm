@@ -73,6 +73,9 @@ class GpsMarker(MapLayer):
 
             self.provider = stype
             self.enable_gps()
+            return True
+
+        self.provider = stype
         return False
 
     def draw_marker(self):
