@@ -6,6 +6,7 @@ from kivy.metrics import dp
 from plyer import gps
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivymd.toast import toast
 
 
 class GpsMarker(MapLayer):
@@ -42,6 +43,7 @@ class GpsMarker(MapLayer):
             self.enable_gps()
 
     def enable_gps(self):
+        toast(text=str("Enable GPS"))
         dialog = MDDialog(
                 title="Enable Localization",
                 text="Localization is required for the application to work properly.",
@@ -64,6 +66,10 @@ class GpsMarker(MapLayer):
 
     def on_status(self, stype, status):
         if stype == 'provider-disabled' and stype != self.provider:
+
+            if self.latitude is not None and self.longitude is not None:
+                self.cancel_animations()
+
             self.provider = stype
             self.enable_gps()
         return False
@@ -89,8 +95,7 @@ class GpsMarker(MapLayer):
 
     def update_marker(self, *args):
         # Cancel animations before drawing new marker
-        Animation.cancel_all(self.blinker_color)
-        Animation.cancel_all(self.blinker)
+        self.cancel_animations()
 
         # Clear any existing circle drawing
         self.canvas.before.clear()
@@ -111,3 +116,8 @@ class GpsMarker(MapLayer):
         anim_size = Animation(size=(self.base_size * 3, self.base_size * 3))
         anim_size.bind(on_progress=self.update_blinker_position, on_complete=self.update_marker)
         anim_size.start(self.blinker)
+
+    def cancel_animations(self):
+        # Cancel blinker animations
+        Animation.cancel_all(self.blinker_color)
+        Animation.cancel_all(self.blinker)
