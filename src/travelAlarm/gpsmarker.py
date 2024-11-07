@@ -65,13 +65,9 @@ class GpsMarker(MapLayer):
             self.draw_marker()
 
     def on_status(self, stype, status):
-        toast(text=str(f'{stype}, {self.provider}'))
         if stype == 'provider-disabled' and stype != self.provider:
-
-            if self.latitude is not None and self.longitude is not None:
-                self.cancel_animations()
-
             self.provider = stype
+            self.update_marker()
             self.enable_gps()
             return True
 
@@ -95,7 +91,8 @@ class GpsMarker(MapLayer):
             Color(*self.app.theme_cls.primary_dark)
             Ellipse(size=self.marker_size, pos=marker_pos)
 
-        self.blink()
+        if self.provider == 'provider-enabled':
+            self.blink()
 
     def update_marker(self, *args):
         # Cancel animations before drawing new marker
