@@ -44,18 +44,18 @@ class GpsMarker(MapLayer):
 
     def enable_gps(self):
         toast(text=str("Enable GPS"))
-        # dialog = MDDialog(
-        #         title="Enable Localization",
-        #         text="Localization is required for the application to work properly.",
-        #         buttons=[
-        #             MDFlatButton(
-        #                 text="OK",
-        #                 theme_text_color="Custom",
-        #                 text_color=self.app.theme_cls.primary_color,
-        #             )
-        #         ]
-        #     )
-        # dialog.open()
+        dialog = MDDialog(
+                title="Enable Localization",
+                text="Localization is required for the application to work properly.",
+                buttons=[
+                    MDFlatButton(
+                        text="OK",
+                        theme_text_color="Custom",
+                        text_color=self.app.theme_cls.primary_color,
+                    )
+                ]
+            )
+        dialog.open()
 
     def update_lat_lon(self, **kwargs):
         self.latitude = kwargs['lat']
@@ -68,12 +68,11 @@ class GpsMarker(MapLayer):
         if stype == 'provider-disabled' and stype != self.provider:
             self.provider = stype
             self.enable_gps()
-            self.update_marker()
-            toast(text=str(f"{stype}"))
+            self.reposition()
             return False
         elif stype == 'provider-enabled' and stype != self.provider:
-            toast(text=str(f"{stype}"))
             self.provider = stype
+            self.reposition()
             return True
 
     def draw_marker(self):
