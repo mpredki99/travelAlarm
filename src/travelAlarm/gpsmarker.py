@@ -65,6 +65,7 @@ class GpsMarker(MapLayer):
             self.draw_marker()
 
     def on_status(self, stype, status):
+        toast(text=str(f'{stype}, {self.provider}'))
         if stype == 'provider-disabled' and stype != self.provider:
 
             if self.latitude is not None and self.longitude is not None:
