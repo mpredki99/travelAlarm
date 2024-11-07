@@ -31,6 +31,8 @@ class TravelAlarmApp(MDApp):
             from android.permissions import Permission, request_permissions
             request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
 
+            self.root.ids.screen_manager.get_screen("MapScreen").add_gps_marker()
+
     def on_stop(self):
         """Save map_widget state and disconnect from database."""
         # Save current map_widget state

@@ -31,18 +31,19 @@ class MapScreen(Screen):
 
         # Initialize gps marker
         self.gps_marker = None
-
-        # If gps permission granted, add gps marker to map widget
-        if self.app.check_gps_permission():
-            self.add_gps_marker()
+        self.add_gps_marker()
 
     def add_gps_marker(self):
         """Add gps marker to map widget."""
-        # Initialize gps marker object
-        self.gps_marker = GpsMarker()
+        if self.app.check_gps_permission() and self.gps_marker is None:
+            # Initialize gps marker object
+            self.gps_marker = GpsMarker()
 
-        # Add gps marker to map widget
-        self.map_widget.add_layer(self.gps_marker)
+            # Add gps marker to map widget
+            self.map_widget.add_layer(self.gps_marker)
+
+            return True
+        return False
 
     def close_map_marker_popups(self, pin_id=None):
         """Close pin marker popups. Skip for pin with provided pin id."""

@@ -46,10 +46,11 @@ class GpsMarker(MapLayer):
 
         if self.blinker_color is None and self.blinker is None:
             self.draw_marker()
-        # self.update_marker()
 
     def on_status(self, stype, status):
-        toast(text=str(f'{stype}, {status}'))
+        if stype == 'provider-disabled':
+            self.enable_gps()
+        return False
 
     def draw_marker(self):
         if self.latitude is None or self.longitude is None:
