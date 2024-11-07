@@ -31,6 +31,9 @@ class GpsMarker(MapLayer):
         self.latitude = None
         self.longitude = None
 
+        # Initialize provider status
+        self.provider = None
+
         try:
             gps.configure(on_location=self.update_lat_lon, on_status=self.on_status)
             gps.start(minTime=1000, minDistance=1)
@@ -48,7 +51,8 @@ class GpsMarker(MapLayer):
             self.draw_marker()
 
     def on_status(self, stype, status):
-        if stype == 'provider-disabled':
+        if stype == 'provider-disabled' and stype != self.provider:
+            self.provider = stype
             self.enable_gps()
         return False
 
