@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from kivy import platform
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivymd.toast import toast
 
 from plyer import gps
 
@@ -63,6 +64,7 @@ class TravelAlarmApp(MDApp):
 
     def update_status(self, stype, status):
         if stype == 'provider-disabled' and stype != self.provider_status:
+            toast(text='Enable Localization')
             self.provider_status = stype
             self.gps_dialog.open()
             return False
