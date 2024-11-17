@@ -32,6 +32,7 @@ class GpsMarker(MapLayer):
         # Initialize marker positions
         self.latitude = None
         self.longitude = None
+        self.n = 0
 
         # Initialize gps dialog
         self.gps_dialog = None
@@ -73,8 +74,10 @@ class GpsMarker(MapLayer):
             self.draw_marker()
 
     def on_status(self, stype, status):
+        print("on_status")
         if stype == 'provider-disabled' and stype != self.provider:
             self.provider = stype
+            self.cancel_animations()
             self.gps_dialog.open()
 
             self.update_marker()
@@ -109,12 +112,6 @@ class GpsMarker(MapLayer):
         # Cancel animations before drawing new marker
         self.cancel_animations()
 
-        # Clear any existing circle drawing
-        self.canvas.before.clear()
-
-        self.blinker = None
-        self.blinker_color = None
-
         self.draw_marker()
 
     def reposition(self, *args):
@@ -137,3 +134,9 @@ class GpsMarker(MapLayer):
         # Cancel blinker animations
         Animation.cancel_all(self.blinker_color)
         Animation.cancel_all(self.blinker)
+
+        # Clear any existing circle drawing
+        self.canvas.before.clear()
+
+        self.blinker = None
+        self.blinker_color = None
