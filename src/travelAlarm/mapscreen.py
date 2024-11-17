@@ -41,7 +41,6 @@ class MapScreen(Screen):
 
             # Add gps marker to map widget
             self.map_widget.add_layer(self.gps_marker)
-
             return True
         return False
 
