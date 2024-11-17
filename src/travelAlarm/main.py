@@ -68,20 +68,22 @@ class TravelAlarmApp(MDApp):
             self.provider_status = stype
             self.enable_gps()
             toast(text='Enable Localization')
+            return True
 
         elif stype == 'provider-enabled' and stype != self.provider_status:
             self.provider_status = stype
+            return True
 
-        return True
+        return False
+
+    @mainthread
+    def enable_gps(self):
+        self.gps_dialog.open()
 
     def update_localization(self, **kwargs):
         self.user_latitude = kwargs['lat']
         self.user_longitude = kwargs['lon']
         return True
-
-    @mainthread
-    def enable_gps(self):
-        self.gps_dialog.open()
 
     def build(self):
         """Build app."""
