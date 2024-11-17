@@ -3,8 +3,10 @@ from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
+
 from plyer import gps
-from kivymd.toast import toast
 
 
 class GpsMarker(MapLayer):
@@ -28,8 +30,13 @@ class GpsMarker(MapLayer):
         self.blinker_center = None
 
         # Initialize marker positions
-        self.latitude = None
-        self.longitude = None
+        self.latitude = 50 #None
+        self.longitude = 20 #None
+
+        # Initialize gps dialog
+        self.gps_dialog = None
+        self.gps_button = None
+        self.build_gps_dialog()
 
         # Initialize provider status
         self.provider = 'provider-enabled'
@@ -38,10 +45,25 @@ class GpsMarker(MapLayer):
             gps.configure(on_location=self.update_lat_lon, on_status=self.on_status)
             gps.start(minTime=1000, minDistance=1)
         except NotImplementedError:
-            self.enable_gps()
+            pass
+        except ModuleNotFoundError:
+            pass
+        except Exception:
+            pass
 
-    def enable_gps(self):
-        toast(text=str("Enable Localization"))
+    def build_gps_dialog(self):
+        self.gps_button = MDFlatButton(
+            text='OK',
+            theme_text_color='Custom',
+            text_color=self.app.theme_cls.primary_color,
+            )
+        self.gps_dialog = MDDialog(
+            title='Enable Localization',
+            text='Enable localization to ensure the application works properly.',
+            buttons=[self.gps_button]
+        )
+        self.gps_button.bind(on_press=self.gps_dialog.dismiss)
+        return True
 
     def update_lat_lon(self, **kwargs):
         self.latitude = kwargs['lat']
@@ -53,7 +75,7 @@ class GpsMarker(MapLayer):
     def on_status(self, stype, status):
         if stype == 'provider-disabled' and stype != self.provider:
             self.provider = stype
-            self.enable_gps()
+            self.self.gps_dialog.open()
 
             self.update_marker()
             return False
