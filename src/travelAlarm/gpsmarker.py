@@ -3,8 +3,6 @@ from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDFlatButton
 
 from plyer import gps
 
@@ -25,19 +23,10 @@ class GpsMarker(MapLayer):
         self.blinker_size = (self.base_size, self.base_size)
 
         # Initialize blinker attributes
+        self.latitude, self.longitude = None, None
         self.blinker = None
         self.blinker_color = None
         self.blinker_center = None
-
-        # Initialize marker positions
-        self.latitude = None
-        self.longitude = None
-        self.n = 0
-
-        # Initialize gps dialog
-        self.gps_dialog = None
-        self.gps_button = None
-        self.build_gps_dialog()
 
         # Initialize provider status
         self.provider = 'provider-enabled'
@@ -52,45 +41,10 @@ class GpsMarker(MapLayer):
         except Exception:
             pass
 
-    def build_gps_dialog(self):
-        self.gps_button = MDFlatButton(
-            text='OK',
-            theme_text_color='Custom',
-            text_color=self.app.theme_cls.primary_color,
-            )
-        self.gps_dialog = MDDialog(
-            title='Enable Localization',
-            text='Enable localization to ensure the application works properly.',
-            buttons=[self.gps_button]
-        )
-        self.gps_button.bind(on_press=self.gps_dialog.dismiss)
-        return True
-
-    def update_lat_lon(self, **kwargs):
-        self.latitude = kwargs['lat']
-        self.longitude = kwargs['lon']
-
-        if self.blinker_color is None and self.blinker is None:
-            self.draw_marker()
-
-    def on_status(self, stype, status):
-        print("on_status")
-        if stype == 'provider-disabled' and stype != self.provider:
-            self.provider = stype
-            self.cancel_animations()
-            self.gps_dialog.open()
-
-            self.update_marker()
-            return False
-        elif stype == 'provider-enabled' and stype != self.provider:
-            self.provider = stype
-            self.update_marker()
-            return True
-
     def draw_marker(self):
         if self.latitude is None or self.longitude is None:
             return False
-
+        self.latitude, self.longitude = self.app.user_latitude, self.app.user_longitude
         pos_x, pos_y = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
         self.blinker_center = (pos_x, pos_y)
 
@@ -101,7 +55,7 @@ class GpsMarker(MapLayer):
             Color(*self.app.theme_cls.primary_dark)
             Ellipse(size=self.marker_size, pos=marker_pos)
 
-        if self.provider == 'provider-enabled':
+        if self.app.provider_status == 'provider-enabled':
             with self.canvas.before:
                 self.blinker_color = Color(*self.app.theme_cls.primary_dark)
                 self.blinker = Ellipse(size=self.blinker_size, pos=blinker_pos)
