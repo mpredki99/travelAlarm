@@ -30,8 +30,8 @@ class GpsMarker(MapLayer):
         self.blinker_center = None
 
         # Initialize marker positions
-        self.latitude = 50 # None
-        self.longitude = 20 # None
+        self.latitude = None
+        self.longitude = None
         self.n = 0
 
         # Initialize provider status
