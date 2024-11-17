@@ -4,8 +4,6 @@ from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
 from plyer import gps
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.dialog import MDDialog
 from kivymd.toast import toast
 
 
@@ -32,7 +30,6 @@ class GpsMarker(MapLayer):
         # Initialize marker positions
         self.latitude = None
         self.longitude = None
-        self.n = 0
 
         # Initialize provider status
         self.provider = 'provider-enabled'
@@ -45,18 +42,6 @@ class GpsMarker(MapLayer):
 
     def enable_gps(self):
         toast(text=str("Enable Localization"))
-        # self.button = MDFlatButton(
-        #                 text="OK",
-        #                 theme_text_color="Custom",
-        #                 text_color=self.app.theme_cls.primary_color,
-        #             )
-        # self.dialog = MDDialog(
-        #         title="Enable Localization",
-        #         text="Localization is required for the application to work properly.",
-        #         buttons=[self.button]
-        #     )
-        # self.button.bind(on_release=self.dialog.dismiss)
-        # self.dialog.open()
 
     def update_lat_lon(self, **kwargs):
         self.latitude = kwargs['lat']
@@ -69,10 +54,6 @@ class GpsMarker(MapLayer):
         if stype == 'provider-disabled' and stype != self.provider:
             self.provider = stype
             self.enable_gps()
-
-            self.blinker = None
-            self.blinker_color = None
-            self.blinker_center = None
 
             self.update_marker()
             return False
@@ -108,6 +89,10 @@ class GpsMarker(MapLayer):
 
         # Clear any existing circle drawing
         self.canvas.before.clear()
+
+        self.blinker = None
+        self.blinker_color = None
+
         self.draw_marker()
 
     def reposition(self, *args):
