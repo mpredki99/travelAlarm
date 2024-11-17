@@ -75,7 +75,7 @@ class GpsMarker(MapLayer):
     def on_status(self, stype, status):
         if stype == 'provider-disabled' and stype != self.provider:
             self.provider = stype
-            self.self.gps_dialog.open()
+            self.gps_dialog.open()
 
             self.update_marker()
             return False
