@@ -1,3 +1,4 @@
+from kivy.clock import mainthread
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy import platform
@@ -65,18 +66,22 @@ class TravelAlarmApp(MDApp):
     def update_status(self, stype, status):
         if stype == 'provider-disabled' and stype != self.provider_status:
             self.provider_status = stype
-            self.gps_dialog.open()
+            self.enable_gps()
             toast(text='Enable Localization')
-            return True
 
         elif stype == 'provider-enabled' and stype != self.provider_status:
             self.provider_status = stype
-            return True
+
+        return True
 
     def update_localization(self, **kwargs):
         self.user_latitude = kwargs['lat']
         self.user_longitude = kwargs['lon']
         return True
+
+    @mainthread
+    def enable_gps(self):
+        self.gps_dialog.open()
 
     def build(self):
         """Build app."""
@@ -101,9 +106,6 @@ class TravelAlarmApp(MDApp):
             pass
 
         return Builder.load_file("main.kv")
-
-    def on_start(self):
-        self.update_status('provider-disabled', 'provider-disabled')
 
     def on_pause(self):
         """Prepare app to close."""
