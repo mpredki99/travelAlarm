@@ -30,8 +30,9 @@ class GpsMarker(MapLayer):
         self.blinker_center = None
 
         # Initialize marker positions
-        self.latitude = None
-        self.longitude = None
+        self.latitude = 50 # None
+        self.longitude = 20 # None
+        self.n = 0
 
         # Initialize provider status
         self.provider = 'provider-enabled'
@@ -68,11 +69,16 @@ class GpsMarker(MapLayer):
         if stype == 'provider-disabled' and stype != self.provider:
             self.provider = stype
             self.enable_gps()
-            self.reposition()
+
+            self.blinker = None
+            self.blinker_color = None
+            self.blinker_center = None
+
+            self.update_marker()
             return False
         elif stype == 'provider-enabled' and stype != self.provider:
             self.provider = stype
-            self.reposition()
+            self.update_marker()
             return True
 
     def draw_marker(self):
@@ -86,13 +92,14 @@ class GpsMarker(MapLayer):
         blinker_pos = (pos_x - self.blinker_size[0] / 2, pos_y - self.blinker_size[1] / 2)
 
         with self.canvas.before:
-            self.blinker_color = Color(*self.app.theme_cls.primary_dark)
-            self.blinker = Ellipse(size=self.blinker_size, pos=blinker_pos)
-
             Color(*self.app.theme_cls.primary_dark)
             Ellipse(size=self.marker_size, pos=marker_pos)
 
         if self.provider == 'provider-enabled':
+            with self.canvas.before:
+                self.blinker_color = Color(*self.app.theme_cls.primary_dark)
+                self.blinker = Ellipse(size=self.blinker_size, pos=blinker_pos)
+
             self.blink()
 
     def update_marker(self, *args):

@@ -18,6 +18,7 @@ class TravelAlarmApp(MDApp):
         self.pins_db = Database('pins.db')
 
     def check_gps_permission(self):
+        return True
         if platform == 'android':
             from android.permissions import Permission, check_permission
             return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
