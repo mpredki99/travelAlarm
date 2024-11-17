@@ -75,6 +75,7 @@ class TravelAlarmApp(MDApp):
     def enable_gps(self):
         self.gps_dialog.open()
         toast(text='Enable Localization')
+        return True
 
     def update_localization(self, **kwargs):
         self.user_latitude = kwargs['lat']
