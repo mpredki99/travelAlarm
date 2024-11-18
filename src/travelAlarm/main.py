@@ -60,7 +60,7 @@ class TravelAlarmApp(MDApp):
         return Builder.load_file("main.kv")
 
     def on_start(self):
-        Clock.schedule_once(lambda dt: self.add_gps_marker(), .5)
+        self.add_gps_marker()
         return True
 
     def on_pause(self):
