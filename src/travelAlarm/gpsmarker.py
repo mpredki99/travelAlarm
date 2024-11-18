@@ -7,7 +7,7 @@ from kivy.metrics import dp
 from kivymd.toast import toast
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivy.clock import mainthread
+from kivy.clock import Clock, mainthread
 
 
 class GpsMarker(MapLayer):
@@ -42,7 +42,7 @@ class GpsMarker(MapLayer):
         # Initialize provider status
         self.provider_status = 'provider-enabled'
 
-        self.initialize_gps()
+        Clock.schedule_once(lambda dt: self.initialize_gps(), 0.5)
 
     def build_gps_dialog(self):
         self.gps_button = MDFlatButton(
