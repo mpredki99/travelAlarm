@@ -40,6 +40,7 @@ class MapScreen(Screen):
 
     def center_mapview_on_user_location(self):
         """Center the map_widget on user GPS position."""
+        self.app.add_gps_marker()
         gps_marker = self.app.gps_marker
 
         # If gps in mapview

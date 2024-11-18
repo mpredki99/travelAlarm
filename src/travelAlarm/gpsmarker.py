@@ -87,6 +87,7 @@ class GpsMarker(MapLayer):
 
         return False
 
+    @mainthread
     def enable_gps(self):
         self.gps_dialog.open()
 
