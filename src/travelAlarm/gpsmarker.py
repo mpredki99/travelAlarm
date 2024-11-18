@@ -95,7 +95,7 @@ class GpsMarker(MapLayer):
         self.longitude = kwargs['lon']
 
         if self.blinker_color is None and self.blinker is None:
-            self.reposition()
+            self.update_marker()
 
         return True
 
