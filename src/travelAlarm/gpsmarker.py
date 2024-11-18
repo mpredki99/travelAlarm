@@ -76,7 +76,7 @@ class GpsMarker(MapLayer):
         if stype == 'provider-disabled' and stype != self.provider_status:
             self.provider_status = stype
             self.enable_gps()
-            toast(text='Enable Localization')
+            toast(text=str(gps.gps_status))
             return True
 
         elif stype == 'provider-enabled' and stype != self.provider_status:

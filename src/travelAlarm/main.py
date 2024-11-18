@@ -2,8 +2,6 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy import platform
 
-from plyer import gps
-
 from database import Database
 from mapwidget import MapWidget
 from gpsmarker import GpsMarker
