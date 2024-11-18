@@ -22,6 +22,7 @@ class TravelAlarmApp(MDApp):
         self.gps_marker = None
 
     def check_gps_permission(self):
+        return True
         if platform == 'android':
             from android.permissions import Permission, check_permission
             return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
@@ -35,6 +36,20 @@ class TravelAlarmApp(MDApp):
             from android.permissions import Permission, request_permissions
             request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
 
+    def initialize_gps(self):
+        try:
+            from plyer import gps
+
+            gps.configure(on_location=self.gps_marker.update_localization, on_status=self.gps_marker.update_status)
+            gps.start(minTime=1000, minDistance=1)
+            return True
+        except NotImplementedError:
+            return False
+        except ModuleNotFoundError:
+            return False
+        except Exception:
+            return False
+
     def add_gps_marker(self):
         """Add gps marker to map widget."""
         if self.check_gps_permission() and self.gps_marker is None:
@@ -43,6 +58,7 @@ class TravelAlarmApp(MDApp):
 
             # Add gps marker to map widget
             self.map_widget.add_layer(self.gps_marker)
+
             return True
         return False
 
@@ -58,7 +74,9 @@ class TravelAlarmApp(MDApp):
         return Builder.load_file("main.kv")
 
     def on_start(self):
+        self.initialize_gps()
         self.add_gps_marker()
+        return True
 
     def on_pause(self):
         """Prepare app to close."""
