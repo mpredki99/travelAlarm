@@ -4,7 +4,6 @@ from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
 
-from kivymd.toast import toast
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
@@ -42,8 +41,8 @@ class GpsMarker(MapLayer):
         # Initialize provider status
         self.provider_status = 'provider-enabled'
 
-        # Wait one second to build UI and then initialize GPS
-        Clock.schedule_once(lambda dt: self.initialize_gps(), 1)
+        # Wait half second to build UI and then initialize GPS
+        Clock.schedule_once(lambda dt: self.initialize_gps(), .5)
 
     def build_gps_dialog(self):
         self.gps_button = MDFlatButton(
@@ -77,6 +76,7 @@ class GpsMarker(MapLayer):
     def update_status(self, stype, status):
         if stype == 'provider-disabled' and stype != self.provider_status:
             self.provider_status = stype
+            self.cancel_animations()
             self.enable_gps()
             return True
 
@@ -108,7 +108,7 @@ class GpsMarker(MapLayer):
         marker_pos = (pos_x - self.marker_size[0] / 2, pos_y - self.marker_size[1] / 2)
         blinker_pos = (pos_x - self.blinker_size[0] / 2, pos_y - self.blinker_size[1] / 2)
 
-        with self.canvas.before:
+        with self.canvas:
             Color(*self.app.theme_cls.primary_dark)
             Ellipse(size=self.marker_size, pos=marker_pos)
 
@@ -122,6 +122,7 @@ class GpsMarker(MapLayer):
     def update_marker(self, *args):
         # Cancel animations before drawing new marker
         self.cancel_animations()
+        self.canvas.clear()
 
         self.draw_marker()
 
@@ -146,7 +147,7 @@ class GpsMarker(MapLayer):
         Animation.cancel_all(self.blinker_color)
         Animation.cancel_all(self.blinker)
 
-        # Clear any existing circle drawing
+        # Clear any existing blinker drawing
         self.canvas.before.clear()
 
         self.blinker = None
