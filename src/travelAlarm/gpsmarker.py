@@ -42,7 +42,8 @@ class GpsMarker(MapLayer):
         # Initialize provider status
         self.provider_status = 'provider-enabled'
 
-        Clock.schedule_once(lambda dt: self.initialize_gps(), 0.5)
+        # Wait one second to build UI and then initialize GPS
+        Clock.schedule_once(lambda dt: self.initialize_gps(), 1)
 
     def build_gps_dialog(self):
         self.gps_button = MDFlatButton(
@@ -77,12 +78,10 @@ class GpsMarker(MapLayer):
         if stype == 'provider-disabled' and stype != self.provider_status:
             self.provider_status = stype
             self.enable_gps()
-            toast(text='Enable Localization')
             return True
 
         elif stype == 'provider-enabled' and stype != self.provider_status:
             self.provider_status = stype
-            toast(text='Localization Enabled')
             return True
 
         return False
