@@ -2,6 +2,8 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy import platform
 
+from kivymd.toast import toast
+
 from database import Database
 from mapwidget import MapWidget
 from gpsmarker import GpsMarker
@@ -39,7 +41,7 @@ class TravelAlarmApp(MDApp):
         try:
             from plyer import gps
 
-            gps.configure(on_location=self.gps_marker.update_localization, on_status=self.gps_marker.update_status)
+            gps.configure(on_location=self.gps_marker.update_localization, on_status=self.update_status)
             gps.start(minTime=1000, minDistance=1)
             return True
         except NotImplementedError:
@@ -48,6 +50,20 @@ class TravelAlarmApp(MDApp):
             return False
         except Exception:
             return False
+
+    def update_status(self, stype, status):
+        if stype == 'provider-disabled' and stype != self.gps_marker.provider_status:
+            self.gps_marker.provider_status = stype
+            self.gps_marker.enable_gps()
+            toast(text='Enable Localization')
+            return True
+
+        elif stype == 'provider-enabled' and stype != self.gps_marker.provider_status:
+            self.gps_marker.provider_status = stype
+            toast(text='Localization Enabled')
+            return True
+
+        return False
 
     def add_gps_marker(self):
         """Add gps marker to map widget."""
@@ -73,8 +89,8 @@ class TravelAlarmApp(MDApp):
         return Builder.load_file("main.kv")
 
     def on_start(self):
-        self.initialize_gps()
         self.add_gps_marker()
+        self.initialize_gps()
         return True
 
     def on_pause(self):
