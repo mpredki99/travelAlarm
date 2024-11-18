@@ -4,6 +4,7 @@ from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
 
+from kivymd.toast import toast
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import mainthread
@@ -41,6 +42,8 @@ class GpsMarker(MapLayer):
         # Initialize provider status
         self.provider_status = 'provider-enabled'
 
+        self.initialize_gps()
+
     def build_gps_dialog(self):
         self.gps_button = MDFlatButton(
             text='OK',
@@ -56,7 +59,34 @@ class GpsMarker(MapLayer):
 
         return True
 
-    @mainthread
+    def initialize_gps(self):
+        try:
+            from plyer import gps
+
+            gps.configure(on_location=self.update_localization, on_status=self.update_status)
+            gps.start(minTime=1000, minDistance=1)
+            return True
+        except NotImplementedError:
+            return False
+        except ModuleNotFoundError:
+            return False
+        except Exception:
+            return False
+
+    def update_status(self, stype, status):
+        if stype == 'provider-disabled' and stype != self.provider_status:
+            self.provider_status = stype
+            self.enable_gps()
+            toast(text='Enable Localization')
+            return True
+
+        elif stype == 'provider-enabled' and stype != self.provider_status:
+            self.provider_status = stype
+            toast(text='Localization Enabled')
+            return True
+
+        return False
+
     def enable_gps(self):
         self.gps_dialog.open()
 
