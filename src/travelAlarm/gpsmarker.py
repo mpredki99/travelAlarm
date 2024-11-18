@@ -81,7 +81,7 @@ class GpsMarker(MapLayer):
 
         elif stype == 'provider-enabled' and stype != self.provider_status:
             self.provider_status = stype
-            self.reposition()
+            Clock.schedule_once(lambda dt: self.reposition(), .5)
             return True
 
         return False
