@@ -1,6 +1,7 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy import platform
+from kivy.clock import Clock
 
 from database import Database
 from mapwidget import MapWidget
@@ -59,7 +60,7 @@ class TravelAlarmApp(MDApp):
         return Builder.load_file("main.kv")
 
     def on_start(self):
-        self.add_gps_marker()
+        Clock.schedule_once(lambda dt: self.add_gps_marker(), .5)
         return True
 
     def on_pause(self):
