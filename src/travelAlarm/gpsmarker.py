@@ -44,6 +44,7 @@ class GpsMarker(MapLayer):
         # Initialize provider status
         self.provider_status = 'provider-enabled'
 
+    def on_parent(self):
         self.initialize_gps()
 
     def build_gps_dialog(self):
