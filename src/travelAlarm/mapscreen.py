@@ -29,21 +29,6 @@ class MapScreen(Screen):
             pin = self.pins_db.pins[pin_id].get('marker')
             if pin: pin.close_marker_popup()
 
-        # Initialize gps marker
-        self.gps_marker = None
-        self.add_gps_marker()
-
-    def add_gps_marker(self):
-        """Add gps marker to map widget."""
-        if self.app.check_gps_permission() and self.gps_marker is None:
-            # Initialize gps marker object
-            self.gps_marker = GpsMarker()
-
-            # Add gps marker to map widget
-            self.map_widget.add_layer(self.gps_marker)
-            return True
-        return False
-
     def close_map_marker_popups(self, pin_id=None):
         """Close pin marker popups. Skip for pin with provided pin id."""
         for key, value in self.pins_db.pins.items():

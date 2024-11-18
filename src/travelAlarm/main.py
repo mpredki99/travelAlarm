@@ -34,6 +34,9 @@ class TravelAlarmApp(MDApp):
         self.user_latitude = None
         self.user_longitude = None
 
+        # Initialize gps marker
+        self.gps_marker = None
+
     def build_gps_dialog(self):
         self.gps_button = MDFlatButton(
             text='OK',
@@ -85,6 +88,27 @@ class TravelAlarmApp(MDApp):
         self.user_longitude = kwargs['lon']
         return True
 
+    def add_gps_marker(self):
+        """Add gps marker to map widget."""
+        if self.check_gps_permission() and self.gps_marker is None:
+            # Initialize gps marker object
+            # self.gps_marker = GpsMarker()
+
+            try:
+                gps.configure(on_location=self.update_localization, on_status=self.update_status)
+                gps.start(minTime=1000, minDistance=1)
+            except NotImplementedError:
+                pass
+            except ModuleNotFoundError:
+                pass
+            except Exception:
+                pass
+
+            # Add gps marker to map widget
+            # self.map_widget.add_layer(self.gps_marker)
+            return True
+        return False
+
     def build(self):
         """Build app."""
         # Set app themes
@@ -97,17 +121,10 @@ class TravelAlarmApp(MDApp):
         # Build gps dialog
         self.build_gps_dialog()
 
-        try:
-            gps.configure(on_location=self.update_localization, on_status=self.update_status)
-            gps.start(minTime=1000, minDistance=1)
-        except NotImplementedError:
-            pass
-        except ModuleNotFoundError:
-            pass
-        except Exception:
-            pass
-
         return Builder.load_file("main.kv")
+
+    def on_start(self):
+        self.add_gps_marker()
 
     def on_pause(self):
         """Prepare app to close."""
