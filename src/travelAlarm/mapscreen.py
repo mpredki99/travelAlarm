@@ -1,8 +1,6 @@
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 
-from gpsmarker import GpsMarker
-
 
 class MapScreen(Screen):
 
@@ -42,11 +40,12 @@ class MapScreen(Screen):
 
     def center_mapview_on_user_location(self):
         """Center the map_widget on user GPS position."""
-        self.add_gps_marker()
+        gps_marker = self.app.gps_marker
+
         # If gps in mapview
-        if self.gps_marker is not None:
+        if gps_marker is not None:
             # Get user location
-            user_lat, user_lon = self.gps_marker.latitude, self.gps_marker.longitude
+            user_lat, user_lon = gps_marker.latitude, gps_marker.longitude
 
             # if GPS marker have no location data
             if user_lat is None or user_lon is None:

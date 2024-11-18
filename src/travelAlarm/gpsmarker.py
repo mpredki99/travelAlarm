@@ -4,6 +4,11 @@ from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
 
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
+from kivymd.toast import toast
+from kivy.clock import mainthread
+
 from plyer import gps
 
 
@@ -17,22 +22,48 @@ class GpsMarker(MapLayer):
         # Get map_widget instance
         self.map_widget = self.app.map_widget
 
+        # Initialize gps dialog
+        self.gps_dialog = None
+        self.gps_button = None
+        self.build_gps_dialog()
+
+        # Initialize position
+        self.latitude = None
+        self.longitude = None
+
         # Define size of marker
         self.base_size = dp(16)
         self.marker_size = (self.base_size, self.base_size)
         self.blinker_size = (self.base_size, self.base_size)
 
         # Initialize blinker attributes
-        self.latitude, self.longitude = None, None
         self.blinker = None
         self.blinker_color = None
         self.blinker_center = None
 
         # Initialize provider status
-        self.provider = 'provider-enabled'
+        self.provider_status = 'provider-enabled'
 
+        self.initialize_gps()
+
+    def build_gps_dialog(self):
+        self.gps_button = MDFlatButton(
+            text='OK',
+            theme_text_color='Custom',
+            text_color=self.app.theme_cls.primary_color,
+        )
+        self.gps_dialog = MDDialog(
+            title='Enable Localization',
+            text='Enable localization to ensure the application works properly.',
+            buttons=[self.gps_button]
+        )
+        self.gps_button.bind(on_press=self.gps_dialog.dismiss)
+
+        return True
+
+    def initialize_gps(self):
         try:
-            gps.configure(on_location=self.update_lat_lon, on_status=self.on_status)
+            gps.configure(on_location=self.update_localization, on_status=self.update_status)
             gps.start(minTime=1000, minDistance=1)
         except NotImplementedError:
             pass
@@ -41,10 +72,35 @@ class GpsMarker(MapLayer):
         except Exception:
             pass
 
+    def update_status(self, stype, status):
+        if stype == 'provider-disabled' and stype != self.provider_status:
+            self.provider_status = stype
+            self.enable_gps()
+            toast(text='Enable Localization')
+            return True
+
+        elif stype == 'provider-enabled' and stype != self.provider_status:
+            self.provider_status = stype
+            return True
+
+        return False
+
+    @mainthread
+    def enable_gps(self):
+        self.gps_dialog.open()
+
+    def update_localization(self, **kwargs):
+        self.latitude = kwargs['lat']
+        self.longitude = kwargs['lon']
+
+        if self.blinker_color is None and self.blinker is None:
+            self.draw_marker()
+
+        return True
+
     def draw_marker(self):
         if self.latitude is None or self.longitude is None:
             return False
-        self.latitude, self.longitude = self.app.user_latitude, self.app.user_longitude
         pos_x, pos_y = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
         self.blinker_center = (pos_x, pos_y)
 
@@ -55,7 +111,7 @@ class GpsMarker(MapLayer):
             Color(*self.app.theme_cls.primary_dark)
             Ellipse(size=self.marker_size, pos=marker_pos)
 
-        if self.app.provider_status == 'provider-enabled':
+        if self.provider_status == 'provider-enabled':
             with self.canvas.before:
                 self.blinker_color = Color(*self.app.theme_cls.primary_dark)
                 self.blinker = Ellipse(size=self.blinker_size, pos=blinker_pos)
