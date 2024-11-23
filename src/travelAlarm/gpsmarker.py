@@ -226,14 +226,13 @@ class GpsMarker(MapLayer):
         self.update_marker()
 
     def is_within_buffer(self):
-        return False
-        # from kivymd.toast import toast
-        #
-        # pins = self.app.pins_db.pins
+        from kivymd.toast import toast
+
+        pins = self.app.pins_db.pins
         # unit_mult = Buffer.unit_mult
         #
-        # user_pos = (self.latitude, self.longitude)
-        #
+        user_pos = (self.latitude, self.longitude)
+        toast(text=str(user_pos))
         # for pin_id in pins:
         #     if not pins[pin_id].get('is_active'):
         #         continue
