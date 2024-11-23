@@ -232,7 +232,7 @@ class GpsMarker(MapLayer):
 
         from kivymd.toast import toast
 
-        pins = self.app.pins_dp.pins
+        pins = self.app.pins_db.pins
         unit_mult = Buffer.unit_mult
 
         user_pos = (self.latitude, self.longitude)
