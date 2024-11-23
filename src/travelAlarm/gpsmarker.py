@@ -144,7 +144,7 @@ class GpsMarker(MapLayer):
         self.longitude = kwargs['lon']
 
         if self.blinker is None and self.blinker_color is None:
-            self.update_marker()
+            self.draw_marker()
 
         return True
 
@@ -205,9 +205,6 @@ class GpsMarker(MapLayer):
 
         # Clear any existing blinker drawing
         self.canvas.before.clear()
-
-        self.blinker = None
-        self.blinker_color = None
 
     def update_marker(self, *args):
         """Update GPS marker on map widget."""
