@@ -1,4 +1,3 @@
-from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy import platform
 from kivy_garden.mapview import MapLayer
