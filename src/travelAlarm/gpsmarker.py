@@ -99,6 +99,10 @@ class GpsMarker(MapLayer):
             # Configure gps object
             gps.configure(on_location=self.update_localization, on_status=self.update_status)
             gps.start(minTime=1000, minDistance=1)
+
+            # Draw marker on map widget
+            self.draw_marker()
+
             return True
         # Handle exceptions
         except NotImplementedError:
@@ -130,9 +134,9 @@ class GpsMarker(MapLayer):
 
             return True
 
-        elif self.provider_status == 'provider-enabled':
-            toast(text=str(status))
-            return True
+        # elif self.provider_status == 'provider-enabled':
+        #     toast(text=str(status))
+        #     return True
 
         return False
 
