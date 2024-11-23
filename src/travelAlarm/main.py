@@ -4,7 +4,7 @@ from kivy.lang import Builder
 from database import Database
 from mapwidget import MapWidget
 from gpsmarker import GpsMarker, check_gps_permission, request_location_permission
-from src.travelAlarm.alarm import Alarm
+from alarm import Alarm
 
 
 class TravelAlarmApp(MDApp):

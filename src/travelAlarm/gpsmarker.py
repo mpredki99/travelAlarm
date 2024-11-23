@@ -10,8 +10,6 @@ from kivy.metrics import dp
 
 from geopy import distance
 
-from alarm import Alarm
-
 def check_gps_permission():
     """Check localization permissions for android devices."""
     if platform == 'android':
@@ -235,6 +233,7 @@ class GpsMarker(MapLayer):
 
         for pin_id in pins:
             if not pins[pin_id].get('is_active'): continue
+
             user_pos = (self.latitude, self.longitude)
             pin_pos = (pins[pin_id].get('latitude'), pins[pin_id].get('longitude'))
             buffer_size = pins[pin_id].get('buffer_size')
@@ -249,7 +248,11 @@ class GpsMarker(MapLayer):
                 pin = pins[pin_id].get('marker')
                 if pin: pin.close_marker_popup()
 
-                self.app.run_alarm(pins[pin_id].get('address'), pins[pin_id].get('buffer_size'), pins[pin_id].get('buffer_unit'))
+                self.app.run_alarm(
+                    pins[pin_id].get('address'),
+                    pins[pin_id].get('buffer_size'),
+                    pins[pin_id].get('buffer_unit')
+                )
                 return True
 
         return False
