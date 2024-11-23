@@ -7,6 +7,9 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
+from geopy.distance import distance
+
+from buffer import Buffer
 
 
 def check_gps_permission():
@@ -148,6 +151,8 @@ class GpsMarker(MapLayer):
         if self.blinker is None and self.blinker_color is None:
             Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
+        self.is_within_buffer()
+
         return True
 
     def draw_marker(self):
@@ -222,3 +227,27 @@ class GpsMarker(MapLayer):
     def reposition(self, *args):
         """Update map widget."""
         self.update_marker()
+
+    def is_within_buffer(self):
+
+        from kivymd.toast import toast
+
+        pins = self.app.pins_dp.pins
+        unit_mult = Buffer.unit_mult
+
+        user_pos = (self.latitude, self.longitude)
+
+        for pin_id in pins:
+            if not pins[pin_id].get('is_active'):
+                continue
+            pin_pos = (pins[pin_id].get('latitude', 0), pins[pin_id].get('longitude', 0))
+            address = pins[pin_id].get('address')
+            buffer_size = pins[pin_id].get('buffer_size')
+            buffer_unit = pins[pin_id].get('buffer_unit')
+
+            buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
+
+            buffer_distance = distance(user_pos, pin_pos).meters
+
+            if buffer_distance <= buffer_meters:
+                toast(text=str(address))
