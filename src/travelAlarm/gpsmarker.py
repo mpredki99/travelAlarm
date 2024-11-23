@@ -145,15 +145,16 @@ class GpsMarker(MapLayer):
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
 
+        # Draw marker if not in map widget yet
         if self.blinker is None and self.blinker_color is None:
             self.draw_marker()
 
         return True
 
+    @mainthread
     def draw_marker(self):
         """Draw marker on map widget."""
         # Check if GPS marker has localization attributes
-        toast(text=str(self.latitude is None or self.longitude is None))
         if self.latitude is None or self.longitude is None:
             return False
 
