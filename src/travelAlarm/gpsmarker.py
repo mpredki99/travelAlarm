@@ -8,6 +8,8 @@ from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
 
+from geopy.distance import distance
+
 
 def check_gps_permission():
     """Check localization permissions for android devices."""
@@ -230,9 +232,10 @@ class GpsMarker(MapLayer):
 
         pins = self.app.pins_db.pins
         # unit_mult = Buffer.unit_mult
-        #
+
         user_pos = (self.latitude, self.longitude)
-        toast(text=str(user_pos))
+
+        toast(text=str(distance((0, 0), (1, 1))))
         # for pin_id in pins:
         #     if not pins[pin_id].get('is_active'):
         #         continue
