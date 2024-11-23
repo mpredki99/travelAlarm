@@ -227,8 +227,8 @@ class GpsMarker(MapLayer):
         """Update map widget."""
         self.update_marker()
 
-    def is_within_buffer(self):
-        pass
+    # def is_within_buffer(self):
+    #     pass
     #
     #     unit_mult = {'m': 1, 'km': 1000}
     #     pins = self.app.pins_db.pins
