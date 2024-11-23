@@ -17,20 +17,20 @@ class TravelAlarmApp(MDApp):
         # Create database instance
         self.pins_db = Database('pins.db')
 
-        # Initialize gps marker
+        # Initialize GPS marker
         self.gps_marker = None
 
     def add_gps_marker(self):
         """Add gps marker to map widget."""
         if check_gps_permission() and self.gps_marker is None:
-            # Initialize gps marker object
+            # Initialize GPS marker object
             self.gps_marker = GpsMarker()
 
-            # Add gps marker to map widget
+            # Add GPS marker to map widget
             self.map_widget.add_layer(self.gps_marker)
 
             return True
-
+        # If gps marker not added
         return False
 
     def build(self):
@@ -45,7 +45,9 @@ class TravelAlarmApp(MDApp):
         return Builder.load_file("main.kv")
 
     def on_start(self):
+        """Check localization permissions and add gps marker to map widget."""
         self.add_gps_marker()
+
         return True
 
     def on_pause(self):
@@ -60,6 +62,8 @@ class TravelAlarmApp(MDApp):
         # Reconnect to the database and reload the map state
         self.pins_db.connect('pins.db')
 
+        return True
+
     def on_stop(self):
         """Save map_widget state and disconnect from database."""
         # Save current map_widget state
@@ -67,6 +71,8 @@ class TravelAlarmApp(MDApp):
 
         # Close connection with database while turn off the app
         self.pins_db.disconnect()
+
+        return True
 
 if __name__ == '__main__':
     TravelAlarmApp().run()

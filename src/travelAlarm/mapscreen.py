@@ -38,28 +38,30 @@ class MapScreen(Screen):
             pin = value.get('marker')
             if pin: pin.close_marker_popup()
 
-    def center_mapview_on_user_location(self):
-        """Center the map_widget on user GPS position."""
+    def center_map_widget_on_user_location(self):
+        """Center the map widget on user GPS position."""
+        # Add GPS marker if not in mapview
         self.app.add_gps_marker()
+
+        # Get instance of GPS marker
         gps_marker = self.app.gps_marker
 
-        # If gps in mapview
-        if gps_marker is not None:
-            # Get user location
-            user_lat, user_lon = gps_marker.latitude, gps_marker.longitude
-
-            # if GPS marker have no location data
-            if user_lat is None or user_lon is None:
-                return False
-
-            # Center the map on the user's location
-            self.center_mapview_on_lat_lon(user_lat, user_lon)
-            return True
-
         # If no instance of GPS marker
-        return False
+        if gps_marker is None:
+            return False
+
+        # Get user location
+        user_lat, user_lon = gps_marker.latitude, gps_marker.longitude
+
+        # If GPS marker have no location data
+        if user_lat is None or user_lon is None:
+            return False
+
+        # Center the map on the user's location
+        self.center_mapview_on_lat_lon(user_lat, user_lon)
+        return True
 
     def center_mapview_on_lat_lon(self, latitude, longitude):
-        """Center map_widget on provided latitude and longitude."""
+        """Center map widget on provided latitude and longitude."""
         self.map_widget.center_on(latitude, longitude)
         self.map_widget.zoom = 11
