@@ -1,3 +1,4 @@
+from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy import platform
 from kivy_garden.mapview import MapLayer
@@ -7,8 +8,6 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
-
-from geopy.distance import geodesic
 
 
 def check_gps_permission():
@@ -62,6 +61,11 @@ class GpsMarker(MapLayer):
 
         # Initialize provider status
         self.provider_status = 'provider-enabled'
+
+        try:
+            from geopy.distance import geodesic
+        except Exception as e:
+            toast(text=str(e))
 
         # Wait half second to build UI and then initialize GPS
         Clock.schedule_once(lambda dt: self.initialize_gps(), .5)
@@ -235,8 +239,6 @@ class GpsMarker(MapLayer):
 
         user_pos = (self.latitude, self.longitude)
 
-        odl = geodesic(user_pos, (50, 20))
-        toast(text=str(odl))
         # for pin_id in pins:
         #     if not pins[pin_id].get('is_active'):
         #         continue
