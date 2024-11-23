@@ -146,6 +146,8 @@ class GpsMarker(MapLayer):
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
 
+        toast(text=str(self.blinker is None and self.blinker_color is None))
+
         return True
 
     def draw_marker(self):
