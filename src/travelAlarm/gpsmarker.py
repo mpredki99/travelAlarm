@@ -47,6 +47,7 @@ class GpsMarker(MapLayer):
         # Initialize position
         self.latitude = None
         self.longitude = None
+        self.marker_center = None
 
         # Define size of marker
         self.base_size = dp(16)
@@ -56,8 +57,6 @@ class GpsMarker(MapLayer):
         # Initialize blinker attributes
         self.blinker = None
         self.blinker_color = None
-
-        self.marker_center = None
 
         # Initialize provider status
         self.provider_status = 'provider-enabled'
@@ -125,11 +124,9 @@ class GpsMarker(MapLayer):
             # Update value of provider status
             self.provider_status = stype
 
-            self.gps_dialog = None
-            self.gps_button = None
-
             # Update GPS marker to start blinking again
             Clock.schedule_once(lambda dt: self.update_marker(), .5)
+
             return True
 
         return False
@@ -138,6 +135,8 @@ class GpsMarker(MapLayer):
     def enable_gps(self):
         """Open GPS dialog window on main thread."""
         self.gps_dialog.open()
+
+        return True
 
     def update_localization(self, **kwargs):
         """Update marker localization attributes."""

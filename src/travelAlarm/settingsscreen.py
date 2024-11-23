@@ -96,3 +96,7 @@ class PrimaryPaletteToolbar(GridLayout):
             if self.app.gps_marker is not None:
                 self.app.gps_marker.update_marker()
                 self.app.gps_marker.update_dialog_button_color()
+
+            return True
+
+        return False
