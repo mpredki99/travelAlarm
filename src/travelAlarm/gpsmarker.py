@@ -1,3 +1,4 @@
+from kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy import platform
 from kivy_garden.mapview import MapLayer
@@ -243,16 +244,17 @@ class GpsMarker(MapLayer):
             buffer_distance = distance.distance(user_pos, pin_pos).meters
 
             if buffer_distance <= buffer_meters:
-                self.app.pins_db.update_is_active(pin_id, False)
-
-                pin = pins[pin_id].get('marker')
-                if pin: pin.close_marker_popup()
-
-                self.app.run_alarm(
-                    pins[pin_id].get('address'),
-                    pins[pin_id].get('buffer_size'),
-                    pins[pin_id].get('buffer_unit')
-                )
+                # self.app.pins_db.update_is_active(pin_id, False)
+                #
+                # pin = pins[pin_id].get('marker')
+                # if pin: pin.close_marker_popup()
+                #
+                # self.app.run_alarm(
+                #     pins[pin_id].get('address'),
+                #     pins[pin_id].get('buffer_size'),
+                #     pins[pin_id].get('buffer_unit')
+                # )
+                toast(text=str(pin_id))
                 return True
 
         return False
