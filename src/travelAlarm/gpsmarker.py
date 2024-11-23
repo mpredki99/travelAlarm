@@ -111,7 +111,6 @@ class GpsMarker(MapLayer):
 
     def update_status(self, stype, status):
         """Update gps provider status."""
-        toast(text=str(stype, status))
         # Check if provider status value was changed
         if stype == 'provider-disabled' and stype != self.provider_status:
             # Update value of provider status
@@ -146,13 +145,15 @@ class GpsMarker(MapLayer):
         self.latitude = kwargs['lat']
         self.longitude = kwargs['lon']
 
-        toast(text=str(self.blinker is None and self.blinker_color is None))
+        if self.blinker is None and self.blinker_color is None:
+            self.draw_marker()
 
         return True
 
     def draw_marker(self):
         """Draw marker on map widget."""
         # Check if GPS marker has localization attributes
+        toast(text=str(self.latitude is None or self.longitude is None))
         if self.latitude is None or self.longitude is None:
             return False
 
