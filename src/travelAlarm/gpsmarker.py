@@ -100,9 +100,11 @@ class GpsMarker(MapLayer):
         # Bind button event to close dialog window
         gps_button.bind(on_press=gps_dialog.dismiss)
 
-        gps_dialog.open()
+        self.open_dialog(gps_dialog)
 
-        return True
+    @mainthread
+    def open_dialog(self, gps_dialog):
+        gps_dialog.open()
 
     def initialize_gps(self):
         """Configure plyer gps object to get user localization."""
@@ -141,7 +143,7 @@ class GpsMarker(MapLayer):
             self.provider_status = stype
 
             # Update GPS marker to start blinking again
-            Clock.schedule_once(lambda dt: self.reposition(), .5)
+            Clock.schedule_once(lambda dt: self.update_marker(), .5)
             return True
 
         return False
