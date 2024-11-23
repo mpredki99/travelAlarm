@@ -42,7 +42,7 @@ class GpsMarker(MapLayer):
         # Initialize GPS dialog
         self.gps_dialog = None
         self.gps_button = None
-        # self.build_gps_dialog()
+        self.build_gps_dialog()
 
         # Initialize position
         self.latitude = None
@@ -85,6 +85,12 @@ class GpsMarker(MapLayer):
 
         return True
 
+    def update_dialog_button_color(self):
+        """Update dialog button text color."""
+        self.gps_button.text_color = self.app.theme_cls.primary_color
+
+        return True
+
     def initialize_gps(self):
         """Configure plyer gps object to get user localization."""
         try:
@@ -108,9 +114,6 @@ class GpsMarker(MapLayer):
         if stype == 'provider-disabled' and stype != self.provider_status:
             # Update value of provider status
             self.provider_status = stype
-
-            # Build dialog window
-            self.build_gps_dialog()
 
             # Open dialog window
             self.enable_gps()

@@ -91,3 +91,8 @@ class PrimaryPaletteToolbar(GridLayout):
 
             # Close pin marker popups
             self.app.root.ids.screen_manager.get_screen('MapScreen').close_map_marker_popups()
+
+            # Update GPS marker colors
+            if self.app.gps_marker is not None:
+                self.app.gps_marker.update_marker()
+                self.app.gps_marker.update_dialog_button_color()
