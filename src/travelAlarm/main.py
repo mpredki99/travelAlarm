@@ -6,7 +6,6 @@ from mapwidget import MapWidget
 from gpsmarker import GpsMarker, check_gps_permission, request_location_permission
 # from alarm import Alarm
 
-
 class TravelAlarmApp(MDApp):
 
     def __init__(self, **kwargs):
@@ -21,7 +20,8 @@ class TravelAlarmApp(MDApp):
         # Initialize GPS marker
         self.gps_marker = None
 
-        self.alarm = None
+        # # Initialize alarm
+        # self.alarm = None
 
     def add_gps_marker(self):
         """Add gps marker to map widget."""

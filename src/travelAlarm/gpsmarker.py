@@ -8,8 +8,8 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
-
 from geopy.distance import distance
+
 
 def check_gps_permission():
     """Check localization permissions for android devices."""
