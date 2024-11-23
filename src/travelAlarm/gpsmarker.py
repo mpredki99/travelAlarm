@@ -1,4 +1,3 @@
-from kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
@@ -147,11 +146,10 @@ class GpsMarker(MapLayer):
 
         # Draw marker if not in map widget yet
         if self.blinker is None and self.blinker_color is None:
-            self.draw_marker()
+            Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
         return True
 
-    @mainthread
     def draw_marker(self):
         """Draw marker on map widget."""
         # Check if GPS marker has localization attributes
