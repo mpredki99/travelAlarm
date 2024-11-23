@@ -227,34 +227,34 @@ class GpsMarker(MapLayer):
         """Update map widget."""
         self.update_marker()
 
-    def is_within_buffer(self):
-
-        unit_mult = {'m': 1, 'km': 1000}
-        pins = self.app.pins_db.pins
-
-        for pin_id in pins:
-            if not pins[pin_id].get('is_active'): continue
-
-            user_pos = (self.latitude, self.longitude)
-            pin_pos = (pins[pin_id].get('latitude'), pins[pin_id].get('longitude'))
-            buffer_size = pins[pin_id].get('buffer_size')
-            buffer_unit = pins[pin_id].get('buffer_unit', 1)
-            buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
-
-            buffer_distance = distance.distance(user_pos, pin_pos).meters
-
-            if buffer_distance <= buffer_meters:
-                # self.app.pins_db.update_is_active(pin_id, False)
-                #
-                # pin = pins[pin_id].get('marker')
-                # if pin: pin.close_marker_popup()
-                #
-                # self.app.run_alarm(
-                #     pins[pin_id].get('address'),
-                #     pins[pin_id].get('buffer_size'),
-                #     pins[pin_id].get('buffer_unit')
-                # )
-                toast(text=str(pin_id))
-                return True
-
-        return False
+    # def is_within_buffer(self):
+    #
+    #     unit_mult = {'m': 1, 'km': 1000}
+    #     pins = self.app.pins_db.pins
+    #
+    #     for pin_id in pins:
+    #         if not pins[pin_id].get('is_active'): continue
+    #
+    #         user_pos = (self.latitude, self.longitude)
+    #         pin_pos = (pins[pin_id].get('latitude'), pins[pin_id].get('longitude'))
+    #         buffer_size = pins[pin_id].get('buffer_size')
+    #         buffer_unit = pins[pin_id].get('buffer_unit', 1)
+    #         buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
+    #
+    #         buffer_distance = distance.distance(user_pos, pin_pos).meters
+    #
+    #         if buffer_distance <= buffer_meters:
+    #             # self.app.pins_db.update_is_active(pin_id, False)
+    #             #
+    #             # pin = pins[pin_id].get('marker')
+    #             # if pin: pin.close_marker_popup()
+    #             #
+    #             # self.app.run_alarm(
+    #             #     pins[pin_id].get('address'),
+    #             #     pins[pin_id].get('buffer_size'),
+    #             #     pins[pin_id].get('buffer_unit')
+    #             # )
+    #             toast(text=str(pin_id))
+    #             return True
+    #
+    #     return False
