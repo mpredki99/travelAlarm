@@ -3,10 +3,26 @@ from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
 from kivy.animation import Animation
 from kivy.metrics import dp
-
+from kivy import platform
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
+
+
+def check_gps_permission():
+    if platform == 'android':
+        from android.permissions import Permission, check_permission
+        return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
+    elif platform == 'ios':
+        return True
+
+    return False
+
+
+def request_location_permission():
+    if platform == 'android' and not check_gps_permission():
+        from android.permissions import Permission, request_permissions
+        request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
 
 
 class GpsMarker(MapLayer):
@@ -102,6 +118,7 @@ class GpsMarker(MapLayer):
     def draw_marker(self):
         if self.latitude is None or self.longitude is None:
             return False
+
         pos_x, pos_y = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
         self.blinker_center = (pos_x, pos_y)
 

@@ -1,11 +1,9 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
-from kivy import platform
-from kivy.clock import Clock
 
 from database import Database
 from mapwidget import MapWidget
-from gpsmarker import GpsMarker
+from gpsmarker import GpsMarker, check_gps_permission, request_location_permission
 
 
 class TravelAlarmApp(MDApp):
@@ -22,23 +20,9 @@ class TravelAlarmApp(MDApp):
         # Initialize gps marker
         self.gps_marker = None
 
-    def check_gps_permission(self):
-        if platform == 'android':
-            from android.permissions import Permission, check_permission
-            return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
-        elif platform == 'ios':
-            return True
-
-        return False
-
-    def request_location_permission(self):
-        if platform == 'android' and not self.check_gps_permission():
-            from android.permissions import Permission, request_permissions
-            request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
-
     def add_gps_marker(self):
         """Add gps marker to map widget."""
-        if self.check_gps_permission() and self.gps_marker is None:
+        if check_gps_permission() and self.gps_marker is None:
             # Initialize gps marker object
             self.gps_marker = GpsMarker()
 
@@ -46,6 +30,7 @@ class TravelAlarmApp(MDApp):
             self.map_widget.add_layer(self.gps_marker)
 
             return True
+
         return False
 
     def build(self):
@@ -55,7 +40,7 @@ class TravelAlarmApp(MDApp):
         self.theme_cls.primary_palette = self.pins_db.primary_palette
 
         # Request location permissions
-        self.request_location_permission()
+        request_location_permission()
 
         return Builder.load_file("main.kv")
 
