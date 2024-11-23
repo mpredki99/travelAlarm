@@ -1,4 +1,3 @@
-from kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy import platform
 from kivy_garden.mapview import MapLayer
@@ -9,6 +8,7 @@ from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
 from geopy.distance import distance
+from kivymd.toast import toast
 
 
 def check_gps_permission():
@@ -150,7 +150,7 @@ class GpsMarker(MapLayer):
         if self.blinker is None and self.blinker_color is None:
             Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
-        self.is_within_buffer()
+        # self.is_within_buffer()
 
         return True
 
