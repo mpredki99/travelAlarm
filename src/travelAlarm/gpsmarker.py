@@ -40,9 +40,9 @@ class GpsMarker(MapLayer):
         self.map_widget = self.app.map_widget
 
         # Initialize GPS dialog
-        self.gps_dialog = None
-        self.gps_button = None
-        self.build_gps_dialog()
+        # self.gps_dialog = None
+        # self.gps_button = None
+        # self.build_gps_dialog()
 
         # Initialize position
         self.latitude = None
@@ -68,20 +68,39 @@ class GpsMarker(MapLayer):
     def build_gps_dialog(self):
         """Build dialog window about providing localization."""
 
+        # # Build button to close dialog window
+        # self.gps_button = MDFlatButton(
+        #     text='OK',
+        #     theme_text_color='Custom',
+        #     text_color=self.app.theme_cls.primary_color,
+        # )
+        # # Build dialog window
+        # self.gps_dialog = MDDialog(
+        #     title='Enable Localization',
+        #     text='Enable localization to ensure the application works properly.',
+        #     buttons=[self.gps_button]
+        # )
+        # # Bind button event to close dialog window
+        # self.gps_button.bind(on_press=self.gps_dialog.dismiss)
+        #
+        # return True
+
         # Build button to close dialog window
-        self.gps_button = MDFlatButton(
+        gps_button = MDFlatButton(
             text='OK',
             theme_text_color='Custom',
             text_color=self.app.theme_cls.primary_color,
         )
         # Build dialog window
-        self.gps_dialog = MDDialog(
+        gps_dialog = MDDialog(
             title='Enable Localization',
             text='Enable localization to ensure the application works properly.',
             buttons=[self.gps_button]
         )
         # Bind button event to close dialog window
-        self.gps_button.bind(on_press=self.gps_dialog.dismiss)
+        gps_button.bind(on_press=gps_dialog.dismiss)
+
+        gps_dialog.open()
 
         return True
 
@@ -109,8 +128,10 @@ class GpsMarker(MapLayer):
             # Update value of provider status
             self.provider_status = stype
 
-            # Open dialog window
-            self.enable_gps()
+            self.build_gps_dialog()
+
+            # # Open dialog window
+            # self.enable_gps()
 
             return True
 

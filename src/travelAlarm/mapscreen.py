@@ -27,6 +27,10 @@ class MapScreen(Screen):
             pin = self.pins_db.pins[pin_id].get('marker')
             if pin: pin.close_marker_popup()
 
+    def on_enter(self, *args):
+        """Update map widget."""
+        self.map_widget.do_update(0)
+
     def close_map_marker_popups(self, pin_id=None):
         """Close pin marker popups. Skip for pin with provided pin id."""
         for key, value in self.pins_db.pins.items():
