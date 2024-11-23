@@ -125,8 +125,8 @@ class GpsMarker(MapLayer):
             # Update value of provider status
             self.provider_status = stype
 
-            # # Update GPS marker to start blinking again
-            # Clock.schedule_once(lambda dt: self.update_marker(), .5)
+            # Update GPS marker to start blinking again
+            Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
             return True
 
@@ -207,10 +207,6 @@ class GpsMarker(MapLayer):
 
         # Clear any existing blinker drawing
         self.canvas.before.clear()
-
-        # Set blinker attributes to None
-        self.blinker = None
-        self.blinker_color = None
 
     def update_marker(self, *args):
         """Update GPS marker on map widget."""
