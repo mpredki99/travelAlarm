@@ -1,13 +1,16 @@
 from kivymd.app import MDApp
-from kivy.graphics import Color, Ellipse
-from kivy_garden.mapview import MapLayer
-from kivy.animation import Animation
-from kivy.metrics import dp
 from kivy import platform
+from kivy_garden.mapview import MapLayer
+from kivy.graphics import Color, Ellipse
+from kivy.animation import Animation
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
+from kivy.metrics import dp
 
+from geopy import distance
+
+from alarm import Alarm
 
 def check_gps_permission():
     """Check localization permissions for android devices."""
@@ -148,6 +151,8 @@ class GpsMarker(MapLayer):
         if self.blinker is None and self.blinker_color is None:
             Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
+        self.is_within_buffer()
+
         return True
 
     def draw_marker(self):
@@ -222,3 +227,29 @@ class GpsMarker(MapLayer):
     def reposition(self, *args):
         """Update map widget."""
         self.update_marker()
+
+    def is_within_buffer(self):
+
+        unit_mult = {'m': 1, 'km': 1000}
+        pins = self.app.pins_db.pins
+
+        for pin_id in pins:
+            if not pins[pin_id].get('is_active'): continue
+            user_pos = (self.latitude, self.longitude)
+            pin_pos = (pins[pin_id].get('latitude'), pins[pin_id].get('longitude'))
+            buffer_size = pins[pin_id].get('buffer_size')
+            buffer_unit = pins[pin_id].get('buffer_unit', 1)
+            buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
+
+            buffer_distance = distance.distance(user_pos, pin_pos).meters
+
+            if buffer_distance <= buffer_meters:
+                self.app.pins_db.update_is_active(pin_id, False)
+
+                pin = pins[pin_id].get('marker')
+                if pin: pin.close_marker_popup()
+
+                Alarm(pins[pin_id].get('address'), pins[pin_id].get('buffer_size'), pins[pin_id].get('buffer_unit'))
+                return True
+
+        return False

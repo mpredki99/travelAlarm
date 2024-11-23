@@ -1,4 +1,4 @@
-from kivy_garden.mapview import MapView, MapSource, MarkerMapLayer
+from kivy_garden.mapview import MapView, MapSource
 from kivy.clock import Clock
 
 from pinmarkers import AddPinMarker
