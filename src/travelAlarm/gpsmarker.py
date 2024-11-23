@@ -249,7 +249,7 @@ class GpsMarker(MapLayer):
                 pin = pins[pin_id].get('marker')
                 if pin: pin.close_marker_popup()
 
-                Alarm(pins[pin_id].get('address'), pins[pin_id].get('buffer_size'), pins[pin_id].get('buffer_unit'))
+                self.app.run_alarm(pins[pin_id].get('address'), pins[pin_id].get('buffer_size'), pins[pin_id].get('buffer_unit'))
                 return True
 
         return False
