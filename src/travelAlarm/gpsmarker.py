@@ -8,7 +8,7 @@ from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
 
-from geopy.distance import distance
+from geopy import distance
 
 
 def check_gps_permission():
@@ -235,7 +235,7 @@ class GpsMarker(MapLayer):
 
         user_pos = (self.latitude, self.longitude)
 
-        toast(text=str(distance((0, 0), (1, 1))))
+        toast(text=str('A'))
         # for pin_id in pins:
         #     if not pins[pin_id].get('is_active'):
         #         continue
