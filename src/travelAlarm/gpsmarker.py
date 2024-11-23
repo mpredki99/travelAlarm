@@ -7,7 +7,6 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
-
 from geopy import distance
 
 
@@ -235,7 +234,7 @@ class GpsMarker(MapLayer):
 
         user_pos = (self.latitude, self.longitude)
 
-        toast(text=str('A'))
+        toast(text=str(distance.geodesic(pins, user_pos)))
         # for pin_id in pins:
         #     if not pins[pin_id].get('is_active'):
         #         continue
