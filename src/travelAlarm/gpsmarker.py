@@ -1,3 +1,4 @@
+from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse
 from kivy_garden.mapview import MapLayer
@@ -125,9 +126,12 @@ class GpsMarker(MapLayer):
             self.provider_status = stype
 
             # Update GPS marker to start blinking again
-            # Clock.schedule_once(lambda dt: self.update_marker(), .5)
-            self.update_marker()
+            Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
+            return True
+
+        elif self.provider_status == 'provider-enabled':
+            toast(text=str(status))
             return True
 
         return False
