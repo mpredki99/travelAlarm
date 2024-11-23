@@ -9,7 +9,7 @@ from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
 
-from geopy import distance
+from geopy.distance import distance
 
 def check_gps_permission():
     """Check localization permissions for android devices."""
@@ -227,7 +227,8 @@ class GpsMarker(MapLayer):
         """Update map widget."""
         self.update_marker()
 
-    # def is_within_buffer(self):
+    def is_within_buffer(self):
+        pass
     #
     #     unit_mult = {'m': 1, 'km': 1000}
     #     pins = self.app.pins_db.pins
