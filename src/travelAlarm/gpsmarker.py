@@ -40,8 +40,8 @@ class GpsMarker(MapLayer):
         self.map_widget = self.app.map_widget
 
         # Initialize GPS dialog
-        # self.gps_dialog = None
-        # self.gps_button = None
+        self.gps_dialog = None
+        self.gps_button = None
         # self.build_gps_dialog()
 
         # Initialize position
@@ -68,43 +68,22 @@ class GpsMarker(MapLayer):
     def build_gps_dialog(self):
         """Build dialog window about providing localization."""
 
-        # # Build button to close dialog window
-        # self.gps_button = MDFlatButton(
-        #     text='OK',
-        #     theme_text_color='Custom',
-        #     text_color=self.app.theme_cls.primary_color,
-        # )
-        # # Build dialog window
-        # self.gps_dialog = MDDialog(
-        #     title='Enable Localization',
-        #     text='Enable localization to ensure the application works properly.',
-        #     buttons=[self.gps_button]
-        # )
-        # # Bind button event to close dialog window
-        # self.gps_button.bind(on_press=self.gps_dialog.dismiss)
-        #
-        # return True
-
         # Build button to close dialog window
-        gps_button = MDFlatButton(
+        self.gps_button = MDFlatButton(
             text='OK',
             theme_text_color='Custom',
             text_color=self.app.theme_cls.primary_color,
         )
         # Build dialog window
-        gps_dialog = MDDialog(
+        self.gps_dialog = MDDialog(
             title='Enable Localization',
             text='Enable localization to ensure the application works properly.',
             buttons=[self.gps_button]
         )
         # Bind button event to close dialog window
-        gps_button.bind(on_press=gps_dialog.dismiss)
+        self.gps_button.bind(on_press=self.gps_dialog.dismiss)
 
-        self.open_dialog(gps_dialog)
-
-    @mainthread
-    def open_dialog(self, gps_dialog):
-        gps_dialog.open()
+        return True
 
     def initialize_gps(self):
         """Configure plyer gps object to get user localization."""
@@ -130,10 +109,11 @@ class GpsMarker(MapLayer):
             # Update value of provider status
             self.provider_status = stype
 
+            # Build dialog window
             self.build_gps_dialog()
 
-            # # Open dialog window
-            # self.enable_gps()
+            # Open dialog window
+            self.enable_gps()
 
             return True
 
@@ -141,6 +121,9 @@ class GpsMarker(MapLayer):
         elif stype == 'provider-enabled' and stype != self.provider_status:
             # Update value of provider status
             self.provider_status = stype
+
+            self.gps_dialog = None
+            self.gps_button = None
 
             # Update GPS marker to start blinking again
             Clock.schedule_once(lambda dt: self.update_marker(), .5)
