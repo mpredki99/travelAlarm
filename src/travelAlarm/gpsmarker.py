@@ -62,11 +62,6 @@ class GpsMarker(MapLayer):
         # Initialize provider status
         self.provider_status = 'provider-enabled'
 
-        try:
-            from geopy.distance import geodesic
-        except Exception as e:
-            toast(text=str(e))
-
         # Wait half second to build UI and then initialize GPS
         Clock.schedule_once(lambda dt: self.initialize_gps(), .5)
 
@@ -233,6 +228,11 @@ class GpsMarker(MapLayer):
 
     def is_within_buffer(self):
         from kivymd.toast import toast
+
+        try:
+            from geopy.distance import geodesic
+        except Exception as e:
+            toast(text=str(e))
 
         pins = self.app.pins_db.pins
         # unit_mult = Buffer.unit_mult
