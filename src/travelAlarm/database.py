@@ -132,6 +132,10 @@ class Database:
 
     def update_is_active(self, pin_id, new_is_active):
         """Update pin's is active attribute."""
+
+        from kivymd.toast import toast
+        toast(text='update db')
+
         # Update database
         self.cursor.execute("UPDATE pins SET is_active = ? WHERE id = ?", (new_is_active, pin_id))
         self.connection.commit()
