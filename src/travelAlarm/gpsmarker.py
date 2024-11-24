@@ -263,4 +263,4 @@ class GpsMarker(MapLayer):
             # Check if user is within buffer size
             if buffer_distance <= buffer_meters:
                 # Create alarm object and trigger alarm
-                Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), 0)
+                Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), .1)
