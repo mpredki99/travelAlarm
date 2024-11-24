@@ -46,4 +46,4 @@ class Alarm:
     def vibrate(self):
         if vibrator.exists():
             for i in range(3):
-                Clock.schedule_once(lambda dt: vibrator.vibrate(1), i * 2)
+                Clock.schedule_once(lambda dt: vibrator.vibrate(1), 1 + i * 2)

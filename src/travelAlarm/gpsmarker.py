@@ -130,7 +130,7 @@ class GpsMarker(MapLayer):
             self.provider_status = stype
 
             # Update GPS marker to start blinking again
-            Clock.schedule_once(lambda dt: self.update_marker(), .5)
+            Clock.schedule_once(lambda dt: self.update_marker(), 0)
 
             return True
 
