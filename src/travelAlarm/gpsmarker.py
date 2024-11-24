@@ -152,6 +152,7 @@ class GpsMarker(MapLayer):
         if self.blinker is None and self.blinker_color is None:
             Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
+        # Check if user is within active buffer
         self.is_within_buffer()
 
         return True
@@ -230,28 +231,36 @@ class GpsMarker(MapLayer):
         self.update_marker()
 
     def is_within_buffer(self):
-
-        from kivymd.toast import toast
-
+        """Check if user is within active buffer and trigger alarm if so."""
+        # Get pins from database
         pins = self.app.pins_db.pins
+
+        # Get unit multiplier
         unit_mult = Buffer.unit_mult
 
+        # Create user position tuple
         user_pos = (self.latitude, self.longitude)
 
         for pin_id in pins:
-
+            # Skip buffer if pin is not active
             if not pins[pin_id].get('is_active'):
                 continue
 
+            # Create pin position tuple
             pin_pos = (pins[pin_id].get('latitude', 0), pins[pin_id].get('longitude', 0))
+
+            # Get pin address, buffer size and buffer unit
             address = pins[pin_id].get('address')
             buffer_size = pins[pin_id].get('buffer_size', 0)
             buffer_unit = pins[pin_id].get('buffer_unit')
 
+            # Convert buffer size to meters
             buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
 
+            # Calculate distance from user to pin
             buffer_distance = geodesic(user_pos, pin_pos).meters
 
+            # Check if user is within buffer size
             if buffer_distance <= buffer_meters:
-
+                # Create alarm object and trigger alarm
                 Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), .5)
