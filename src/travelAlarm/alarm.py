@@ -1,6 +1,7 @@
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivy.clock import Clock
 from plyer import vibrator
 
 
@@ -36,10 +37,13 @@ class Alarm:
         # Bind button event to close dialog window
         self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
 
-        try:
-            if vibrator.exists():
-                vibrator.vibrate(1)
-        except Exception as e:
-            toast(text=str(e))
         # Open dialog window
         self.alarm_dialog.open()
+
+        # Trigger vibrations
+        self.vibrate()
+
+    def vibrate(self):
+        if vibrator.exists():
+            for i in range(3):
+                Clock.schedule_once(lambda dt: vibrator.vibrate(1), i * 2)
