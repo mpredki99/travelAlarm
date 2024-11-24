@@ -254,6 +254,6 @@ class GpsMarker(MapLayer):
             if buffer_distance <= buffer_meters:
                 # Clock.schedule_once(lambda dt: self.app.pins_db.update_is_active(pin_id, False), .5)
                 try:
-                    Alarm(pin_id, address, buffer_size, buffer_unit)
+                    Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), .5)
                 except Exception as e:
                     toast(text=str(e))
