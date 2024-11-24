@@ -150,7 +150,7 @@ class GpsMarker(MapLayer):
 
         # Draw marker if not in map widget yet
         if self.blinker is None and self.blinker_color is None:
-            Clock.schedule_once(lambda dt: self.update_marker(), .5)
+            Clock.schedule_once(lambda dt: self.update_marker(), .1)
 
         # Check if user is within active buffer
         self.is_within_buffer()
