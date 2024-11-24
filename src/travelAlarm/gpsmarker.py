@@ -65,8 +65,8 @@ class GpsMarker(MapLayer):
         # Initialize provider status
         self.provider_status = 'provider-enabled'
 
-        # Wait half second to build UI and then initialize GPS
-        Clock.schedule_once(lambda dt: self.initialize_gps(), .5)
+        # Wait a second to build UI and then initialize GPS
+        Clock.schedule_once(lambda dt: self.initialize_gps(), 1)
 
     def build_gps_dialog(self):
         """Build dialog window about providing localization."""
@@ -150,7 +150,7 @@ class GpsMarker(MapLayer):
 
         # Draw marker if not in map widget yet
         if self.blinker is None and self.blinker_color is None:
-            Clock.schedule_once(lambda dt: self.update_marker(), .1)
+            Clock.schedule_once(lambda dt: self.update_marker(), 0)
 
         # Check if user is within active buffer
         self.is_within_buffer()
@@ -263,4 +263,4 @@ class GpsMarker(MapLayer):
             # Check if user is within buffer size
             if buffer_distance <= buffer_meters:
                 # Create alarm object and trigger alarm
-                Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), .1)
+                Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), 0)
