@@ -251,5 +251,5 @@ class GpsMarker(MapLayer):
             buffer_distance = geodesic(user_pos, pin_pos).meters
 
             if buffer_distance <= buffer_meters:
-                self.app.pins_db.update_is_active(pin_id, 0)
-                # toast(text=str(address))
+                Clock.schedule_once(lambda dt: self.app.pins_db.update_is_active(pin_id, False), .5)
+                toast(text=str(address))
