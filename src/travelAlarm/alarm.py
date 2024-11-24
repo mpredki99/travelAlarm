@@ -5,7 +5,7 @@ from kivy.clock import Clock
 
 
 class Alarm:
-    def __init__(self, address, buffer_size, buffer_unit):
+    def __init__(self, pin_id, address, buffer_size, buffer_unit):
         self.app = MDApp().get_running_app()
 
         self.address = address
@@ -27,5 +27,5 @@ class Alarm:
         # Bind button event to close dialog window
         self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
 
-
-        Clock.schedule_once(lambda dt: self.alarm_dialog.open(), .5)
+        self.alarm_dialog.open()
+        Clock.schedule_once(lambda dt: self.app.pins_db.update_is_active(pin_id, False), .5)
