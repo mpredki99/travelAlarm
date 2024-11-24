@@ -43,8 +43,6 @@ class GpsMarker(MapLayer):
         # Get map widget instance
         self.map_widget = self.app.map_widget
 
-        self.alarm_triggered = False
-
         # Initialize GPS dialog
         self.gps_dialog = None
         self.gps_button = None
@@ -154,8 +152,7 @@ class GpsMarker(MapLayer):
         if self.blinker is None and self.blinker_color is None:
             Clock.schedule_once(lambda dt: self.update_marker(), .5)
 
-        if not self.alarm_triggered:
-            self.is_within_buffer()
+        self.is_within_buffer()
 
         return True
 
@@ -233,7 +230,8 @@ class GpsMarker(MapLayer):
         self.update_marker()
 
     def is_within_buffer(self):
-        self.alarm_triggered = True
+
+        from kivymd.toast import toast
 
         pins = self.app.pins_db.pins
         unit_mult = Buffer.unit_mult
@@ -256,4 +254,7 @@ class GpsMarker(MapLayer):
 
             if buffer_distance <= buffer_meters:
 
-                Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), .5)
+                try:
+                    Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), .5)
+                except Exception as e:
+                    toast(text=str(e))
