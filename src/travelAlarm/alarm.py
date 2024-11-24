@@ -8,6 +8,8 @@ class Alarm:
     def __init__(self, pin_id, address, buffer_size, buffer_unit):
         self.app = MDApp().get_running_app()
 
+        self.app.pins_db.update_is_active(pin_id, False)
+
         self.address = address
         self.buffer_size =  buffer_size
         self.buffer_unit = buffer_unit
@@ -28,4 +30,4 @@ class Alarm:
         self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
 
         self.alarm_dialog.open()
-        Clock.schedule_once(lambda dt: self.app.pins_db.update_is_active(pin_id, False), .5)
+        # Clock.schedule_once(lambda dt: self.app.pins_db.update_is_active(pin_id, False), .5)
