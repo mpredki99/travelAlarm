@@ -184,16 +184,23 @@ class GpsMarker(MapLayer):
 
     def blink(self):
         """Run blinking animation on GPS marker."""
-        # Define animation for blinker transparency
-        anim_color = Animation(a=0)
+        from kivymd.toast import toast
 
-        # Animation for size change to create a pulsing effect and keep it centered
-        anim_size = Animation(size=(self.base_size * 3, self.base_size * 3))
-        anim_size.bind(on_start=self.is_within_buffer, on_progress=self.update_blinker_position, on_complete=self.update_marker)
+        try:
 
-        # Start animations
-        anim_color.start(self.blinker_color)
-        anim_size.start(self.blinker)
+            # Define animation for blinker transparency
+            anim_color = Animation(a=0)
+
+            # Animation for size change to create a pulsing effect and keep it centered
+            anim_size = Animation(size=(self.base_size * 3, self.base_size * 3))
+            anim_size.bind(on_start=self.is_within_buffer, on_progress=self.update_blinker_position, on_complete=self.update_marker)
+
+            # Start animations
+            anim_color.start(self.blinker_color)
+            anim_size.start(self.blinker)
+
+        except Exception as e:
+            toast(text=str(e))
 
     def update_blinker_position(self, *args):
         """Update blinker position while its size is increasing."""
