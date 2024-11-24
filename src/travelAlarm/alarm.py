@@ -1,7 +1,6 @@
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivy.clock import Clock
 
 
 class Alarm:
@@ -9,12 +8,8 @@ class Alarm:
 
         self.app = MDApp.get_running_app()
 
-        from kivymd.toast import toast
-
-        try:
-            self.app.pins_db.update_is_active(pin_id, False)
-        except Exception as e:
-            toast(text=str(e))
+        self.app.pins_db.update_is_active(pin_id, False)
+        self.app.pins_db.pins[pin_id].get('marker').close_marker_popup()
 
         self.address = address
         self.buffer_size =  buffer_size
