@@ -10,7 +10,6 @@ from kivy.metrics import dp
 from geopy.distance import geodesic
 
 from buffer import Buffer
-from alarm import Alarm
 
 
 def check_gps_permission():

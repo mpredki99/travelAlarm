@@ -1,6 +1,7 @@
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivy.clock import Clock
 
 
 class Alarm:
@@ -26,4 +27,5 @@ class Alarm:
         # Bind button event to close dialog window
         self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
 
-        self.alarm_dialog.open()
+
+        Clock.schedule_once(lambda dt: self.alarm_dialog.open(), .5)
