@@ -1,11 +1,12 @@
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from plyer import vibrator
 
 
 class Alarm:
     def __init__(self, pin_id, address, buffer_size, buffer_unit):
-
+        from kivymd.toast import toast
         # Get app instance
         self.app = MDApp.get_running_app()
 
@@ -35,5 +36,10 @@ class Alarm:
         # Bind button event to close dialog window
         self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
 
+        try:
+            if vibrator.exists():
+                vibrator.vibrate(1)
+        except Exception as e:
+            toast(text=str(e))
         # Open dialog window
         self.alarm_dialog.open()
