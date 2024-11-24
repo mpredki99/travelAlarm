@@ -7,8 +7,11 @@ from kivy.clock import Clock
 class Alarm:
     def __init__(self, pin_id, address, buffer_size, buffer_unit):
         self.app = MDApp().get_running_app()
-
-        self.app.pins_db.update_is_active(pin_id, False)
+        from kivymd.toast import toast
+        try:
+            self.app.pins_db.update_is_active(pin_id, False)
+        except Exception as e:
+            toast(text=str(e))
 
         self.address = address
         self.buffer_size =  buffer_size
