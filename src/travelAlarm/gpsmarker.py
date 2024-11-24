@@ -10,6 +10,7 @@ from kivy.metrics import dp
 from geopy.distance import geodesic
 
 from buffer import Buffer
+from alarm import Alarm
 
 
 def check_gps_permission():
@@ -252,4 +253,5 @@ class GpsMarker(MapLayer):
 
             if buffer_distance <= buffer_meters:
                 Clock.schedule_once(lambda dt: self.app.pins_db.update_is_active(pin_id, False), .5)
-                toast(text=str(address))
+
+                Alarm(address, buffer_size, buffer_unit)
