@@ -241,7 +241,7 @@ class GpsMarker(MapLayer):
                 continue
             pin_pos = (pins[pin_id].get('latitude', 0), pins[pin_id].get('longitude', 0))
             address = pins[pin_id].get('address')
-            buffer_size = pins[pin_id].get('buffer_size')
+            buffer_size = pins[pin_id].get('buffer_size', 0)
             buffer_unit = pins[pin_id].get('buffer_unit')
 
             buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
@@ -249,5 +249,5 @@ class GpsMarker(MapLayer):
             buffer_distance = geodesic(user_pos, pin_pos).meters
 
             if buffer_distance <= buffer_meters:
-                self.app.pins_db.update_is_active(pin_id, False)
+                self.app.pins_db.update_is_active(pin_id, 0)
                 toast(text=str(address))
