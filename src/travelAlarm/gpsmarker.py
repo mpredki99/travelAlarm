@@ -152,9 +152,6 @@ class GpsMarker(MapLayer):
         if self.blinker is None and self.blinker_color is None:
             Clock.schedule_once(lambda dt: self.update_marker(), 0)
 
-        # Check if user is within active buffer
-        self.is_within_buffer()
-
         return True
 
     def draw_marker(self):
@@ -192,7 +189,7 @@ class GpsMarker(MapLayer):
 
         # Animation for size change to create a pulsing effect and keep it centered
         anim_size = Animation(size=(self.base_size * 3, self.base_size * 3))
-        anim_size.bind(on_progress=self.update_blinker_position, on_complete=self.update_marker)
+        anim_size.bind(on_start=self.is_within_buffer, on_progress=self.update_blinker_position, on_complete=self.update_marker)
 
         # Start animations
         anim_color.start(self.blinker_color)
