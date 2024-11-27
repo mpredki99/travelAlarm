@@ -263,4 +263,4 @@ class GpsMarker(MapLayer):
                 # Create alarm object and trigger alarm
                 pin_marker = pins[pin_id].get('marker')
                 # Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), 0)
-                Clock.schedule_once(lambda dt: Alarm(pin_marker.pin), 0)
+                Clock.schedule_once(lambda dt: Alarm(pin_marker), 0)

@@ -8,16 +8,22 @@ from kivymd.toast import toast
 
 
 class Alarm:
-    def __init__(self, pin):
+    def __init__(self, pin_marker):
         from kivymd.toast import toast
         # Get app instance
         self.app = MDApp.get_running_app()
 
         # Initialize pin object in alarm
-        self.pin = pin
+        self.pin = pin_marker.pin
+
+        self.pin.on_checkbox_click(False)
 
         try:
-            self.pin.on_checkbox_click(False)
+            pin_marker.close_marker_popup()
+            # Get pin address, buffer size and buffer unit
+            address = self.pin.address
+            buffer_size = self.pin.buffer_size
+            buffer_unit = self.pin.buffer_unit
         except Exception as e:
             toast(text=str(e))
 
