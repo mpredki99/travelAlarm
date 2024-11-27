@@ -41,8 +41,6 @@ class Alarm:
         # Open dialog window
         self.alarm_dialog.open()
 
-        Clock.schedule_once(lambda dt: pin_marker.close_marker_popup(), .5)
-
         # Trigger vibrations
         self.vibrate()
 
