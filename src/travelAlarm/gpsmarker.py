@@ -1,4 +1,3 @@
-from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy import platform
 from kivy_garden.mapview import MapLayer
@@ -231,6 +230,7 @@ class GpsMarker(MapLayer):
 
     def is_within_buffer(self, *args):
         """Check if user is within active buffer and trigger alarm if so."""
+        from kivymd.toast import toast
         # Get pins from database
         pins = self.app.pins_db.pins
 
