@@ -13,14 +13,12 @@ class Alarm:
         # Get app instance
         self.app = MDApp.get_running_app()
 
-        self.pin_marker = pin_marker
-
         # Initialize pin object in alarm
-        self.pin = self.pin_marker.pin
+        self.pin = pin_marker.pin
 
+        # Deactivate checkbox with UI update
         self.pin.on_checkbox_click(False)
 
-        self.pin_marker.close_marker_popup()
         # Get pin address, buffer size and buffer unit
         self.address = self.pin.address
         self.buffer_size = self.pin.buffer_size
@@ -46,12 +44,15 @@ class Alarm:
         self.alarm_dialog.open()
 
         # Trigger vibrations
-        # self.vibrate()
+        self.vibrate()
 
-    # def vibrate(self):
-    #     if vibrator.exists():
-    #         for i in range(3):
-    #             Clock.schedule_once(lambda dt: vibrator.vibrate(1), 1 + i * 2)
+        # Close map marker popup
+        pin_marker.close_marker_popup()
+
+    def vibrate(self):
+        if vibrator.exists():
+            for i in range(3):
+                Clock.schedule_once(lambda dt: vibrator.vibrate(1), 1 + i * 2)
 
 
 # class Alarm:
