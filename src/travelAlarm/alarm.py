@@ -18,32 +18,30 @@ class Alarm:
 
         self.pin.on_checkbox_click(False)
 
-        try:
-            pin_marker.close_marker_popup()
-            # Get pin address, buffer size and buffer unit
-            address = self.pin.address
-            buffer_size = self.pin.buffer_size
-            buffer_unit = self.pin.buffer_unit
-        except Exception as e:
-            toast(text=str(e))
+        pin_marker.close_marker_popup()
+        # Get pin address, buffer size and buffer unit
+        self.address = self.pin.address
+        self.buffer_size = self.pin.buffer_size
+        self.buffer_unit = self.pin.buffer_unit
 
-        # # Build button to close dialog window
-        # self.alarm_button = MDFlatButton(
-        #     text='OK',
-        #     theme_text_color='Custom',
-        #     text_color=self.app.theme_cls.primary_color,
-        # )
-        # # Build dialog window
-        # self.alarm_dialog = MDDialog(
-        #     title='Wake up!',
-        #     text=f'You are within {self.buffer_size} {self.buffer_unit} from {self.address}',
-        #     buttons=[self.alarm_button]
-        # )
-        # # Bind button event to close dialog window
-        # self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
-        #
-        # # Open dialog window
-        # self.alarm_dialog.open()
+
+        # Build button to close dialog window
+        self.alarm_button = MDFlatButton(
+            text='OK',
+            theme_text_color='Custom',
+            text_color=self.app.theme_cls.primary_color,
+        )
+        # Build dialog window
+        self.alarm_dialog = MDDialog(
+            title='Wake up!',
+            text=f'You are within {self.buffer_size} {self.buffer_unit} from {self.address}',
+            buttons=[self.alarm_button]
+        )
+        # Bind button event to close dialog window
+        self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
+
+        # Open dialog window
+        self.alarm_dialog.open()
 
         # Trigger vibrations
         # self.vibrate()
