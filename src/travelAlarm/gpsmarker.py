@@ -230,7 +230,6 @@ class GpsMarker(MapLayer):
 
     def is_within_buffer(self, *args):
         """Check if user is within active buffer and trigger alarm if so."""
-        from kivymd.toast import toast
         # Get pins from database
         pins = self.app.pins_db.pins
 
@@ -240,57 +239,28 @@ class GpsMarker(MapLayer):
         # Create user position tuple
         user_pos = (self.latitude, self.longitude)
 
-        # for pin_id in pins:
-        #     # Skip buffer if pin is not active
-        #     if not pins[pin_id].get('is_active'):
-        #         continue
-        #
-        #     # Create pin position tuple
-        #     pin_pos = (pins[pin_id].get('latitude', 0), pins[pin_id].get('longitude', 0))
-        #
-        #     # Get pin address, buffer size and buffer unit
-        #     address = pins[pin_id].get('address')
-        #     buffer_size = pins[pin_id].get('buffer_size', 0)
-        #     buffer_unit = pins[pin_id].get('buffer_unit')
-        #
-        #     # Convert buffer size to meters
-        #     buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
-        #
-        #     # Calculate distance from user to pin
-        #     buffer_distance = geodesic(user_pos, pin_pos).meters
-        #
-        #     # Check if user is within buffer size
-        #     if buffer_distance <= buffer_meters:
-        #         # Create alarm object and trigger alarm
-        #         Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), 0)
+        for pin_id in pins:
+            # Skip buffer if pin is not active
+            if not pins[pin_id].get('is_active'):
+                continue
 
-        for attributes in pins.values():
-            pin_marker = attributes.get('marker')
-            try:
-                pin = pin_marker.pin
-                # Skip buffer if pin is not active
-                if not pin.is_active:
-                    continue
+            # Create pin position tuple
+            pin_pos = (pins[pin_id].get('latitude', 0), pins[pin_id].get('longitude', 0))
 
-                # Create pin position tuple
-                pin_pos = (pin.latitude, pin.longitude)
+            # Get pin address, buffer size and buffer unit
+            address = pins[pin_id].get('address')
+            buffer_size = pins[pin_id].get('buffer_size', 0)
+            buffer_unit = pins[pin_id].get('buffer_unit')
 
-                # Get pin address, buffer size and buffer unit
-                address = pin.address
-                buffer_size = pin.buffer_size
-                buffer_unit = pin.buffer_unit
+            # Convert buffer size to meters
+            buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
 
-                # Convert buffer size to meters
-                buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
+            # Calculate distance from user to pin
+            buffer_distance = geodesic(user_pos, pin_pos).meters
 
-                # Calculate distance from user to pin
-                buffer_distance = geodesic(user_pos, pin_pos).meters
-
-                # Check if user is within buffer size
-                if buffer_distance <= buffer_meters:
-                    pin.on_checkbox_click(False)
-                    # Create alarm object and trigger alarm
-                    # Clock.schedule_once(lambda dt: Alarm(pin), 0)
-
-            except Exception as e:
-                toast(text=e)
+            # Check if user is within buffer size
+            if buffer_distance <= buffer_meters:
+                # Create alarm object and trigger alarm
+                pin_marker = pins[pin_id].get('marker')
+                # Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), 0)
+                Clock.schedule_once(lambda dt: Alarm(pin_marker.pin), 0)
