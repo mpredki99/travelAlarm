@@ -13,12 +13,14 @@ class Alarm:
         # Get app instance
         self.app = MDApp.get_running_app()
 
+        self.pin_marker = pin_marker
+
         # Initialize pin object in alarm
-        self.pin = pin_marker.pin
+        self.pin = self.pin_marker.pin
 
         self.pin.on_checkbox_click(False)
 
-        pin_marker.close_marker_popup()
+        self.pin_marker.close_marker_popup()
         # Get pin address, buffer size and buffer unit
         self.address = self.pin.address
         self.buffer_size = self.pin.buffer_size
