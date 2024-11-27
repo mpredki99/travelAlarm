@@ -2,6 +2,7 @@ from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock
+from kivy.core.audio import SoundLoader
 from plyer import vibrator
 
 
@@ -36,7 +37,17 @@ class Alarm:
             buttons=[self.alarm_button]
         )
         # Bind button event to close dialog window
-        self.alarm_button.bind(on_press=self.alarm_dialog.dismiss)
+        self.alarm_button.bind(on_press=self.stop)
+
+        self.alarm_sound=None
+        try:
+            # alarm_1 - 501880__greenworm__cellphone-alarm-clock
+            self.alarm_sound = SoundLoader.load('sounds/alarm_1.mp3')
+            if self.alarm_sound:
+                self.alarm_sound.loop = True  # Set to loop if needed
+                self.alarm_sound.play()
+        except Exception as e:
+            toast(text=str(e))
 
         # Open dialog window
         self.alarm_dialog.open()
@@ -44,7 +55,15 @@ class Alarm:
         # Trigger vibrations
         self.vibrate()
 
+
     def vibrate(self):
         if vibrator.exists():
             for i in range(3):
                 Clock.schedule_once(lambda dt: vibrator.vibrate(1), 1 + i * 2)
+
+    def stop(self, *args):
+        if self.alarm_sound:
+            self.alarm_sound.stop()
+            self.alarm_sound.unload()
+
+        self.alarm_dialog.dismiss()
