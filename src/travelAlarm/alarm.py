@@ -4,8 +4,6 @@ from kivymd.uix.dialog import MDDialog
 from kivy.clock import Clock
 from plyer import vibrator
 
-from kivymd.toast import toast
-
 
 class Alarm:
     def __init__(self, pin_marker):
@@ -17,7 +15,7 @@ class Alarm:
         self.pin = pin_marker.pin
 
         # Deactivate checkbox with UI update
-        Clock.schedule_once(lambda dt: self.pin.on_checkbox_click(False), 0)
+        self.pin.on_checkbox_click(False)
 
         # Get pin address, buffer size and buffer unit
         self.address = self.pin.address
@@ -42,6 +40,8 @@ class Alarm:
 
         # Open dialog window
         self.alarm_dialog.open()
+
+        Clock.schedule_once(lambda dt: pin_marker.close_marker_popup(), .5)
 
         # Trigger vibrations
         self.vibrate()

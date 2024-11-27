@@ -247,8 +247,7 @@ class GpsMarker(MapLayer):
             # Create pin position tuple
             pin_pos = (pins[pin_id].get('latitude', 0), pins[pin_id].get('longitude', 0))
 
-            # Get pin address, buffer size and buffer unit
-            address = pins[pin_id].get('address')
+            # Get pin's buffer size and buffer unit
             buffer_size = pins[pin_id].get('buffer_size', 0)
             buffer_unit = pins[pin_id].get('buffer_unit')
 
@@ -262,5 +261,4 @@ class GpsMarker(MapLayer):
             if buffer_distance <= buffer_meters:
                 # Create alarm object and trigger alarm
                 pin_marker = pins[pin_id].get('marker')
-                # Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), 0)
                 Clock.schedule_once(lambda dt: Alarm(pin_marker), 0)
