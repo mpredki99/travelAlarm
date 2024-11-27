@@ -1,3 +1,4 @@
+from KivyMD.kivymd.toast import toast
 from kivymd.app import MDApp
 from kivy import platform
 from kivy_garden.mapview import MapLayer
@@ -265,27 +266,31 @@ class GpsMarker(MapLayer):
 
         for attributes in pins.values():
             pin_marker = attributes.get('marker')
-            pin = pin_marker.pin
-            # Skip buffer if pin is not active
-            if not pin.is_active:
-                continue
+            try:
+                pin = pin_marker.pin
+                # Skip buffer if pin is not active
+                if not pin.is_active:
+                    continue
 
-            # Create pin position tuple
-            pin_pos = (pin.latitude, pin.longitude)
+                # Create pin position tuple
+                pin_pos = (pin.latitude, pin.longitude)
 
-            # Get pin address, buffer size and buffer unit
-            address = pin.address
-            buffer_size = pin.buffer_size
-            buffer_unit = pin.buffer_unit
+                # Get pin address, buffer size and buffer unit
+                address = pin.address
+                buffer_size = pin.buffer_size
+                buffer_unit = pin.buffer_unit
 
-            # Convert buffer size to meters
-            buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
+                # Convert buffer size to meters
+                buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
 
-            # Calculate distance from user to pin
-            buffer_distance = geodesic(user_pos, pin_pos).meters
+                # Calculate distance from user to pin
+                buffer_distance = geodesic(user_pos, pin_pos).meters
 
-            # Check if user is within buffer size
-            if buffer_distance <= buffer_meters:
-                # Create alarm object and trigger alarm
-                pin.on_checkbox_click(False)
-                # Clock.schedule_once(lambda dt: Alarm(pin_id, address, buffer_size, buffer_unit), 0)
+                # Check if user is within buffer size
+                if buffer_distance <= buffer_meters:
+                    pin.on_checkbox_click(False)
+                    # Create alarm object and trigger alarm
+                    # Clock.schedule_once(lambda dt: Alarm(pin), 0)
+
+            except Exception as e:
+                toast(text=e)
