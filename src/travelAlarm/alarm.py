@@ -17,7 +17,7 @@ class Alarm:
         self.pin = pin_marker.pin
 
         # Deactivate checkbox with UI update
-        self.pin.on_checkbox_click(False)
+        Clock.schedule_once(lambda dt: self.pin.on_checkbox_click(False), 0)
 
         # Get pin address, buffer size and buffer unit
         self.address = self.pin.address
@@ -45,9 +45,6 @@ class Alarm:
 
         # Trigger vibrations
         self.vibrate()
-
-        # Close map marker popup
-        Clock.schedule_once(lambda dt: pin_marker.close_marker_popup(), 0)
 
     def vibrate(self):
         if vibrator.exists():
