@@ -4,7 +4,6 @@ from kivy.lang import Builder
 from database import Database
 from mapwidget import MapWidget
 from gpsmarker import GpsMarker, check_gps_permission, request_location_permission
-# from alarm import Alarm
 
 
 class TravelAlarmApp(MDApp):
@@ -21,9 +20,6 @@ class TravelAlarmApp(MDApp):
         # Initialize GPS marker
         self.gps_marker = None
 
-        # # Initialize alarm object
-        # self.alarm = None
-
     def add_gps_marker(self):
         """Add gps marker to map widget."""
         if check_gps_permission() and self.gps_marker is None:
@@ -36,10 +32,6 @@ class TravelAlarmApp(MDApp):
             return True
         # If gps marker not added
         return False
-
-    # def run_alarm(self, address, buffer_size, buffer_unit):
-    #     self.alarm = Alarm(address, buffer_size, buffer_unit)
-    #     return True
 
     def build(self):
         """Build app."""
