@@ -18,7 +18,7 @@ class TravelAlarmApp(MDApp):
         self.pins_db = Database('pins.db')
 
         # Get alarm sound file
-        self.alarm_file = 'sounds/alarm_1.mp3'
+        self.alarm_file = 'sounds/alarm_2.mp3'
 
         # Initialize GPS marker
         self.gps_marker = None
