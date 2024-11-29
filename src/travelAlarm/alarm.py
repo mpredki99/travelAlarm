@@ -15,14 +15,13 @@ class Alarm:
         # Initialize pin object in alarm
         self.pin = pin_marker.pin
 
-        # Deactivate checkbox with UI update
+        # Deactivate buffer with UI update
         self.pin.on_checkbox_click(False)
 
         # Get pin address, buffer size and buffer unit
         self.address = self.pin.address
         self.buffer_size = self.pin.buffer_size
         self.buffer_unit = self.pin.buffer_unit
-
 
         # Build button to close dialog window
         self.alarm_button = MDFlatButton(
@@ -41,7 +40,6 @@ class Alarm:
 
         # alarm_1 - 501880__greenworm__cellphone-alarm-clock
         self.alarm_sound = SoundLoader.load('sounds/alarm_1.mp3')
-
 
         # Open dialog window
         self.alarm_dialog.open()
@@ -66,6 +64,5 @@ class Alarm:
     def stop(self, *args):
         if self.alarm_sound:
             self.alarm_sound.stop()
-            self.alarm_sound.unload()
 
         self.alarm_dialog.dismiss()
