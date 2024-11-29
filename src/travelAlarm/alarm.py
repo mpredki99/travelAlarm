@@ -39,13 +39,13 @@ class Alarm:
         self.alarm_button.bind(on_release=lambda x: self.stop_alarm())
 
         # alarm_1 - 501880__greenworm__cellphone-alarm-clock
-        self.alarm_sound = SoundLoader.load('sounds/alarm_1.mp3')
+        self.alarm_sound = SoundLoader.load(self.app.alarm_file)
 
         # Open dialog window
         self.alarm_dialog.open()
 
         # Trigger vibrations
-        self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 1)
+        self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 2.5)
 
         # Sound alarm
         self.sound()
