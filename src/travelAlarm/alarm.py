@@ -36,7 +36,7 @@ class Alarm:
             buttons=[self.alarm_button]
         )
         # Bind button event to close dialog window
-        self.alarm_button.bind(on_release=self.stop)
+        self.alarm_button.bind(on_release=self.stop_alarm)
 
         # alarm_1 - 501880__greenworm__cellphone-alarm-clock
         self.alarm_sound = SoundLoader.load('sounds/alarm_1.mp3')
@@ -54,14 +54,16 @@ class Alarm:
     def vibrate(self):
         if vibrator.exists():
             for i in range(3):
-                Clock.schedule_once(lambda dt: vibrator.vibrate(1), 1 + i * 2)
+                Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 1 + i * 2)
 
     def sound(self):
         if self.alarm_sound:
             self.alarm_sound.loop = True
             self.alarm_sound.play()
 
-    def stop(self, *args):
+    def stop_alarm(self, *args):
+        from kivymd.toast import toast
+        toast(text='STOP')
         if self.alarm_sound:
             self.alarm_sound.stop()
 
