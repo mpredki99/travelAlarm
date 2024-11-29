@@ -202,11 +202,11 @@ class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
         # Refresh pins list
         self.app.root.ids.screen_manager.get_screen("ListScreen").refresh_pins_list()
 
-    def close_marker_popup(self):
+    def close_marker_popup(self, screen='ListScreen'):
         """Close pin marker popup."""
-        # Close pin marker popup if on ListScreen
+        # Close pin marker popup if on screen provided in args
         screen = self.app.root.ids.screen_manager.current
-        if screen == 'ListScreen': self.pins_db.pins[self.pin_id].get('marker').close_marker_popup()
+        if screen == screen: self.pins_db.pins[self.pin_id].get('marker').close_marker_popup()
 
     def magic_grow(self):
         """Perform magic animation of pin item."""

@@ -17,6 +17,9 @@ class Alarm:
         # Deactivate buffer with UI update
         self.pin.on_checkbox_click(False)
 
+        # Close marker popup after update the checkbox
+        self.pin.close_marker_popup(screen='MapScreen')
+
         # Get pin address, buffer size and buffer unit
         self.address = self.pin.address
         self.buffer_size = self.pin.buffer_size
