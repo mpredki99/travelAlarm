@@ -8,7 +8,6 @@ from plyer import vibrator
 
 class Alarm:
     def __init__(self, pin_marker):
-        from kivymd.toast import toast
         # Get app instance
         self.app = MDApp.get_running_app()
 
@@ -44,23 +43,30 @@ class Alarm:
         # Open dialog window
         self.alarm_dialog.open()
 
-        # Trigger vibrations
-        self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 2.5)
+        # Trigger vibrations if device has a vibrator
+        self.vibration_event = None
+        if vibrator.exists():
+            self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 2.5)
 
         # Sound alarm
         self.sound()
 
     def sound(self):
+        # Check if alarm sound exists
         if self.alarm_sound:
             self.alarm_sound.loop = True
             self.alarm_sound.play()
+            return True
+        return False
 
     def stop_alarm(self, *args):
+        # Stop alarm sound if exists
         if self.alarm_sound:
             self.alarm_sound.stop()
 
-        # Stop the vibration
+        # Stop the vibration if vibrator exists
         if self.vibration_event:
             Clock.unschedule(self.vibration_event)
 
+        # Close alarm dialog
         self.alarm_dialog.dismiss()
