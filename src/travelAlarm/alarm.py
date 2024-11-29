@@ -45,16 +45,10 @@ class Alarm:
         self.alarm_dialog.open()
 
         # Trigger vibrations
-        self.vibrate()
+        self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 1)
 
         # Sound alarm
         self.sound()
-
-
-    def vibrate(self):
-        if vibrator.exists():
-            for i in range(3):
-                Clock.schedule_once(lambda dt: vibrator.vibrate(1), 1 + i * 2)
 
     def sound(self):
         if self.alarm_sound:
@@ -62,9 +56,11 @@ class Alarm:
             self.alarm_sound.play()
 
     def stop_alarm(self, *args):
-        from kivymd.toast import toast
-        toast(text='STOP')
         if self.alarm_sound:
             self.alarm_sound.stop()
+
+        # Stop the vibration
+        if self.vibration_event:
+            Clock.unschedule(self.vibration_event)
 
         self.alarm_dialog.dismiss()
