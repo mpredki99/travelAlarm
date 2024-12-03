@@ -4,10 +4,12 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp
+from kivy.core.audio import SoundLoader
 
 
 class SettingsScreen(Screen):
-    pass
+    def on_leave(self, *args):
+        self.ids.alarm_sounds_list.stop_alarm_sound()
 
 
 class ThemeStyleSwitch(BoxLayout):
@@ -102,4 +104,28 @@ class PrimaryPaletteToolbar(GridLayout):
         return False
 
 class AlarmSoundsList(BoxLayout):
-    pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.app = MDApp.get_running_app()
+
+        self.alarm_sound = None
+
+    def update_alarm_file(self, alarm_file):
+        self.app.alarm_file = f'sounds/{alarm_file}'
+
+    def sound_alarm_sample(self):
+        self.alarm_sound = SoundLoader.load(self.app.alarm_file)
+        if self.alarm_sound:
+            self.alarm_sound.loop = False
+            self.alarm_sound.play()
+
+    def stop_alarm_sound(self):
+        if self.alarm_sound:
+            self.alarm_sound.stop()
+
+    def on_touch_down(self, touch):
+        self.stop_alarm_sound()
+        super().on_touch_down(touch)
+
+
+
