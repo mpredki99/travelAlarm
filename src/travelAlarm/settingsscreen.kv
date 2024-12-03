@@ -101,7 +101,9 @@
             group: "group"
             size_hint_x: .2
             active: app.alarm_file == "sounds/alarm_1.mp3"
-            on_active: app.pins_db.update_alarm_sound("alarm_1.mp3")
+            on_active:
+                app.pins_db.update_alarm_sound("alarm_1.mp3"),
+                app.alarm_file = "sounds/alarm_1.mp3"
         MDLabel:
             text: "alarm 1"
 
@@ -110,7 +112,9 @@
             group: "group"
             size_hint_x: .2
             active: app.alarm_file == "sounds/alarm_2.mp3"
-            on_active: app.pins_db.update_alarm_sound("alarm_2.mp3")
+            on_active:
+                app.pins_db.update_alarm_sound("alarm_2.mp3"),
+                app.alarm_file = "sounds/alarm_2.mp3"
         MDLabel:
             text: "alarm 2"
 
@@ -119,6 +123,8 @@
             group: "group"
             size_hint_x: .2
             active: app.alarm_file == "sounds/alarm_3.mp3"
-            on_active: app.pins_db.update_alarm_sound("alarm_3.mp3")
+            on_active:
+                app.pins_db.update_alarm_sound("alarm_3.mp3"),
+                app.alarm_file = "sounds/alarm_3.mp3"
         MDLabel:
             text: "alarm 3"
