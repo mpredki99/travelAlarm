@@ -21,17 +21,26 @@
             MDLabel:
                 size_hint_y: None
                 height: "50dp"
-                text: "App Theme"
+                text: "Select app theme"
                 halign: "center"
 
             PrimaryPaletteToolbar:
                 size_hint_y: None
                 height: self.minimum_height
 
+            MDLabel:
+                size_hint_y: None
+                height: "50dp"
+                text: "Select alarm sound"
+                halign: "center"
+
+            AlarmSoundsList:
 
 <ThemeStyleSwitch@BoxLayout>:
     MDSwitch:
         active: app.pins_db.theme_style == "Dark"
+        pos_hint: {"center_x": .5, "center_y": .5}
+
         on_active:
             root.update_theme_style(self.active)
 
@@ -80,3 +89,36 @@
         icon: ""
         md_bg_color: 1.0, 0.9215686274509803, 0.23137254901960785, 1.0
         on_release: root.update_primary_palette("Yellow")
+
+
+<AlarmSoundsList@BoxLayout>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: "150dp"
+
+    BoxLayout:
+        MDCheckbox:
+            group: "group"
+            size_hint_x: .2
+            active: app.alarm_file == "sounds/alarm_1.mp3"
+            on_active: app.pins_db.update_alarm_sound("alarm_1.mp3")
+        MDLabel:
+            text: "alarm 1"
+
+    BoxLayout:
+        MDCheckbox:
+            group: "group"
+            size_hint_x: .2
+            active: app.alarm_file == "sounds/alarm_2.mp3"
+            on_active: app.pins_db.update_alarm_sound("alarm_2.mp3")
+        MDLabel:
+            text: "alarm 2"
+
+    BoxLayout:
+        MDCheckbox:
+            group: "group"
+            size_hint_x: .2
+            active: app.alarm_file == "sounds/alarm_3.mp3"
+            on_active: app.pins_db.update_alarm_sound("alarm_3.mp3")
+        MDLabel:
+            text: "alarm 3"

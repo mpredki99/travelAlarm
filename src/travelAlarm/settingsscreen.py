@@ -100,3 +100,6 @@ class PrimaryPaletteToolbar(GridLayout):
             return True
 
         return False
+
+class AlarmSoundsList(BoxLayout):
+    pass

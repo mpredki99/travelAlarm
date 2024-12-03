@@ -318,6 +318,27 @@ class Database:
 
         return theme_style
 
+
+    def update_alarm_sound(self, new_alarm_sound):
+        """Update alarm sound in database."""
+        self.cursor.execute('REPLACE INTO customizations (key,value) VALUES ("alarmsound", ?);', (new_alarm_sound,))
+        self.connection.commit()
+
+    @property
+    def alarm_sound(self):
+        """Return alarm sound from database."""
+        self.cursor.execute('SELECT value FROM customizations WHERE key="alarmsound";')
+        alarm_sound = self.cursor.fetchall()
+
+        if len(alarm_sound) > 0:
+            # Value from previous end of session
+            alarm_sound = alarm_sound[0][0]
+        else:
+            # Default value while open first time
+            alarm_sound = "alarm_1.mp3"
+
+        return alarm_sound
+
     def disconnect(self):
         """Close the database connection."""
         self.cursor.close()
