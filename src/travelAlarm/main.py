@@ -9,6 +9,7 @@ from gpsmarker import GpsMarker, check_gps_permission, request_location_permissi
 class TravelAlarmApp(MDApp):
 
     def __init__(self, **kwargs):
+        """Initialize app object and its attributes."""
         super().__init__(**kwargs)
 
         # Create map_widget instance

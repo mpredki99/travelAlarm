@@ -8,7 +8,9 @@ from kivy.core.audio import SoundLoader
 
 
 class SettingsScreen(Screen):
+
     def on_leave(self, *args):
+        """Stop alarm sound sample while leaving the settings screen."""
         self.ids.alarm_sounds_list.stop_alarm_sound()
 
 
@@ -24,7 +26,7 @@ class ThemeStyleSwitch(BoxLayout):
         self.pins_db = self.app.pins_db
 
     def update_theme_style(self, active):
-        """Update app style."""
+        """Switch between light and dark theme."""
         # Assign the value of active to the corresponding style
         map_theme_style = {True: "Dark", False: "Light"}
 
@@ -37,6 +39,10 @@ class ThemeStyleSwitch(BoxLayout):
 
             # Update app style in database
             self.pins_db.update_app_theme_style(selected_theme)
+
+            return True
+
+        return False
 
 
 class PrimaryPaletteToolbar(GridLayout):
@@ -68,7 +74,7 @@ class PrimaryPaletteToolbar(GridLayout):
         self.cols = max(num_cols, 1)
 
     def update_primary_palette(self, new_palette):
-        """Update primary palette."""
+        """Set app color palette."""
         # Assign the value of new_palette to the corresponding palette
         map_primary_palette = {
             'Light Green': 'LightGreen',
@@ -104,26 +110,38 @@ class PrimaryPaletteToolbar(GridLayout):
         return False
 
 class AlarmSoundsList(BoxLayout):
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        # Get app instance
         self.app = MDApp.get_running_app()
 
+        # Initialize sound loader object
         self.alarm_sound = None
 
     def update_alarm_file(self, alarm_file):
+        """Set new alarm file."""
         self.app.alarm_file = f'sounds/{alarm_file}'
 
     def sound_alarm_sample(self):
+        """Start sound alarm sample."""
+        # Load sound alarm file
         self.alarm_sound = SoundLoader.load(self.app.alarm_file)
+
+        # If file exists play the sound
         if self.alarm_sound:
             self.alarm_sound.loop = False
             self.alarm_sound.play()
 
     def stop_alarm_sound(self):
+        """Stop sound alarm sample."""
+        # Stop sound if file exists
         if self.alarm_sound:
             self.alarm_sound.stop()
 
     def on_touch_down(self, touch):
+        """Stop sound alarm sample when touch the screen."""
         self.stop_alarm_sound()
         super().on_touch_down(touch)
 
