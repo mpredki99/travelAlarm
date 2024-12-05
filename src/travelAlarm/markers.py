@@ -6,7 +6,7 @@
 
 from kivymd.app import MDApp
 from kivy.core.window import Window
-from kivy_garden.mapview import MapMarkerPopup
+from kivy_garden.mapview import MapMarkerPopup, MarkerMapLayer
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.metrics import dp
 from kivymd.uix.button import MDRaisedButton
@@ -17,7 +17,7 @@ from kivymd.toast import toast
 from pinitem import PinItem
 
 
-class PinMarker(MapMarkerPopup):
+class Marker(MapMarkerPopup):
 
     def __init__(self, pin_id, is_active, address, buffer_size, buffer_unit, **kwargs):
         super().__init__(**kwargs)
@@ -95,8 +95,16 @@ class PinMarker(MapMarkerPopup):
         """Close popup widget."""
         self.is_open = False
 
+    def draw_buffer(self, *args):
+        from kivy.graphics import Color, Ellipse
 
-class AddPinMarker(MapMarkerPopup):
+        with self.canvas.before:
+            # Draw the buffer circle
+            Color(0,0,0,1)
+            Ellipse(pos=(self.x, self.y), size=(dp(50) * 2, dp(50) * 2))
+
+
+class AddMarker(MapMarkerPopup):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
