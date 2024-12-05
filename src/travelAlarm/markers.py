@@ -25,11 +25,8 @@ class Marker(MapMarkerPopup):
         # Get app instance
         self.app = MDApp.get_running_app()
 
-        # Get pins database instance
-        pins = self.app.pins_db.pins
-
         # Determine pin marker color
-        marker_color = self.app.theme_cls.primary_palette if pins[pin_id].get('is_active') else 'Red'
+        marker_color = self.app.theme_cls.primary_palette if is_active else 'Red'
 
         # Get pin marker icon
         self.source = "icons/" + marker_color + ".png"
@@ -57,6 +54,8 @@ class Marker(MapMarkerPopup):
         self.add_widget(
             self.pin
         )
+
+        self.buffer = {'ellipse_color': None, 'ellipse': None, 'outline_color': None, 'outline': None}
 
     def build_three_dots_menu(self):
         """Builds drop down menu for delete and show on list screen."""
@@ -94,14 +93,6 @@ class Marker(MapMarkerPopup):
     def close_marker_popup(self):
         """Close popup widget."""
         self.is_open = False
-
-    def draw_buffer(self, *args):
-        from kivy.graphics import Color, Ellipse
-
-        with self.canvas.before:
-            # Draw the buffer circle
-            Color(0,0,0,1)
-            Ellipse(pos=(self.x, self.y), size=(dp(50) * 2, dp(50) * 2))
 
 
 class AddMarker(MapMarkerPopup):

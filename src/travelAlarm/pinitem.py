@@ -12,8 +12,6 @@ from kivy.properties import NumericProperty, BooleanProperty, StringProperty
 from kivymd.uix.behaviors.magic_behavior import MagicBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 
-from buffer import Buffer
-
 
 class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
 
@@ -164,7 +162,9 @@ class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
     @staticmethod
     def valid_buffer_size(buffer_size, buffer_unit):
         buffer_size = float(buffer_size)
-        if Buffer.unit_mult[buffer_unit] * buffer_size < 1:
+        from markerslayer import MarkersLayer
+        unit_mult = MarkersLayer.unit_mult
+        if unit_mult[buffer_unit] * buffer_size < 1:
             toast("Buffer size to small")
             return False
         else:

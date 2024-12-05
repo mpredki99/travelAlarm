@@ -4,10 +4,11 @@
 # Licensed under the GNU General Public License v3.0.
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
 
-from kivy_garden.mapview import MapView, MapSource
+from kivy_garden.mapview import MapView, MapSource, MarkerMapLayer
 from kivy.clock import Clock
 
-from pinmarkers import AddPinMarker
+from markers import AddMarker
+from markerslayer import MarkersLayer
 
 
 class MapWidget(MapView):
@@ -17,11 +18,16 @@ class MapWidget(MapView):
         # Set min zoom value as 3
         self.map_source = MapSource(min_zoom=3)
 
+        self.snap_to_zoom = False
+
         # Initialize clock variable
         self.clock = None
 
         # Initialize hold state
         self.hold = False
+
+        self._default_marker_layer = MarkersLayer()
+        self.add_layer(self._default_marker_layer)
 
     def on_touch_down(self, touch):
         """Override touch down method and add functionality to add pin by hold."""
@@ -64,7 +70,7 @@ class MapWidget(MapView):
             touch_lat, touch_lon = self.get_latlon_at(*touch.pos, self.zoom)
 
             # Add marker to the map widget
-            self.add_marker(AddPinMarker(lat=touch_lat, lon=touch_lon))
+            self.add_marker(AddMarker(lat=touch_lat, lon=touch_lon))
 
         else:
             return False

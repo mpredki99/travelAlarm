@@ -15,7 +15,7 @@ from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
 from geopy.distance import geodesic
 
-from buffer import Buffer
+from markerslayer import MarkersLayer
 from alarm import Alarm
 
 
@@ -240,7 +240,7 @@ class GpsMarker(MapLayer):
         pins = self.app.pins_db.pins
 
         # Get unit multiplier
-        unit_mult = Buffer.unit_mult
+        unit_mult = MarkersLayer.unit_mult
 
         # Create user position tuple
         user_pos = (self.latitude, self.longitude)

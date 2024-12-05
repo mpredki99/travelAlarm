@@ -9,8 +9,8 @@ import sqlite3
 from kivymd.app import MDApp
 
 from geocode import geocode_by_address
-from pinmarkers import PinMarker
-from buffer import Buffer
+from markers import Marker
+from markerslayer import MarkersLayer
 
 from kivy_garden.mapview import MapLayer
 
@@ -213,17 +213,17 @@ class Database:
         buffer_unit = self.pins[pin_id].get('buffer_unit')
 
         # Create pin marker and pin buffer
-        self.pins[pin_id]['buffer'] = Buffer(is_active, latitude, longitude, buffer_size, buffer_unit)
-        self.pins[pin_id]['marker'] = PinMarker(pin_id, is_active, address, buffer_size, buffer_unit, lat=latitude, lon=longitude)
+        # self.pins[pin_id]['buffer'] = MarkersLayer(is_active, latitude, longitude, buffer_size, buffer_unit)
+        self.pins[pin_id]['marker'] = Marker(pin_id, is_active, address, buffer_size, buffer_unit, lat=latitude, lon=longitude)
 
         # Add new buffer and marker to map_widget
         self.map_widget.add_marker(self.pins[pin_id]['marker'])
-        self.map_widget.add_layer(self.pins[pin_id]['buffer'])
+        # self.map_widget.add_layer(self.pins[pin_id]['buffer'])
 
     def erase_mapview_buffer(self, pin_id):
         """Remove pin marker buffer and pin marker popup from map_widget."""
         # Remove buffer and marker from map_widget
-        self.map_widget.remove_layer(self.pins[pin_id]['buffer'])
+        # self.map_widget.remove_layer(self.pins[pin_id]['buffer'])
         self.map_widget.remove_marker(self.pins[pin_id]['marker'])
 
     def update_mapview_buffer(self, pin_id):
