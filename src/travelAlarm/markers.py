@@ -6,7 +6,7 @@
 
 from kivymd.app import MDApp
 from kivy.core.window import Window
-from kivy_garden.mapview import MapMarkerPopup, MarkerMapLayer
+from kivy_garden.mapview import MapMarkerPopup
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.metrics import dp
 from kivymd.uix.button import MDRaisedButton
@@ -25,12 +25,6 @@ class Marker(MapMarkerPopup):
         # Get app instance
         self.app = MDApp.get_running_app()
 
-        # Determine pin marker color
-        marker_color = self.app.theme_cls.primary_palette if is_active else 'Red'
-
-        # Get pin marker icon
-        self.source = "icons/" + marker_color + ".png"
-
         # Determine popup widget size
         self.popup_size = Window.width * .9, Window.height * .1
 
@@ -39,13 +33,13 @@ class Marker(MapMarkerPopup):
 
         # Create instance of popup widget
         self.pin = PinItem(
-                y = dp(10),
-                pin_id=pin_id,
-                is_active=is_active,
-                address=address,
-                buffer_size=buffer_size,
-                buffer_unit=buffer_unit,
-            )
+            y = dp(10),
+            pin_id=pin_id,
+            is_active=is_active,
+            address=address,
+            buffer_size=buffer_size,
+            buffer_unit=buffer_unit,
+        )
 
         # Override three dots menu options
         self.pin.three_dots_menu = self.build_three_dots_menu()
@@ -56,6 +50,10 @@ class Marker(MapMarkerPopup):
         )
 
         self.buffer = {'ellipse_color': None, 'ellipse': None, 'outline_color': None, 'outline': None}
+
+        self.set_pin_icon()
+
+        self.app.map_widget.add_marker(self)
 
     def build_three_dots_menu(self):
         """Builds drop down menu for delete and show on list screen."""
@@ -68,6 +66,20 @@ class Marker(MapMarkerPopup):
             items=three_dots_menu_items,
             width_mult=2,
         )
+
+    def set_pin_icon(self):
+        # Determine pin marker color
+        marker_color = self.app.theme_cls.primary_palette if self.pin.is_active else 'Red'
+
+        # Get pin marker icon
+        self.source = "icons/" + marker_color + ".png"
+
+    @property
+    def layer(self):
+        return self._layer
+
+    def erase_from_map_widget(self):
+        self.app.map_widget.remove_marker(self)
 
     def on_to_list(self):
         """Show pin item on list screen"""
