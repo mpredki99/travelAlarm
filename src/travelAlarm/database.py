@@ -142,10 +142,11 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id]['is_active'] = new_is_active
+        self.pins[pin_id]['marker'].pin.is_active = new_is_active
 
         # Update map_widget
-        self.update_mapview_buffer(pin_id)
+        self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
+        self.pins[pin_id]['marker'].set_pin_icon()
 
     def update_address(self, pin_id, new_address):
         """Update pin's address attribute."""
