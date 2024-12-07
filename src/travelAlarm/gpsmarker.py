@@ -21,7 +21,6 @@ from alarm import Alarm
 
 def check_gps_permission():
     """Check localization permissions for android devices."""
-    return True
     if platform == 'android':
         from android.permissions import Permission, check_permission
         return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
@@ -56,8 +55,8 @@ class GpsMarker(MapLayer):
         self.build_gps_dialog()
 
         # Initialize position
-        self.latitude = 50 #None
-        self.longitude = 20 #None
+        self.latitude = None
+        self.longitude = None
         self.marker_center = None
 
         # Define size of marker
