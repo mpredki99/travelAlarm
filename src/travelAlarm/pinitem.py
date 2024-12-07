@@ -74,9 +74,6 @@ class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
         # Refresh pins list
         self.refresh_pins_list_on_list_screen()
 
-        # Close marker popup if edited on ListScreen
-        self.close_marker_popup()
-
     def on_address_edit(self, new_address):
         """Update address attribute regarding value of text field."""
         # Check if provided value is different to previous one

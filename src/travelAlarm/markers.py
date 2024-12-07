@@ -28,9 +28,6 @@ class Marker(MapMarkerPopup):
         # Determine popup widget size
         self.popup_size = Window.width * .9, Window.height * .1
 
-        # # Keep popup open while interactions
-        # self.is_open = True
-
         # Create instance of popup widget
         self.pin = PinItem(
             y = dp(10),
@@ -177,12 +174,6 @@ class AddMarker(MapMarkerPopup):
             # Add pin to database, add pin marker to map widget and get pin identifier
             pin_id = self.app.pins_db.add_pin_by_address_lat_lon(address, latitude, longitude)
 
-            # Get map screen instance
-            map_screen = self.app.root.ids.screen_manager.get_screen('MapScreen')
-
-            # Close map marker popups except the added one
-            map_screen.close_map_marker_popups(pin_id)
-
             # Get list screen instance
             list_screen = self.app.root.ids.screen_manager.get_screen('ListScreen')
 
@@ -197,7 +188,7 @@ class AddMarker(MapMarkerPopup):
 
         except Exception as err:
             # Show information on the screen
-            toast(text=str("Geocoding Failed"))
+            toast(text=str(f"Geocoding Failed {err}"))
             return False
 
     def remove_marker(self, *args):

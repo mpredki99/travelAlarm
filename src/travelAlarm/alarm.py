@@ -23,14 +23,6 @@ class Alarm:
         # Deactivate buffer with UI update
         self.pin.on_checkbox_click(False)
 
-        # Close marker popup after update the checkbox
-        self.pin.close_marker_popup(screen='MapScreen')
-
-        # Get pin address, buffer size and buffer unit
-        self.address = self.pin.address
-        self.buffer_size = self.pin.buffer_size
-        self.buffer_unit = self.pin.buffer_unit
-
         # Build button to close dialog window
         self.alarm_button = MDFlatButton(
             text='OK',
@@ -40,7 +32,7 @@ class Alarm:
         # Build dialog window
         self.alarm_dialog = MDDialog(
             title='Wake up!',
-            text=f'You are within {self.buffer_size} {self.buffer_unit} from {self.address}',
+            text=f'You are within {self.pin.buffer_size} {self.pin.buffer_unit} from {self.pin.address}',
             buttons=[self.alarm_button]
         )
         # Bind button event to close dialog window
@@ -53,10 +45,10 @@ class Alarm:
         self.alarm_dialog.open()
 
         # Trigger vibrations if device has a vibrator
-        self.vibration_event = None
-        if vibrator.exists():
+        try:
             self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 2.5)
-
+        except:
+            pass
         # Sound alarm
         self.sound()
 

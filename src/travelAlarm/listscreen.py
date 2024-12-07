@@ -176,9 +176,6 @@ class ListScreen(Screen):
         # Refresh pins list
         self.refresh_pins_list()
 
-        # Close pin marker popups
-        self.app.root.ids.screen_manager.get_screen("MapScreen").close_map_marker_popups()
-
         # Switch back to list view mode
         self.hide_search_view()
 
