@@ -184,10 +184,10 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id]['buffer_size'] = new_buffer_size
+        self.pins[pin_id]['marker'].pin.buffer_size = new_buffer_size
 
         # Update map_widget
-        self.update_mapview_buffer(pin_id)
+        self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
 
     def update_buffer_unit(self, pin_id, new_buffer_unit):
         """Update pin's buffer_unit attribute."""
@@ -196,10 +196,10 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id]['buffer_unit'] = new_buffer_unit
+        self.pins[pin_id]['marker'].pin.buffer_unit = new_buffer_unit
 
         # Update map_widget
-        self.update_mapview_buffer(pin_id)
+        self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
 
 
     # Manage map_widget
