@@ -1,5 +1,4 @@
 # Coding: UTF-8
-
 # Copyright (C) 2024 Michał Prędki
 # Licensed under the GNU General Public License v3.0.
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
@@ -13,11 +12,14 @@ from kivymd.uix.button import MDRaisedButton
 from kivy.uix.boxlayout import BoxLayout
 from geocode import geocode_by_lat_lon
 from kivymd.toast import toast
+from kivy.properties import ObjectProperty
 
 from pinitem import PinItem
 
 
 class Marker(MapMarkerPopup):
+
+    pin = ObjectProperty()
 
     def __init__(self, pin_id, is_active, address, buffer_size, buffer_unit, **kwargs):
         super().__init__(**kwargs)
@@ -30,7 +32,7 @@ class Marker(MapMarkerPopup):
 
         # Create instance of popup widget
         self.pin = PinItem(
-            y = dp(10),
+            y=dp(10),
             pin_id=pin_id,
             is_active=is_active,
             address=address,

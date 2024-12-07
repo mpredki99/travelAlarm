@@ -11,8 +11,6 @@ from kivymd.app import MDApp
 from geocode import geocode_by_address
 from markers import Marker
 
-from kivy_garden.mapview import MapLayer
-
 
 class Database:
     def __init__(self, db_filename):
@@ -22,8 +20,6 @@ class Database:
 
         # Get map_widget instance
         self.map_widget = MDApp.get_running_app().map_widget
-
-        self.buffer_layer = MapLayer()
 
         # Initialize database tables
         self.init_pins_table()

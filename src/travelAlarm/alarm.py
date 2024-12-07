@@ -45,10 +45,10 @@ class Alarm:
         self.alarm_dialog.open()
 
         # Trigger vibrations if device has a vibrator
-        try:
+        self.vibration_event = None
+        if vibrator.exists():
             self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 2.5)
-        except:
-            pass
+
         # Sound alarm
         self.sound()
 

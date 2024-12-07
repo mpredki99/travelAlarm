@@ -6,6 +6,7 @@
 
 from kivymd.app import MDApp
 from kivy.lang import Builder
+from kivy.properties import DictProperty, ObjectProperty, StringProperty
 
 from database import Database
 from mapwidget import MapWidget
@@ -14,21 +15,10 @@ from gpsmarker import GpsMarker, check_gps_permission, request_location_permissi
 
 class TravelAlarmApp(MDApp):
 
-    def __init__(self, **kwargs):
-        """Initialize app object and its attributes."""
-        super().__init__(**kwargs)
-
-        # Create map_widget instance
-        self.map_widget = MapWidget()
-
-        # Create database instance
-        self.pins_db = Database('pins.db')
-
-        # Get alarm sound file
-        self.alarm_file = f'sounds/{self.pins_db.alarm_sound}'
-
-        # Initialize GPS marker
-        self.gps_marker = None
+    map_widget = ObjectProperty()
+    pins_db = ObjectProperty()
+    alarm_file = StringProperty()
+    gps_marker = ObjectProperty()
 
     def add_gps_marker(self):
         """Add gps marker to map widget."""
@@ -45,6 +35,15 @@ class TravelAlarmApp(MDApp):
 
     def build(self):
         """Build app."""
+        # Create map_widget instance
+        self.map_widget = MapWidget()
+
+        # Create database instance
+        self.pins_db = Database('pins.db')
+
+        # Get alarm sound file
+        self.alarm_file = f'sounds/{self.pins_db.alarm_sound}'
+
         # Set app themes
         self.theme_cls.theme_style = self.pins_db.theme_style
         self.theme_cls.primary_palette = self.pins_db.primary_palette
