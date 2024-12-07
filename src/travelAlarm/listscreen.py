@@ -187,10 +187,10 @@ class ListScreen(Screen):
         return [
             {
                 'pin_id': pin_id,
-                'is_active': attributes.get('is_active'),
-                'address': attributes.get('address'),
-                'buffer_size': attributes.get('buffer_size'),
-                'buffer_unit': attributes.get('buffer_unit'),
+                'is_active': attributes['marker'].pin.is_active,
+                'address': attributes['marker'].pin.address,
+                'buffer_size': attributes['marker'].pin.buffer_size,
+                'buffer_unit': attributes['marker'].pin.buffer_unit,
             }
             for pin_id, attributes in self.pins_db.pins.items()
         ]

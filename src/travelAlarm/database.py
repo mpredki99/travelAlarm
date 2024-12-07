@@ -163,10 +163,11 @@ class Database:
             self.connection.commit()
 
             # Update dict
-            self.update_pins()
-
-            # Update map_widget
-            self.update_mapview_buffer(pin_id)
+            self.pins[pin_id]['marker'].pin.address = address
+            self.pins[pin_id]['marker'].lat = latitude
+            self.pins[pin_id]['marker'].lon = longitude
+            self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
+            self.pins[pin_id]['marker'].layer.set_marker_position(self.map_widget, self.pins[pin_id]['marker'])
 
             # Return new address to update text field on ListScreen
             return address
