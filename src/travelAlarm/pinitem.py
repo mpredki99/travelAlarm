@@ -95,25 +95,16 @@ class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
             # Refresh pins list
             self.refresh_pins_list_on_list_screen()
 
-            # Get name of current open screen
-            screen = self.app.root.ids.screen_manager.current
-
-            # Get id of pin to keep open if edited on MapScreen
-            pin_id = self.pin_id if screen == 'MapScreen' else None
-
-            # Close pin marker popups
-            self.app.root.ids.screen_manager.get_screen("MapScreen").close_map_marker_popups(pin_id=pin_id)
-
             # Show information on the screen
             toast(text=str("Pin Edited"))
 
         # If geocode failed
-        except Exception as err:
+        except:
             # Restore text field to previous value
             self.ids.address_field.text = self.address
 
             # Show information on the screen
-            toast(text=str("Geocoding Failed"))
+            toast(text=f"Geocoding Failed")
             return False
 
     def on_buffer_size_edit(self, new_buffer_size):

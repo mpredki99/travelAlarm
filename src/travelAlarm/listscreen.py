@@ -186,13 +186,13 @@ class ListScreen(Screen):
         """Read pins' data from the pins database."""
         return [
             {
-                'pin_id': pin_id,
-                'is_active': attributes['marker'].pin.is_active,
-                'address': attributes['marker'].pin.address,
-                'buffer_size': attributes['marker'].pin.buffer_size,
-                'buffer_unit': attributes['marker'].pin.buffer_unit,
+                'pin_id': marker.pin.pin_id,
+                'is_active': marker.pin.is_active,
+                'address': marker.pin.address,
+                'buffer_size': marker.pin.buffer_size,
+                'buffer_unit': marker.pin.buffer_unit,
             }
-            for pin_id, attributes in self.pins_db.pins.items()
+            for marker in self.pins_db.pins.values()
         ]
 
     def refresh_pins_list(self):

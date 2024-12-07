@@ -26,12 +26,7 @@ class MapScreen(Screen):
         self.add_widget(self.map_widget)
 
         # Draw pins from database to the map
-        for pin_id in self.pins_db.pins:
-            self.pins_db.draw_mapview_buffer(pin_id)
-
-            # Close pin marker popups
-            pin = self.pins_db.pins[pin_id].get('marker')
-            if pin: pin.close_marker_popup()
+        self.pins_db.draw_mapview_buffers()
 
     def close_map_marker_popups(self, pin_id=None):
         """Close pin marker popups. Skip for pin with provided pin id."""

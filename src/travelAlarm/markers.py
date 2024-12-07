@@ -28,8 +28,8 @@ class Marker(MapMarkerPopup):
         # Determine popup widget size
         self.popup_size = Window.width * .9, Window.height * .1
 
-        # Keep popup open while interactions
-        self.is_open = True
+        # # Keep popup open while interactions
+        # self.is_open = True
 
         # Create instance of popup widget
         self.pin = PinItem(

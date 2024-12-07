@@ -30,7 +30,7 @@ class Database:
         self.init_customizations_table()
 
         # Retrieve pins from database
-        self.pins = self.get_pins()
+        self.pins = {}
 
         # Set map_widget initial state
         self.set_mapview_initial_state()
@@ -80,14 +80,8 @@ class Database:
         self.cursor.execute(query)
 
         return {
-            pin_id: {
-                'is_active': is_active,
-                'address': address,
-                'latitude': latitude,
-                'longitude': longitude,
-                'buffer_size': buffer_size,
-                'buffer_unit': buffer_unit,
-            } for pin_id, is_active, address, latitude, longitude, buffer_size, buffer_unit, _ in
+            pin_id: Marker(pin_id, is_active, address, buffer_size, buffer_unit, lat=latitude, lon=longitude)
+            for pin_id, is_active, address, latitude, longitude, buffer_size, buffer_unit, _ in
             self.cursor.fetchall()
         }
 
@@ -99,10 +93,6 @@ class Database:
 
         # Update pins dict
         self.pins = self.get_pins()
-
-        # Draw buffers on the map_widget
-        for pin_id in self.pins:
-            self.draw_mapview_buffer(pin_id)
 
     def get_pin_by_id(self, pin_id):
         """Get pin from database by provided identifier."""
@@ -142,11 +132,11 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id]['marker'].pin.is_active = new_is_active
+        self.pins[pin_id].pin.is_active = new_is_active
 
         # Update map_widget
-        self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
-        self.pins[pin_id]['marker'].set_pin_icon()
+        self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
+        self.pins[pin_id].set_pin_icon()
 
     def update_address(self, pin_id, new_address):
         """Update pin's address attribute."""
@@ -164,11 +154,11 @@ class Database:
             self.connection.commit()
 
             # Update dict
-            self.pins[pin_id]['marker'].pin.address = address
-            self.pins[pin_id]['marker'].lat = latitude
-            self.pins[pin_id]['marker'].lon = longitude
-            self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
-            self.pins[pin_id]['marker'].layer.set_marker_position(self.map_widget, self.pins[pin_id]['marker'])
+            self.pins[pin_id].pin.address = address
+            self.pins[pin_id].lat = latitude
+            self.pins[pin_id].lon = longitude
+            self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
+            self.pins[pin_id].layer.set_marker_position(self.map_widget, self.pins[pin_id])
 
             # Return new address to update text field on ListScreen
             return address
@@ -184,10 +174,10 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id]['marker'].pin.buffer_size = new_buffer_size
+        self.pins[pin_id].pin.buffer_size = new_buffer_size
 
         # Update map_widget
-        self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
+        self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
 
     def update_buffer_unit(self, pin_id, new_buffer_unit):
         """Update pin's buffer_unit attribute."""
@@ -196,36 +186,22 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id]['marker'].pin.buffer_unit = new_buffer_unit
+        self.pins[pin_id].pin.buffer_unit = new_buffer_unit
 
         # Update map_widget
-        self.pins[pin_id]['marker'].layer.update_buffer(self.pins[pin_id]['marker'])
+        self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
 
 
     # Manage map_widget
-    def draw_mapview_buffer(self, pin_id):
+    def draw_mapview_buffers(self):
         """Draw pin marker buffer and create pin marker popup on map_widget."""
         # Get pin's attributes
-        is_active = self.pins[pin_id].get('is_active')
-        address = self.pins[pin_id].get('address')
-        latitude = self.pins[pin_id].get('latitude')
-        longitude = self.pins[pin_id].get('longitude')
-        buffer_size = self.pins[pin_id].get('buffer_size')
-        buffer_unit = self.pins[pin_id].get('buffer_unit')
-
-        # Create marker
-        self.pins[pin_id]['marker'] = Marker(pin_id, is_active, address, buffer_size, buffer_unit, lat=latitude, lon=longitude)
+        self.pins = self.get_pins()
 
     def erase_mapview_buffer(self, pin_id):
         """Remove pin marker buffer and pin marker popup from map_widget."""
         # Remove buffer and marker from map_widget
-        self.pins[pin_id]['marker'].erase_from_map_widget()
-
-    def update_mapview_buffer(self, pin_id):
-        """Update pin marker buffer and pin marker popup on map_widget."""
-        self.erase_mapview_buffer(pin_id)
-        self.draw_mapview_buffer(pin_id)
-
+        self.pins[pin_id].erase_from_map_widget()
 
     # Manage customizations table
     def save_mapview_state(self):
