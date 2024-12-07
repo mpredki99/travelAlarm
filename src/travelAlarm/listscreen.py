@@ -90,9 +90,6 @@ class ListScreen(Screen):
         # Refresh recycle view pins list
         self.refresh_pins_list()
 
-        # Close pin marker popups
-        self.app.root.ids.screen_manager.get_screen("MapScreen").close_map_marker_popups()
-
         # Close dropdown menu
         self.list_order_menu.dismiss()
 

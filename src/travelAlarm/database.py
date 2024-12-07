@@ -278,8 +278,7 @@ class Database:
         self.connection.commit()
 
         # Update pins dictionary
-        for values in self.pins.values():
-            marker = values.get('marker')
+        for marker in self.pins.values():
             marker.set_pin_icon()
             marker.layer.update_buffer(marker)
 

@@ -28,17 +28,6 @@ class MapScreen(Screen):
         # Draw pins from database to the map
         self.pins_db.draw_mapview_buffers()
 
-    def close_map_marker_popups(self, pin_id=None):
-        """Close pin marker popups. Skip for pin with provided pin id."""
-        for key, value in self.pins_db.pins.items():
-            # Skip id pin id is the same as provided
-            if key == pin_id:
-                continue
-
-            # Close pin marker popup
-            pin = value.get('marker')
-            if pin: pin.close_marker_popup()
-
     def center_map_widget_on_user_location(self):
         """Center the map widget on user GPS position."""
         # Add GPS marker if not in mapview

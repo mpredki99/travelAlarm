@@ -103,9 +103,6 @@ class PrimaryPaletteToolbar(GridLayout):
             # Update app primary palette in database
             self.pins_db.update_app_primary_palette(map_primary_palette.get(new_palette))
 
-            # Close pin marker popups
-            self.app.root.ids.screen_manager.get_screen('MapScreen').close_map_marker_popups()
-
             # Update GPS marker colors
             if self.app.gps_marker is not None:
                 self.app.gps_marker.update_marker()
