@@ -31,6 +31,12 @@ class PinItem(BoxLayout, MagicBehavior):
         self.pins_db = self.app.pins_db
 
         # Dropdown menus
+        self.buffer_unit_menu = None
+        self.three_dots_menu = None
+
+    def on_kv_post(self, base_widget):
+
+        # Dropdown menus
         self.buffer_unit_menu = self.build_buffer_unit_menu()
         self.three_dots_menu = self.build_three_dots_menu()
 
