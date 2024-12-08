@@ -10,10 +10,9 @@ from kivymd.toast import toast
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.properties import NumericProperty, BooleanProperty, StringProperty
 from kivymd.uix.behaviors.magic_behavior import MagicBehavior
-from kivy.uix.recycleview.views import RecycleDataViewBehavior
 
 
-class PinItem(BoxLayout, MagicBehavior, RecycleDataViewBehavior):
+class PinItem(BoxLayout, MagicBehavior):
 
     # Initialize pins' properties
     pin_id = NumericProperty()
