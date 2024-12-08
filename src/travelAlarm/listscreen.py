@@ -70,7 +70,6 @@ class ListScreen(Screen):
 
     def on_list_order_menu(self, new_order_by):
         """Sort list by new attribute."""
-        print(self.list_order_menu.width)
         # Check if different value was clicked
         if self.ids.sort_menu_button.text == 'Sort by: ' + new_order_by:
             # Close drop down menu if click on the same unit
