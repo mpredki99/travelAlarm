@@ -6,7 +6,7 @@
 
 from kivymd.app import MDApp
 from kivy.lang import Builder
-from kivy.properties import DictProperty, ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty
 
 from database import Database
 from mapwidget import MapWidget

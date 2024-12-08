@@ -10,7 +10,6 @@ from kivy.uix.screenmanager import Screen
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.clock import Clock
 
-from geocode import geocode_by_address
 from addresseslist import AddressesList
 
 
@@ -125,6 +124,9 @@ class ListScreen(Screen):
     def hide_search_view(self):
         """Switch screen back to list view mode."""
         if self.search_mode:
+            # Clean address text field
+            self.ids.add_pin_text_field.text = ""
+
             # Update search mode attribute
             self.search_mode = False
 
@@ -132,49 +134,8 @@ class ListScreen(Screen):
             self.remove_widget(self.addresses_list)
             Animation(y=0, duration=.3).start(self)
 
-            # Clean address text field
-            self.ids.add_pin_text_field.text = ""
         else:
             return False
-
-    def on_address_typing(self, text):
-        """Wait half a second and display proposed addresses on the screen."""
-        # Wait half a second after the user finishes entering the address
-        if self.clock: self.clock.cancel()
-
-        # Display proposed addresses on the screen
-        self.clock = Clock.schedule_once(lambda dt: self.display_proposed_addresses(text), .5)
-
-    def display_proposed_addresses(self, text):
-        """Display proposed addresses on the screen."""
-        # Do not do anything if empty text
-        if len(text) == 0: return False
-
-        try:
-            # Get list of proposed addresses and locations
-            addresses, latitudes, longitudes = geocode_by_address(text, exactly_one=False, limit=5)
-
-            # Add proposed addresses to the list
-            for address, latitude, longitude in zip(addresses, latitudes, longitudes):
-                self.addresses_list.ids.addresses_list.data.insert(
-                    0,
-                    {"text": address,
-                     "on_release": lambda args=(address, latitude, longitude): self.add_pin(*args)}
-                )
-
-        except Exception as err:
-            return False
-
-    def add_pin(self, address, latitude, longitude):
-        """Add new pin to the list and database."""
-        # Add pin to database
-        self.pins_db.add_pin_by_address_lat_lon(address, latitude, longitude)
-
-        # Refresh pins list
-        self.refresh_pins_list()
-
-        # Switch back to list view mode
-        self.hide_search_view()
 
     def get_pins_list(self):
         """Read pins' data from the pins database."""

@@ -5,7 +5,6 @@
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
 
 #:import ListScreen listscreen
-#: include pinitem.kv
 
 <ListScreen@Screen>:
     name: "ListScreen"
@@ -60,4 +59,5 @@
 
             # Field actions
             on_focus: root.prepare_search_view()
-            on_text: root.on_address_typing(self.text)
+            on_text:
+                root.children[0].on_address_typing(self.text),
