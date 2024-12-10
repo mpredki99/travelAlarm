@@ -85,7 +85,7 @@ class Database:
         """Update pins dictionary and map_widget."""
         # Clear map_widget buffers
         for pin_id in self.pins:
-            self.erase_mapview_buffer(pin_id)
+            self.pins[pin_id].erase_from_map_widget()
 
         # Update pins dict
         self.pins = self.get_pins()
@@ -98,7 +98,7 @@ class Database:
     def delete_pin_by_id(self, pin_id):
         """Delete pin from database by provided identifier."""
         # Remove buffer and marker from map_widget
-        self.erase_mapview_buffer(pin_id)
+        self.pins[pin_id].erase_from_map_widget()
 
         # Update database
         self.cursor.execute("DELETE FROM pins WHERE id = ?", (pin_id,))
@@ -187,17 +187,11 @@ class Database:
         # Update map_widget
         self.pins[pin_id].update_buffer()
 
-
     # Manage map_widget
     def draw_mapview_buffers(self):
         """Draw pin marker buffer and create pin marker popup on map_widget."""
         # Get pin's attributes
         self.pins = self.get_pins()
-
-    def erase_mapview_buffer(self, pin_id):
-        """Remove pin marker buffer and pin marker popup from map_widget."""
-        # Remove buffer and marker from map_widget
-        self.pins[pin_id].erase_from_map_widget()
 
     # Manage customizations table
     def save_mapview_state(self):
