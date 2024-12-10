@@ -73,9 +73,14 @@ class Marker(MapMarkerPopup):
         # Get pin marker icon
         self.source = "icons/" + marker_color + ".png"
 
-    @property
-    def layer(self):
-        return self._layer
+    def update_buffer(self):
+        layer = self._layer
+        layer.update_buffer(self)
+
+    def set_marker_position(self):
+        layer = self._layer
+        map_widget = self.parent.parent
+        layer.set_marker_position(map_widget, self)
 
     def erase_from_map_widget(self):
         self.app.map_widget.remove_marker(self)
@@ -195,4 +200,5 @@ class AddMarker(MapMarkerPopup):
 
     def remove_marker(self, *args):
         """Remove add pin marker from map widget."""
-        self.parent.parent.remove_marker(self)
+        map_widget = self.parent.parent
+        map_widget.remove_marker(self)

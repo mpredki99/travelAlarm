@@ -120,9 +120,6 @@ class PinItem(BoxLayout, MagicBehavior):
         # Refresh pins list
         self.refresh_pins_list_on_list_screen()
 
-        # Close marker popup if edited on ListScreen
-        self.close_marker_popup()
-
     def on_buffer_unit_edit(self, new_buffer_unit):
         """Update buffer_unit attribute regarding value of text field."""
         # Check if provided value is different to previous one
@@ -142,9 +139,6 @@ class PinItem(BoxLayout, MagicBehavior):
 
         # Refresh pins list
         self.refresh_pins_list_on_list_screen()
-
-        # Close marker popup if edited on ListScreen
-        self.close_marker_popup()
 
     @staticmethod
     def valid_buffer_size(buffer_size, buffer_unit):
@@ -194,12 +188,6 @@ class PinItem(BoxLayout, MagicBehavior):
         """Refresh ListScreen Recycle view."""
         # Refresh pins list
         self.app.root.ids.screen_manager.get_screen("ListScreen").refresh_pins_list()
-
-    def close_marker_popup(self, screen='ListScreen'):
-        """Close pin marker popup."""
-        # Close pin marker popup if on screen provided in args
-        current_screen = self.app.root.ids.screen_manager.current
-        if current_screen == screen: self.pins_db.pins[self.pin_id].get('marker').close_marker_popup()
 
     def magic_grow(self):
         """Perform magic animation of pin item."""

@@ -131,7 +131,7 @@ class Database:
         self.pins[pin_id].pin.is_active = new_is_active
 
         # Update map_widget
-        self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
+        self.pins[pin_id].update_buffer()
         self.pins[pin_id].set_pin_icon()
 
     def update_address(self, pin_id, new_address):
@@ -153,8 +153,8 @@ class Database:
             self.pins[pin_id].pin.address = address
             self.pins[pin_id].lat = latitude
             self.pins[pin_id].lon = longitude
-            self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
-            self.pins[pin_id].layer.set_marker_position(self.map_widget, self.pins[pin_id])
+            self.pins[pin_id].update_buffer()
+            self.pins[pin_id].set_marker_position()
 
             # Return new address to update text field on ListScreen
             return address
@@ -173,7 +173,7 @@ class Database:
         self.pins[pin_id].pin.buffer_size = new_buffer_size
 
         # Update map_widget
-        self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
+        self.pins[pin_id].update_buffer()
 
     def update_buffer_unit(self, pin_id, new_buffer_unit):
         """Update pin's buffer_unit attribute."""
@@ -185,7 +185,7 @@ class Database:
         self.pins[pin_id].pin.buffer_unit = new_buffer_unit
 
         # Update map_widget
-        self.pins[pin_id].layer.update_buffer(self.pins[pin_id])
+        self.pins[pin_id].update_buffer()
 
 
     # Manage map_widget
@@ -276,7 +276,7 @@ class Database:
         # Update pins dictionary
         for marker in self.pins.values():
             marker.set_pin_icon()
-            marker.layer.update_buffer(marker)
+            marker.update_buffer()
 
     @property
     def primary_palette(self):
