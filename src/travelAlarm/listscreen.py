@@ -5,6 +5,7 @@
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
 
 from kivy.animation import Animation
+from kivy.properties import DictProperty
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.menu import MDDropdownMenu
@@ -41,6 +42,9 @@ class ListScreen(Screen):
 
         # Build dropdown menu
         self.list_order_menu = self.build_list_order_menu()
+
+    def on_pre_enter(self, *args):
+        self.refresh_pins_list()
 
     def set_sort_menu_button_text(self):
         """Set text of list order menu button."""

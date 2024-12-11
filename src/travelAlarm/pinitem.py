@@ -79,9 +79,6 @@ class PinItem(BoxLayout, MagicBehavior):
         # Update database and map_widget
         self.database.update_is_active(self.pin_id, self.is_active)
 
-        # Refresh pins list
-        self.refresh_pins_list_on_list_screen()
-
     def on_address_edit(self, new_address):
         """Update address attribute regarding value of text field."""
         # Check if provided value is different to previous one
@@ -104,9 +101,6 @@ class PinItem(BoxLayout, MagicBehavior):
 
             # Set text field to new address value
             self.ids.address_field.text = self.address
-
-            # Refresh pins list
-            self.refresh_pins_list_on_list_screen()
 
             # Update pin's attribute, database and map_widget
             self.database.update_address(self.pin_id, address, latitude, longitude)
@@ -143,9 +137,6 @@ class PinItem(BoxLayout, MagicBehavior):
         # Update database and map_widget
         self.database.update_buffer_size(self.pin_id, self.buffer_size)
 
-        # Refresh pins list
-        self.refresh_pins_list_on_list_screen()
-
     def on_buffer_unit_edit(self, new_buffer_unit):
         """Update buffer_unit attribute regarding value of text field."""
         # Check if provided value is different to previous one
@@ -168,9 +159,6 @@ class PinItem(BoxLayout, MagicBehavior):
 
         # Update database and map_widget
         self.database.update_buffer_unit(self.pin_id, self.buffer_unit)
-
-        # Refresh pins list
-        self.refresh_pins_list_on_list_screen()
 
     @staticmethod
     def valid_buffer_size(buffer_size, buffer_unit):
@@ -221,11 +209,6 @@ class PinItem(BoxLayout, MagicBehavior):
 
         # Center on map location
         screen_manager.get_screen('MapScreen').center_mapview_on_lat_lon(latitude, longitude)
-
-    def refresh_pins_list_on_list_screen(self):
-        """Refresh ListScreen Recycle view."""
-        # Refresh pins list
-        self.app.root.ids.screen_manager.get_screen("ListScreen").refresh_pins_list()
 
     def magic_grow(self):
         """Perform magic animation of pin item."""
