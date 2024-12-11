@@ -20,7 +20,7 @@ class ListScreen(Screen):
         super().__init__(**kwargs)
 
         # Get database instance
-        self.pins_db = self.app.pins_db
+        self.database = self.app.database
 
         # Initialize list order menu button
         self.list_order_menu = None
@@ -45,7 +45,7 @@ class ListScreen(Screen):
     def set_sort_menu_button_text(self):
         """Set text of list order menu button."""
         # Get attribute value from database
-        db_attribute = self.pins_db.list_order
+        db_attribute = self.database.list_order
 
         # Assign the value of the database attribute to the button text
         map_db_attribute = {'insert_datetime': 'time', 'is_active': 'active', 'address': 'address'}
@@ -78,7 +78,7 @@ class ListScreen(Screen):
         map_button_text = {'time': 'insert_datetime', 'active': 'is_active', 'address': 'address'}
 
         # Update order by attribute in database
-        self.pins_db.update_list_order(map_button_text[new_order_by])
+        self.database.update_list_order(map_button_text[new_order_by])
 
         # Set text of list order menu button
         self.set_sort_menu_button_text()

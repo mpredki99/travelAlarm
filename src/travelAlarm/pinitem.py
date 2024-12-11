@@ -29,7 +29,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.app = MDApp.get_running_app()
 
         # Get database instance
-        self.pins_db = self.app.pins_db
+        self.database = self.app.database
 
         # Dropdown menus
         self.buffer_unit_menu = self.build_buffer_unit_menu()
@@ -69,7 +69,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.is_active = new_is_active
 
         # Update database and map_widget
-        self.pins_db.update_is_active(self.pin_id, self.is_active)
+        self.database.update_is_active(self.pin_id, self.is_active)
 
         # Refresh pins list
         self.refresh_pins_list_on_list_screen()
@@ -84,7 +84,7 @@ class PinItem(BoxLayout, MagicBehavior):
 
         try:
             # Update pin's attribute, database and map_widget
-            self.address = self.pins_db.update_address(self.pin_id, new_address)
+            self.address = self.database.update_address(self.pin_id, new_address)
 
             # Set text field to new address value
             self.ids.address_field.text = self.address
@@ -116,7 +116,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.buffer_size = float(new_buffer_size)
 
         # Update database and map_widget
-        self.pins_db.update_buffer_size(self.pin_id, self.buffer_size)
+        self.database.update_buffer_size(self.pin_id, self.buffer_size)
 
         # Refresh pins list
         self.refresh_pins_list_on_list_screen()
@@ -133,7 +133,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.buffer_unit = new_buffer_unit
 
         # Update database and map_widget
-        self.pins_db.update_buffer_unit(self.pin_id, self.buffer_unit)
+        self.database.update_buffer_unit(self.pin_id, self.buffer_unit)
 
         # Close drop down menu
         self.buffer_unit_menu.dismiss()
@@ -159,7 +159,7 @@ class PinItem(BoxLayout, MagicBehavior):
         list_screen.remove_pin(self.pin_id)
 
         # Update database and map_widget
-        self.pins_db.delete_pin_by_id(self.pin_id)
+        self.database.delete_pin_by_id(self.pin_id)
 
         # Show information on the screen
         toast(text=str("Pin Deleted"))
@@ -176,7 +176,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.three_dots_menu.dismiss()
 
         # Get pin from database
-        latitude, longitude = self.pins_db.get_pin_by_id(self.pin_id)[3:5]
+        latitude, longitude = self.database.get_pin_by_id(self.pin_id)[3:5]
 
         # Move to map screen
         screen_manager.transition.direction = "left" if screen_manager.current == "ListScreen" else "right"

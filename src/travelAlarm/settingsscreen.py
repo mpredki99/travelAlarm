@@ -29,7 +29,7 @@ class ThemeStyleSwitch(BoxLayout):
         self.app = MDApp.get_running_app()
 
         # Get database instance
-        self.pins_db = self.app.pins_db
+        self.database = self.app.database
 
     def update_theme_style(self, active):
         """Switch between light and dark theme."""
@@ -44,7 +44,7 @@ class ThemeStyleSwitch(BoxLayout):
             self.app.theme_cls.theme_style = selected_theme
 
             # Update app style in database
-            self.pins_db.update_app_theme_style(selected_theme)
+            self.database.update_app_theme_style(selected_theme)
 
             return True
 
@@ -60,7 +60,7 @@ class PrimaryPaletteToolbar(GridLayout):
         self.app = MDApp.get_running_app()
 
         # Get database instance
-        self.pins_db = self.app.pins_db
+        self.database = self.app.database
 
         # Customize the grid layout appearance
         self.col_default_width = dp(50)
@@ -101,7 +101,7 @@ class PrimaryPaletteToolbar(GridLayout):
             self.app.theme_cls.primary_palette = map_primary_palette.get(new_palette)
 
             # Update app primary palette in database
-            self.pins_db.update_app_primary_palette(map_primary_palette.get(new_palette))
+            self.database.update_app_primary_palette(map_primary_palette.get(new_palette))
 
             # Update GPS marker colors
             if self.app.gps_marker is not None:

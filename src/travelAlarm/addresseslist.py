@@ -42,7 +42,7 @@ class AddressesList(Screen):
                      "on_release": lambda args=(address, latitude, longitude): self.add_pin(*args)}
                 )
 
-        except Exception as err:
+        except:
             return False
 
     def add_pin(self, address, latitude, longitude):
@@ -50,7 +50,7 @@ class AddressesList(Screen):
         list_screen = self.parent
 
         # Add pin to database
-        list_screen.pins_db.add_pin_by_address_lat_lon(address, latitude, longitude)
+        list_screen.database.add_pin_by_address_lat_lon(address, latitude, longitude)
 
         # Refresh pins list
         list_screen.refresh_pins_list()

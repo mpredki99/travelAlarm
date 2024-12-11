@@ -17,16 +17,13 @@ class MapScreen(Screen):
         self.app = MDApp.get_running_app()
 
         # Get pins database instance
-        self.pins_db = self.app.pins_db
+        self.database = self.app.database
 
         # Get map_widget instance
         self.map_widget = self.app.map_widget
 
         # Add map_widget to the MapScreen
         self.add_widget(self.map_widget)
-
-        # Draw pins from database to the map
-        # self.pins_db.draw_mapview_buffers()
 
     def center_map_widget_on_user_location(self):
         """Center the map widget on user GPS position."""

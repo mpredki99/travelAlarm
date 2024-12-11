@@ -16,7 +16,7 @@ from gpsmarker import GpsMarker, check_gps_permission, request_location_permissi
 class TravelAlarmApp(MDApp):
 
     map_widget = ObjectProperty()
-    pins_db = ObjectProperty()
+    database = ObjectProperty()
     alarm_file = StringProperty()
     gps_marker = ObjectProperty()
     markers = DictProperty()
@@ -40,16 +40,16 @@ class TravelAlarmApp(MDApp):
         self.map_widget = MapWidget()
 
         # Create database instance
-        self.pins_db = Database('pins.db')
+        self.database = Database('pins.db')
 
         # Get alarm sound file
-        self.alarm_file = f'sounds/{self.pins_db.alarm_sound}'
+        self.alarm_file = f'sounds/{self.database.alarm_sound}'
 
         # Set app themes
-        self.theme_cls.theme_style = self.pins_db.theme_style
-        self.theme_cls.primary_palette = self.pins_db.primary_palette
+        self.theme_cls.theme_style = self.database.theme_style
+        self.theme_cls.primary_palette = self.database.primary_palette
 
-        self.markers = self.pins_db.get_pins()
+        self.markers = self.database.get_pins()
 
         # Request location permissions
         request_location_permission()
@@ -72,17 +72,17 @@ class TravelAlarmApp(MDApp):
     def on_resume(self):
         """Return database connection."""
         # Reconnect to the database and reload the map state
-        self.pins_db.connect('pins.db')
+        self.database.connect('pins.db')
 
         return True
 
     def on_stop(self):
         """Save map_widget state and disconnect from database."""
         # Save current map_widget state
-        self.pins_db.save_mapview_state()
+        self.database.save_mapview_state()
 
         # Close connection with database while turn off the app
-        self.pins_db.disconnect()
+        self.database.disconnect()
 
         return True
 

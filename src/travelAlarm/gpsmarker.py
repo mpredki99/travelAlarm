@@ -236,8 +236,8 @@ class GpsMarker(MapLayer):
 
     def is_within_buffer(self, *args):
         """Check if user is within active buffer and trigger alarm if so."""
-        # Get pins from database
-        pins = self.app.pins_db.pins
+        # Get markers from database
+        markers = self.app.markers
 
         # Get unit multiplier
         unit_mult = MarkersLayer.unit_mult
@@ -245,17 +245,17 @@ class GpsMarker(MapLayer):
         # Create user position tuple
         user_pos = (self.latitude, self.longitude)
 
-        for pin_id in pins:
+        for marker in markers.values():
             # Skip buffer if pin is not active
-            if not pins[pin_id].pin.is_active:
+            if not marker.pin.is_active:
                 continue
 
             # Create pin position tuple
-            pin_pos = (pins[pin_id].lat, pins[pin_id].lon)
+            pin_pos = (marker.lat, marker.lon)
 
             # Get pin's buffer size and buffer unit
-            buffer_size = pins[pin_id].pin.buffer_size
-            buffer_unit = pins[pin_id].pin.buffer_unit
+            buffer_size = marker.pin.buffer_size
+            buffer_unit = marker.pin.buffer_unit
 
             # Convert buffer size to meters
             buffer_meters = buffer_size * unit_mult.get(buffer_unit, 0)
@@ -266,5 +266,4 @@ class GpsMarker(MapLayer):
             # Check if user is within buffer size
             if buffer_distance <= buffer_meters:
                 # Create alarm object and trigger alarm
-                pin_marker = pins[pin_id]
-                Clock.schedule_once(lambda dt: Alarm(pin_marker), 0)
+                Clock.schedule_once(lambda dt, x=marker: Alarm(x), 0)

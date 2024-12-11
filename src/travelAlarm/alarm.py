@@ -13,12 +13,12 @@ from plyer import vibrator
 
 
 class Alarm:
-    def __init__(self, pin_marker):
+    def __init__(self, marker):
         # Get app instance
         self.app = MDApp.get_running_app()
 
         # Initialize pin object in alarm
-        self.pin = pin_marker.pin
+        self.pin = marker.pin
 
         # Deactivate buffer with UI update
         self.pin.on_checkbox_click(False)
