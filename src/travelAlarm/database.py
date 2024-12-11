@@ -8,7 +8,6 @@ import sqlite3
 
 from kivymd.app import MDApp
 
-from geocode import geocode_by_address
 from markers import Marker
 
 
@@ -59,7 +58,6 @@ class Database:
         # Save the table
         self.connection.commit()
 
-
     # Manage pins table
     def get_pins(self):
         """Get all pins from database ordered by provided attribute."""
@@ -96,12 +94,6 @@ class Database:
 
     def delete_pin_by_id(self, pin_id):
         """Delete pin from database by provided identifier."""
-        # Remove buffer and marker from map_widget
-        self.app.markers[pin_id].erase_from_map_widget()
-
-        # Update dict
-        self.app.markers.pop(pin_id)
-
         # Update database
         self.cursor.execute("DELETE FROM pins WHERE id = ?", (pin_id,))
         self.connection.commit()
@@ -124,41 +116,16 @@ class Database:
         self.cursor.execute("UPDATE pins SET is_active = ? WHERE id = ?", (new_is_active, pin_id))
         self.connection.commit()
 
-        # Update dict
-        self.app.markers[pin_id].pin.is_active = new_is_active
-
-        # Update map_widget
-        self.app.markers[pin_id].update_buffer()
-        self.app.markers[pin_id].set_pin_icon()
-
-    def update_address(self, pin_id, new_address):
+    def update_address(self, pin_id, new_address, new_latitude, new_longitude):
         """Update pin's address attribute."""
-        try:
-            # Get coordinates of new address
-            address, latitude, longitude = geocode_by_address(new_address)
-
-            # Update database
-            self.cursor.execute(
-                "UPDATE pins "
-                "SET address = ?, latitude = ?, longitude = ?, insert_datetime = CURRENT_TIMESTAMP "
-                "WHERE id = ?",
-                (address, latitude, longitude, pin_id)
-            )
-            self.connection.commit()
-
-            # Update dict
-            self.app.markers[pin_id].pin.address = address
-            self.app.markers[pin_id].lat = latitude
-            self.app.markers[pin_id].lon = longitude
-            self.app.markers[pin_id].update_buffer()
-            self.app.markers[pin_id].set_marker_position()
-
-            # Return new address to update text field on ListScreen
-            return address
-
-        # If geocoding failed
-        except Exception as err:
-            raise ValueError('Geocoding failed')
+        # Update database
+        self.cursor.execute(
+            "UPDATE pins "
+            "SET address = ?, latitude = ?, longitude = ?, insert_datetime = CURRENT_TIMESTAMP "
+            "WHERE id = ?",
+            (new_address, new_latitude, new_longitude, pin_id)
+        )
+        self.connection.commit()
 
     def update_buffer_size(self, pin_id, new_buffer_size):
         """Update pin's buffer_size attribute."""
@@ -166,23 +133,11 @@ class Database:
         self.cursor.execute("UPDATE pins SET buffer_size = ? WHERE id = ?", (new_buffer_size, pin_id))
         self.connection.commit()
 
-        # Update dict
-        self.app.markers[pin_id].pin.buffer_size = new_buffer_size
-
-        # Update map_widget
-        self.app.markers[pin_id].update_buffer()
-
     def update_buffer_unit(self, pin_id, new_buffer_unit):
         """Update pin's buffer_unit attribute."""
         # Update database
         self.cursor.execute("UPDATE pins SET buffer_unit = ? WHERE id = ?", (new_buffer_unit, pin_id))
         self.connection.commit()
-
-        # Update dict
-        self.app.markers[pin_id].pin.buffer_unit = new_buffer_unit
-
-        # Update map_widget
-        self.app.markers[pin_id].update_buffer()
 
     # Manage customizations table
     def save_mapview_state(self):

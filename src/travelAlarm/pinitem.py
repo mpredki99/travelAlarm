@@ -12,6 +12,8 @@ from kivy.properties import NumericProperty, BooleanProperty, StringProperty
 from kivymd.uix.behaviors.magic_behavior import MagicBehavior
 from kivy.lang import Builder
 
+from geocode import geocode_by_address
+
 Builder.load_file('pinitem.kv')
 
 class PinItem(BoxLayout, MagicBehavior):
@@ -67,6 +69,12 @@ class PinItem(BoxLayout, MagicBehavior):
 
         # Update pin's attribute
         self.is_active = new_is_active
+        # Update dict
+        self.app.markers[self.pin_id].pin.is_active = new_is_active
+
+        # Update map_widget
+        self.app.markers[self.pin_id].update_buffer()
+        self.app.markers[self.pin_id].set_pin_icon()
 
         # Update database and map_widget
         self.database.update_is_active(self.pin_id, self.is_active)
@@ -83,14 +91,25 @@ class PinItem(BoxLayout, MagicBehavior):
             return False
 
         try:
-            # Update pin's attribute, database and map_widget
-            self.address = self.database.update_address(self.pin_id, new_address)
+            address, latitude, longitude = geocode_by_address(new_address)
+
+            self.address = address
+
+            # Update dict
+            self.app.markers[self.pin_id].pin.address = address
+            self.app.markers[self.pin_id].lat = latitude
+            self.app.markers[self.pin_id].lon = longitude
+            self.app.markers[self.pin_id].update_buffer()
+            self.app.markers[self.pin_id].set_marker_position()
 
             # Set text field to new address value
             self.ids.address_field.text = self.address
 
             # Refresh pins list
             self.refresh_pins_list_on_list_screen()
+
+            # Update pin's attribute, database and map_widget
+            self.database.update_address(self.pin_id, address, latitude, longitude)
 
             # Show information on the screen
             toast(text=str("Pin Edited"))
@@ -115,6 +134,12 @@ class PinItem(BoxLayout, MagicBehavior):
         # Update pin's attribute
         self.buffer_size = float(new_buffer_size)
 
+        # Update dict
+        self.app.markers[self.pin_id].pin.buffer_size = float(new_buffer_size)
+
+        # Update map_widget
+        self.app.markers[self.pin_id].update_buffer()
+
         # Update database and map_widget
         self.database.update_buffer_size(self.pin_id, self.buffer_size)
 
@@ -132,11 +157,17 @@ class PinItem(BoxLayout, MagicBehavior):
         # Update pin's attribute
         self.buffer_unit = new_buffer_unit
 
-        # Update database and map_widget
-        self.database.update_buffer_unit(self.pin_id, self.buffer_unit)
+        # Update dict
+        self.app.markers[self.pin_id].pin.buffer_unit = new_buffer_unit
+
+        # Update map_widget
+        self.app.markers[self.pin_id].update_buffer()
 
         # Close drop down menu
         self.buffer_unit_menu.dismiss()
+
+        # Update database and map_widget
+        self.database.update_buffer_unit(self.pin_id, self.buffer_unit)
 
         # Refresh pins list
         self.refresh_pins_list_on_list_screen()
@@ -157,6 +188,12 @@ class PinItem(BoxLayout, MagicBehavior):
         # Remove item from screen
         list_screen = self.app.root.ids.screen_manager.get_screen("ListScreen")
         list_screen.remove_pin(self.pin_id)
+
+        # Remove buffer and marker from map_widget
+        self.app.markers[self.pin_id].erase_from_map_widget()
+
+        # Update dict
+        self.app.markers.pop(self.pin_id)
 
         # Update database and map_widget
         self.database.delete_pin_by_id(self.pin_id)
