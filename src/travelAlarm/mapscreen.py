@@ -26,7 +26,7 @@ class MapScreen(Screen):
         self.add_widget(self.map_widget)
 
         # Draw pins from database to the map
-        self.pins_db.draw_mapview_buffers()
+        # self.pins_db.draw_mapview_buffers()
 
     def center_map_widget_on_user_location(self):
         """Center the map widget on user GPS position."""

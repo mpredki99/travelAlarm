@@ -13,20 +13,19 @@ from markers import Marker
 
 
 class Database:
+
     def __init__(self, db_filename):
         # Initialize connection to database
         self.connection = sqlite3.connect(db_filename)
         self.cursor = self.connection.cursor()
 
         # Get map_widget instance
-        self.map_widget = MDApp.get_running_app().map_widget
+        self.app = MDApp.get_running_app()
+        self.map_widget = self.app.map_widget
 
         # Initialize database tables
         self.init_pins_table()
         self.init_customizations_table()
-
-        # Retrieve pins from database
-        self.pins = {}
 
         # Set map_widget initial state
         self.set_mapview_initial_state()
@@ -84,11 +83,11 @@ class Database:
     def update_pins(self):
         """Update pins dictionary and map_widget."""
         # Clear map_widget buffers
-        for pin_id in self.pins:
-            self.pins[pin_id].erase_from_map_widget()
+        for marker in self.app.markers.values():
+            marker.erase_from_map_widget()
 
         # Update pins dict
-        self.pins = self.get_pins()
+        self.app.markers = self.get_pins()
 
     def get_pin_by_id(self, pin_id):
         """Get pin from database by provided identifier."""
@@ -98,14 +97,14 @@ class Database:
     def delete_pin_by_id(self, pin_id):
         """Delete pin from database by provided identifier."""
         # Remove buffer and marker from map_widget
-        self.pins[pin_id].erase_from_map_widget()
+        self.app.markers[pin_id].erase_from_map_widget()
+
+        # Update dict
+        self.app.markers.pop(pin_id)
 
         # Update database
         self.cursor.execute("DELETE FROM pins WHERE id = ?", (pin_id,))
         self.connection.commit()
-
-        # Update dict
-        self.pins.pop(pin_id)
 
     def add_pin_by_address_lat_lon(self, address, latitude, longitude):
         """Add pin to database by geocoded address."""
@@ -119,8 +118,6 @@ class Database:
         # Save the pins in dict
         self.update_pins()
 
-        return self.cursor.lastrowid
-
     def update_is_active(self, pin_id, new_is_active):
         """Update pin's is active attribute."""
         # Update database
@@ -128,11 +125,11 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id].pin.is_active = new_is_active
+        self.app.markers[pin_id].pin.is_active = new_is_active
 
         # Update map_widget
-        self.pins[pin_id].update_buffer()
-        self.pins[pin_id].set_pin_icon()
+        self.app.markers[pin_id].update_buffer()
+        self.app.markers[pin_id].set_pin_icon()
 
     def update_address(self, pin_id, new_address):
         """Update pin's address attribute."""
@@ -150,11 +147,11 @@ class Database:
             self.connection.commit()
 
             # Update dict
-            self.pins[pin_id].pin.address = address
-            self.pins[pin_id].lat = latitude
-            self.pins[pin_id].lon = longitude
-            self.pins[pin_id].update_buffer()
-            self.pins[pin_id].set_marker_position()
+            self.app.markers[pin_id].pin.address = address
+            self.app.markers[pin_id].lat = latitude
+            self.app.markers[pin_id].lon = longitude
+            self.app.markers[pin_id].update_buffer()
+            self.app.markers[pin_id].set_marker_position()
 
             # Return new address to update text field on ListScreen
             return address
@@ -170,10 +167,10 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id].pin.buffer_size = new_buffer_size
+        self.app.markers[pin_id].pin.buffer_size = new_buffer_size
 
         # Update map_widget
-        self.pins[pin_id].update_buffer()
+        self.app.markers[pin_id].update_buffer()
 
     def update_buffer_unit(self, pin_id, new_buffer_unit):
         """Update pin's buffer_unit attribute."""
@@ -182,16 +179,10 @@ class Database:
         self.connection.commit()
 
         # Update dict
-        self.pins[pin_id].pin.buffer_unit = new_buffer_unit
+        self.app.markers[pin_id].pin.buffer_unit = new_buffer_unit
 
         # Update map_widget
-        self.pins[pin_id].update_buffer()
-
-    # Manage map_widget
-    def draw_mapview_buffers(self):
-        """Draw pin marker buffer and create pin marker popup on map_widget."""
-        # Get pin's attributes
-        self.pins = self.get_pins()
+        self.app.markers[pin_id].update_buffer()
 
     # Manage customizations table
     def save_mapview_state(self):
@@ -268,7 +259,7 @@ class Database:
         self.connection.commit()
 
         # Update pins dictionary
-        for marker in self.pins.values():
+        for marker in self.app.markers.values():
             marker.set_pin_icon()
             marker.update_buffer()
 

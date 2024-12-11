@@ -179,7 +179,7 @@ class AddMarker(MapMarkerPopup):
             address, latitude, longitude = geocode_by_lat_lon(self.lat, self.lon)
 
             # Add pin to database, add pin marker to map widget and get pin identifier
-            pin_id = self.app.pins_db.add_pin_by_address_lat_lon(address, latitude, longitude)
+            self.app.pins_db.add_pin_by_address_lat_lon(address, latitude, longitude)
 
             # Get list screen instance
             list_screen = self.app.root.ids.screen_manager.get_screen('ListScreen')

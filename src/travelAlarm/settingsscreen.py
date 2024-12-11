@@ -15,7 +15,7 @@ from kivy.core.audio import SoundLoader
 
 class SettingsScreen(Screen):
 
-    def on_leave(self, *args):
+    def on_pre_leave(self, *args):
         """Stop alarm sound sample while leaving the settings screen."""
         self.ids.alarm_sounds_list.stop_alarm_sound()
 

@@ -14,12 +14,10 @@ from addresseslist import AddressesList
 
 
 class ListScreen(Screen):
+    app = MDApp.get_running_app()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        # Get app instance
-        self.app = MDApp.get_running_app()
 
         # Get database instance
         self.pins_db = self.app.pins_db
@@ -146,7 +144,7 @@ class ListScreen(Screen):
                 'buffer_size': marker.pin.buffer_size,
                 'buffer_unit': marker.pin.buffer_unit,
             }
-            for marker in self.pins_db.pins.values()
+            for marker in self.app.markers.values()
         ]
 
     def refresh_pins_list(self):

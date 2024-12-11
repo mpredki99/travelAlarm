@@ -10,7 +10,9 @@ from kivymd.toast import toast
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.properties import NumericProperty, BooleanProperty, StringProperty
 from kivymd.uix.behaviors.magic_behavior import MagicBehavior
+from kivy.lang import Builder
 
+Builder.load_file('pinitem.kv')
 
 class PinItem(BoxLayout, MagicBehavior):
 
@@ -23,7 +25,6 @@ class PinItem(BoxLayout, MagicBehavior):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
         # Get app instance
         self.app = MDApp.get_running_app()
 
