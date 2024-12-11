@@ -49,6 +49,10 @@ class PinItem(BoxLayout, MagicBehavior):
             width_mult=2,
         )
 
+    @property
+    def map_marker(self):
+        return self.app.markers[self.pin_id]
+
     def build_three_dots_menu(self):
         """Builds drop down menu for delete and zoom on map."""
         three_dots_menu_items = [
@@ -67,14 +71,12 @@ class PinItem(BoxLayout, MagicBehavior):
         if self.is_active == new_is_active:
             return False
 
-        # Update pin's attribute
+        # Update on list
         self.is_active = new_is_active
-        # Update dict
-        self.app.markers[self.pin_id].pin.is_active = new_is_active
-
-        # Update map_widget
-        self.app.markers[self.pin_id].update_buffer()
-        self.app.markers[self.pin_id].set_pin_icon()
+        # Update on map
+        self.map_marker.pin.is_active = new_is_active
+        self.map_marker.update_buffer()
+        self.map_marker.set_pin_icon()
 
         # Update database and map_widget
         self.database.update_is_active(self.pin_id, self.is_active)
@@ -89,15 +91,14 @@ class PinItem(BoxLayout, MagicBehavior):
 
         try:
             address, latitude, longitude = geocode_by_address(new_address)
-
+            # Update on list
             self.address = address
-
-            # Update dict
-            self.app.markers[self.pin_id].pin.address = address
-            self.app.markers[self.pin_id].lat = latitude
-            self.app.markers[self.pin_id].lon = longitude
-            self.app.markers[self.pin_id].update_buffer()
-            self.app.markers[self.pin_id].set_marker_position()
+            # Update on map
+            self.map_marker.pin.address = address
+            self.map_marker.lat = latitude
+            self.map_marker.lon = longitude
+            self.map_marker.update_buffer()
+            self.map_marker.set_marker_position()
 
             # Set text field to new address value
             self.ids.address_field.text = self.address
@@ -129,10 +130,10 @@ class PinItem(BoxLayout, MagicBehavior):
         self.buffer_size = float(new_buffer_size)
 
         # Update dict
-        self.app.markers[self.pin_id].pin.buffer_size = float(new_buffer_size)
+        self.map_marker.pin.buffer_size = float(new_buffer_size)
 
         # Update map_widget
-        self.app.markers[self.pin_id].update_buffer()
+        self.map_marker.update_buffer()
 
         # Update database and map_widget
         self.database.update_buffer_size(self.pin_id, self.buffer_size)
@@ -149,10 +150,10 @@ class PinItem(BoxLayout, MagicBehavior):
         self.buffer_unit = new_buffer_unit
 
         # Update dict
-        self.app.markers[self.pin_id].pin.buffer_unit = new_buffer_unit
+        self.map_marker.pin.buffer_unit = new_buffer_unit
 
         # Update map_widget
-        self.app.markers[self.pin_id].update_buffer()
+        self.map_marker.update_buffer()
 
         # Close drop down menu
         self.buffer_unit_menu.dismiss()
@@ -178,7 +179,7 @@ class PinItem(BoxLayout, MagicBehavior):
         list_screen.remove_pin(self.pin_id)
 
         # Remove buffer and marker from map_widget
-        self.app.markers[self.pin_id].erase_from_map_widget()
+        self.map_marker.erase_from_map_widget()
 
         # Update dict
         self.app.markers.pop(self.pin_id)
