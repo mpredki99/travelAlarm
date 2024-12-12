@@ -12,7 +12,6 @@ from markers import Marker
 
 
 class Database:
-
     def __init__(self, db_filename):
         # Initialize connection to database
         self.connection = sqlite3.connect(db_filename)
@@ -59,7 +58,7 @@ class Database:
         self.connection.commit()
 
     # Manage pins table
-    def get_pins(self):
+    def get_markers(self):
         """Get all pins from database ordered by provided attribute."""
         # Get order by attribute from database
         order_by = self.list_order
@@ -85,7 +84,7 @@ class Database:
             marker.erase_from_map_widget()
 
         # Update pins dict
-        self.app.markers = self.get_pins()
+        self.app.markers = self.get_markers()
 
     def get_pin_by_id(self, pin_id):
         """Get pin from database by provided identifier."""
@@ -240,7 +239,7 @@ class Database:
         self.connection.commit()
 
     @property
-    def alarm_sound(self):
+    def alarm_file(self):
         """Return alarm sound from database."""
         self.cursor.execute('SELECT value FROM customizations WHERE key="alarmsound";')
         alarm_sound = self.cursor.fetchall()
@@ -252,7 +251,7 @@ class Database:
             # Default value while open first time
             alarm_sound = "alarm_1.mp3"
 
-        return alarm_sound
+        return f'sounds/{alarm_sound}'
 
     def disconnect(self):
         """Close the database connection."""

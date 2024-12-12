@@ -9,7 +9,7 @@ from kivymd.app import MDApp
 from kivy.graphics import Color, Ellipse, Line
 from kivy_garden.mapview import MarkerMapLayer
 
-from markers import AddMarker
+from markers import MarkerAdder
 
 
 class MarkersLayer(MarkerMapLayer):
@@ -24,13 +24,13 @@ class MarkersLayer(MarkerMapLayer):
 
     def add_widget(self, marker):
         super().add_widget(marker)
-        if isinstance(marker, AddMarker):
+        if isinstance(marker, MarkerAdder):
             return
         self.draw_buffer(marker)
 
     def remove_widget(self, marker):
         super().remove_widget(marker)
-        if isinstance(marker, AddMarker):
+        if isinstance(marker, MarkerAdder):
             return
         self.remove_buffer(marker)
 
@@ -104,6 +104,6 @@ class MarkersLayer(MarkerMapLayer):
         markers = sorted(self.markers, key=lambda pin: -pin.lat)
         for marker in markers:
             self.set_marker_position(map_widget, marker)
-            if isinstance(marker, AddMarker):
+            if isinstance(marker, MarkerAdder):
                 continue
             self.update_buffer(marker)

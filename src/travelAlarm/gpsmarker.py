@@ -35,7 +35,6 @@ def request_location_permission():
     if platform == 'android' and not check_gps_permission():
         from android.permissions import Permission, request_permissions
         request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
-
         return True
 
 

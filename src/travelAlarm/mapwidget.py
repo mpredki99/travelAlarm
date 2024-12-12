@@ -4,10 +4,10 @@
 # Licensed under the GNU General Public License v3.0.
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
 
-from kivy_garden.mapview import MapView, MapSource, MarkerMapLayer
+from kivy_garden.mapview import MapView, MapSource
 from kivy.clock import Clock
 
-from markers import AddMarker
+from markers import MarkerAdder
 from markerslayer import MarkersLayer
 
 
@@ -15,62 +15,44 @@ class MapWidget(MapView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        # Set min zoom value as 3
+        # Set minimum zoom value as 3
         self.map_source = MapSource(min_zoom=3)
-
+        # Enable smooth zooming
         self.snap_to_zoom = False
 
-        # Initialize clock variable
-        self.clock = None
-
-        # Initialize hold state
-        self.hold = False
+        # Variables for handling on_hold event
+        self.is_screen_held = False
+        self.hold_duration_clock = None
 
         self._default_marker_layer = MarkersLayer()
         self.add_layer(self._default_marker_layer)
 
     def on_touch_down(self, touch):
-        """Override touch down method and add functionality to add pin by hold."""
-        # Change hold state
-        self.hold = True
-
-        # Display proposed addresses on the screen
-        self.clock = Clock.schedule_once(lambda dt: self.on_hold(touch), 1)
-
+        """Update the is_screen_held flag and start the clock for on_hold event."""
+        self.is_screen_held = True
+        self.hold_duration_clock = Clock.schedule_once(lambda dt: self.on_hold(touch), 1)
         # Handle default touch down event
         return super().on_touch_down(touch)
         
     def on_touch_move(self, touch):
-        """Override touch move method and cancel hold state."""
-        # Cancel hold state
-        self.hold = False
-
-        # Cancel clock
-        if self.clock: self.clock.cancel()
-
+        """Update the is_screen_held flag and cancel the clock for on_hold event."""
+        self.is_screen_held = False
+        if self.hold_duration_clock: self.hold_duration_clock.cancel()
         # Handle default touch move event
         return super().on_touch_move(touch)
 
     def on_touch_up(self, touch):
-        """Override touch up method and cancel hold state."""
-        # Change hold state
-        self.hold = False
-
-        # Cancel clock
-        if self.clock: self.clock.cancel()
-
+        """Update the is_screen_held flag and cancel the clock for on_hold event."""
+        self.is_screen_held = False
+        if self.hold_duration_clock: self.hold_duration_clock.cancel()
         # Handle default touch up event
         super().on_touch_up(touch)
 
     def on_hold(self, touch):
-        """Add marker to the map widget."""
-        # If map widget is in hold state
-        if self.hold:
-            # Get latitude and longitude of touch position
+        """Add new marker to the map_widget."""
+        if self.is_screen_held:
             touch_lat, touch_lon = self.get_latlon_at(*touch.pos, self.zoom)
-
-            # Add marker to the map widget
-            self.add_marker(AddMarker(lat=touch_lat, lon=touch_lon))
-
+            self.add_marker(MarkerAdder(lat=touch_lat, lon=touch_lon))
+            return True
         else:
             return False

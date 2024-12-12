@@ -29,7 +29,7 @@ class ListScreen(Screen):
         # Whether screen on search or list mode
         self.search_mode = False
 
-        # Initialize clock variable
+        # Initialize hold_duration_clock variable
         self.clock = None
 
         # Initialize searched addresses list

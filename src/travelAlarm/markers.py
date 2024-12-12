@@ -111,7 +111,7 @@ class Marker(MapMarkerPopup):
         self.is_open = False
 
 
-class AddMarker(MapMarkerPopup):
+class MarkerAdder(MapMarkerPopup):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -14,6 +14,15 @@ from gpsmarker import GpsMarker, check_gps_permission, request_location_permissi
 
 
 class TravelAlarmApp(MDApp):
+    """
+    Travel alarm application. The alarm is triggered when the user
+    is within a buffer range set in relation to a specified location.
+
+    Application contains three main screens:
+    - MapScreen - displays Open Street Map, user's location and user's markers;
+    - ListScreen - displays list of user's markers and enables searching new locations based on provided address;
+    - SettingsScreen - enables choosing of app mode, theme, alarm sound and save the settings into database;
+    """
 
     map_widget = ObjectProperty()
     database = ObjectProperty()
@@ -21,70 +30,52 @@ class TravelAlarmApp(MDApp):
     gps_marker = ObjectProperty()
     markers = DictProperty()
 
-    def add_gps_marker(self):
-        """Add gps marker to map widget."""
-        if check_gps_permission() and self.gps_marker is None:
-            # Initialize GPS marker object
-            self.gps_marker = GpsMarker()
-
-            # Add GPS marker to map widget
-            self.map_widget.add_layer(self.gps_marker)
-
-            return True
-        # If gps marker not added
-        return False
-
     def build(self):
-        """Build app."""
-        # Create map_widget instance
+        """Build the app."""
         self.map_widget = MapWidget()
-
-        # Create database instance
         self.database = Database('pins.db')
 
-        # Get alarm sound file
-        self.alarm_file = f'sounds/{self.database.alarm_sound}'
-
-        # Set app themes
+        # Get data from database
+        self.alarm_file = self.database.alarm_file
         self.theme_cls.theme_style = self.database.theme_style
         self.theme_cls.primary_palette = self.database.primary_palette
+        self.markers = self.database.get_markers()
 
-        self.markers = self.database.get_pins()
-
-        # Request location permissions
+        # Request location permissions for android devices
         request_location_permission()
 
         return Builder.load_file("main.kv")
 
     def on_start(self):
-        """Check localization permissions and add gps marker to map widget."""
+        """Add GPS marker at user's location when the app is started."""
         self.add_gps_marker()
-
         return True
 
     def on_pause(self):
-        """Prepare app to close."""
-        # Save map_widget state and close connection to database
-        self.on_stop()
-
+        """Close connection with the database when the app is moving to the background."""
+        self.database.disconnect()
         return True
 
     def on_resume(self):
-        """Return database connection."""
-        # Reconnect to the database and reload the map state
+        """Reconnect to the database when the app is returning from the background."""
         self.database.connect('pins.db')
-
         return True
 
     def on_stop(self):
-        """Save map_widget state and disconnect from database."""
-        # Save current map_widget state
+        """Save map_widget state and disconnect with the database when the app is closing."""
         self.database.save_mapview_state()
-
-        # Close connection with database while turn off the app
         self.database.disconnect()
-
         return True
+
+    def add_gps_marker(self):
+        """Add gps marker to the map_widget."""
+        if check_gps_permission() and self.gps_marker is None:
+            self.gps_marker = GpsMarker()
+            self.map_widget.add_layer(self.gps_marker)
+            return True
+        # If no location permissions have been granted or gps_marker is already on the map_widget
+        return False
+
 
 if __name__ == '__main__':
     TravelAlarmApp().run()
