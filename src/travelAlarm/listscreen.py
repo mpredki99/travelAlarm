@@ -44,7 +44,7 @@ class ListScreen(Screen):
         self.list_order_menu = self.build_list_order_menu()
 
     def on_pre_enter(self, *args):
-        self.refresh_pins_list()
+        self.set_list_data()
 
     def set_sort_menu_button_text(self):
         """Set text of list order menu button."""
@@ -88,7 +88,7 @@ class ListScreen(Screen):
         self.set_sort_menu_button_text()
 
         # Refresh recycle view pins list
-        self.refresh_pins_list()
+        self.set_list_data()
 
         # Close dropdown menu
         self.list_order_menu.dismiss()
@@ -138,9 +138,9 @@ class ListScreen(Screen):
         else:
             return False
 
-    def get_pins_list(self):
-        """Read pins' data from the pins database."""
-        return [
+    def set_list_data(self):
+        """Refresh pins list on the screen."""
+        self.ids.pins_list.data = [
             {
                 'pin_id': marker.pin.pin_id,
                 'is_active': marker.pin.is_active,
@@ -150,10 +150,6 @@ class ListScreen(Screen):
             }
             for marker in self.app.markers.values()
         ]
-
-    def refresh_pins_list(self):
-        """Refresh pins list on the screen."""
-        self.ids.pins_list.data = self.get_pins_list()
 
     def remove_pin(self, pin_id):
         """Remove pin from the RecycleView data."""

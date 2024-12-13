@@ -23,6 +23,8 @@ class Alarm:
         # Deactivate buffer with UI update
         self.pin.on_checkbox_click(False)
 
+        self.refresh_list_screen()
+
         # Build button to close dialog window
         self.alarm_button = MDFlatButton(
             text='OK',
@@ -73,3 +75,7 @@ class Alarm:
 
         # Close alarm dialog
         self.alarm_dialog.dismiss()
+
+    def refresh_list_screen(self):
+        self.app.root.ids.screen_manager.get_screen('ListScreen').ids.pins_list.data = []
+        self.app.root.ids.screen_manager.get_screen('ListScreen').set_list_data()

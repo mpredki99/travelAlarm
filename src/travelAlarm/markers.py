@@ -185,7 +185,7 @@ class MarkerAdder(MapMarkerPopup):
             list_screen = self.app.root.ids.screen_manager.get_screen('ListScreen')
 
             # Refresh pins list in list screen
-            list_screen.refresh_pins_list()
+            list_screen.set_list_data()
 
             # Remove add pin marker
             self.remove_marker()

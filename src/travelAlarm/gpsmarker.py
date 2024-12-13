@@ -21,6 +21,7 @@ from alarm import Alarm
 
 def check_gps_permission():
     """Check localization permissions for android devices."""
+    return True
     if platform == 'android':
         from android.permissions import Permission, check_permission
         return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
@@ -41,13 +42,14 @@ class GpsMarker(MapLayer):
     gps_dialog = ObjectProperty()
     gps_dialog_button = ObjectProperty()
     # User's geographic position
-    latitude = NumericProperty()
-    longitude = NumericProperty()
+    latitude = NumericProperty(50)
+    longitude = NumericProperty(20)
     # Marker's position on the screen
-    marker_center = ObjectProperty()
-    # Marker blinker geometry attributes
+    marker_center = ()
+    # Marker geometry attributes
     base_size = dp(16)
     marker_size = (base_size, base_size)
+    inner_marker = ObjectProperty()
     blinker_color = ObjectProperty()
     blinker = ObjectProperty()
     # Localization provider status
@@ -63,6 +65,7 @@ class GpsMarker(MapLayer):
 
         # Wait a second to build UI and then initialize GPS
         Clock.schedule_once(lambda dt: self.initialize_gps(), 1)
+        self.update_marker()
 
     def build_gps_dialog(self):
         """Build dialog window about providing localization service."""
@@ -94,6 +97,7 @@ class GpsMarker(MapLayer):
             gps.start(minTime=1000, minDistance=1)
             return True
         except:
+            # If provider wasn't initialized
             return False
 
     def update_status(self, stype, status):
@@ -131,20 +135,22 @@ class GpsMarker(MapLayer):
         if self.blinker is None and self.blinker_color is None:
             Clock.schedule_once(lambda dt: self.update_marker(), 0)
 
+    def update_marker_center(self):
+        """Update marker center in screen coordinates."""
+        self.marker_center = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
+
     def draw_marker(self):
         """Draw marker on map widget."""
-        # Check if GPS marker has localization attributes
+        # Check if GPS marker has the localization attributes
         if self.latitude is None or self.longitude is None:
             return False  # Marker hasn't been drawn
 
-        # Get marker center in screen coordinates
-        self.marker_center = self.map_widget.get_window_xy_from(lat=self.latitude, lon=self.longitude, zoom=self.map_widget.zoom)
+        self.update_marker_center()
 
         marker_pos = (self.marker_center[0] - self.marker_size[0] / 2, self.marker_center[1] - self.marker_size[1] / 2)
         with self.canvas.before:
-            # Inner marker
             Color(*self.app.theme_cls.primary_dark)
-            Ellipse(size=self.marker_size, pos=marker_pos)
+            self.inner_marker = Ellipse(size=self.marker_size, pos=marker_pos)
 
         if self.provider_status == 'provider-disabled':
             return True  # Marker has been drawn
@@ -154,6 +160,7 @@ class GpsMarker(MapLayer):
             self.blinker = Ellipse(size=self.marker_size, pos=marker_pos)
 
         self.blink()  # Run blinking animation
+        return True  # Marker has been drawn
 
     def blink(self):
         """Run blinking animation on GPS marker."""
@@ -167,7 +174,6 @@ class GpsMarker(MapLayer):
             on_progress=self.update_blinker_position,
             on_complete=self.update_marker
         )
-
         # Start animations
         anim_color.start(self.blinker_color)
         anim_size.start(self.blinker)
@@ -176,9 +182,12 @@ class GpsMarker(MapLayer):
         """Update blinker position while its size is increasing."""
         # Get actual blinker size
         new_size = self.blinker.size
-
         # Update blinker position
         self.blinker.pos = (self.marker_center[0] - new_size[0] / 2, self.marker_center[1] - new_size[1] / 2)
+
+    def update_inner_marker_position(self):
+        """Update marker position."""
+        self.inner_marker.pos = (self.marker_center[0] - self.marker_size[0] / 2, self.marker_center[1] - self.marker_size[1] / 2)
 
     def cancel_animations(self):
         """Cancel blinker animation and clear marker geometry."""
@@ -194,8 +203,10 @@ class GpsMarker(MapLayer):
         self.draw_marker()
 
     def reposition(self, *args):
-        """Update marker while map is moving."""
-        self.update_marker()
+        """Update marker position while map is moving."""
+        self.update_marker_center()
+        self.update_inner_marker_position()
+        self.update_blinker_position()
 
     def is_within_buffer(self, *args):
         """Check if user is within active buffer and trigger alarm if so."""

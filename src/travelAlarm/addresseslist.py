@@ -53,7 +53,7 @@ class AddressesList(Screen):
         list_screen.database.add_pin_by_address_lat_lon(address, latitude, longitude)
 
         # Refresh pins list
-        list_screen.refresh_pins_list()
+        list_screen.set_list_data()
 
         # Switch back to list view mode
         list_screen.hide_search_view()
