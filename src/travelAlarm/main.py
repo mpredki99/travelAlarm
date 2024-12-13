@@ -36,9 +36,9 @@ class TravelAlarmApp(MDApp):
         self.database = Database('pins.db')
 
         # Get data from database
-        self.alarm_file = self.database.alarm_file
         self.theme_cls.theme_style = self.database.theme_style
         self.theme_cls.primary_palette = self.database.primary_palette
+        self.alarm_file = self.database.alarm_file
         self.markers = self.database.get_markers()
 
         # Request location permissions for android devices
@@ -52,8 +52,8 @@ class TravelAlarmApp(MDApp):
         return True
 
     def on_pause(self):
-        """Close connection with the database when the app is moving to the background."""
-        self.database.disconnect()
+        """Prepare the app to close when it is moving to the background."""
+        self.on_stop()
         return True
 
     def on_resume(self):

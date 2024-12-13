@@ -130,6 +130,7 @@ class AlarmSoundsList(BoxLayout):
     def update_alarm_file(self, alarm_file):
         """Set new alarm file."""
         self.app.alarm_file = f'sounds/{alarm_file}'
+        self.app.database.update_alarm_file(alarm_file)
 
     def sound_alarm_sample(self):
         """Start sound alarm sample."""
