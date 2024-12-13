@@ -4,9 +4,8 @@
 # Licensed under the GNU General Public License v3.0.
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
 
-import sqlite3
-
 from kivymd.app import MDApp
+import sqlite3
 
 from markers import Marker
 
