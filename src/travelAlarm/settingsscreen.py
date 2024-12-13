@@ -103,6 +103,10 @@ class PrimaryPaletteToolbar(GridLayout):
             # Update app primary palette in database
             self.database.update_app_primary_palette(map_primary_palette.get(new_palette))
 
+            for marker in self.app.markers.values():
+                marker.set_pin_icon()
+                marker.update_buffer()
+
             # Update GPS marker colors
             if self.app.gps_marker is not None:
                 self.app.gps_marker.update_marker()

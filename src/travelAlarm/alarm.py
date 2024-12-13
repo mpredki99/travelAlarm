@@ -38,7 +38,7 @@ class Alarm:
         # Bind button event to close dialog window
         self.alarm_button.bind(on_release=lambda x: self.stop_alarm())
 
-        # alarm_1 - 501880__greenworm__cellphone-alarm-hold_duration_clock
+        # alarm_1 - 501880__greenworm__cellphone-alarm-_hold_duration_clock
         self.alarm_sound = SoundLoader.load(self.app.alarm_file)
 
         # Open dialog window

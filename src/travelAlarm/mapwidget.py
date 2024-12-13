@@ -21,36 +21,36 @@ class MapWidget(MapView):
         self.snap_to_zoom = False
 
         # Variables for handling on_hold event
-        self.is_screen_held = False
-        self.hold_duration_clock = None
+        self._is_screen_held = False
+        self._hold_duration_clock = None
 
         self._default_marker_layer = MarkersLayer()
         self.add_layer(self._default_marker_layer)
 
     def on_touch_down(self, touch):
-        """Update the is_screen_held flag and start the clock for on_hold event."""
-        self.is_screen_held = True
-        self.hold_duration_clock = Clock.schedule_once(lambda dt: self.on_hold(touch), 1)
+        """Update the _is_screen_held flag and start the clock for on_hold event."""
+        self._is_screen_held = True
+        self._hold_duration_clock = Clock.schedule_once(lambda dt: self.on_hold(touch), 1)
         # Handle default touch down event
         return super().on_touch_down(touch)
         
     def on_touch_move(self, touch):
-        """Update the is_screen_held flag and cancel the clock for on_hold event."""
-        self.is_screen_held = False
-        if self.hold_duration_clock: self.hold_duration_clock.cancel()
+        """Update the _is_screen_held flag and cancel the clock for on_hold event."""
+        self._is_screen_held = False
+        if self._hold_duration_clock: self._hold_duration_clock.cancel()
         # Handle default touch move event
         return super().on_touch_move(touch)
 
     def on_touch_up(self, touch):
-        """Update the is_screen_held flag and cancel the clock for on_hold event."""
-        self.is_screen_held = False
-        if self.hold_duration_clock: self.hold_duration_clock.cancel()
+        """Update the _is_screen_held flag and cancel the clock for on_hold event."""
+        self._is_screen_held = False
+        if self._hold_duration_clock: self._hold_duration_clock.cancel()
         # Handle default touch up event
         super().on_touch_up(touch)
 
     def on_hold(self, touch):
         """Add new marker to the map_widget."""
-        if self.is_screen_held:
+        if self._is_screen_held:
             touch_lat, touch_lon = self.get_latlon_at(*touch.pos, self.zoom)
             self.add_marker(MarkerAdder(lat=touch_lat, lon=touch_lon))
             return True

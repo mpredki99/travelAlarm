@@ -58,7 +58,7 @@ class TravelAlarmApp(MDApp):
 
     def on_resume(self):
         """Reconnect to the database when the app is returning from the background."""
-        self.database.connect('pins.db')
+        self.database.connect()
         return True
 
     def on_stop(self):
