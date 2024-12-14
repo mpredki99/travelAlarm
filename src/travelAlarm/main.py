@@ -32,26 +32,23 @@ class TravelAlarmApp(MDApp):
 
     def build(self):
         """Build the app."""
-        try:
-            self.map_widget = MapWidget()
-            self.database = Database('pins.db')
+        self.map_widget = MapWidget()
+        self.database = Database('pins.db')
 
-            # Get data from database
-            self.theme_cls.theme_style = self.database.theme_style
-            self.theme_cls.primary_palette = self.database.primary_palette
-            self.alarm_file = self.database.alarm_file
-            self.markers = self.database.get_markers()
+        # Get data from database
+        self.theme_cls.theme_style = self.database.theme_style
+        self.theme_cls.primary_palette = self.database.primary_palette
+        self.alarm_file = self.database.alarm_file
+        self.markers = self.database.get_markers()
 
-            # Request location permissions for android devices
-            request_location_permission()
-        except Exception as e:
-            toast(text=str(e))
+        # Request location permissions for android devices
+        request_location_permission()
 
         return Builder.load_file("main.kv")
 
     def on_start(self):
         """Add GPS marker at user's location when the app is started."""
-        self.add_gps_marker()
+        # self.add_gps_marker()
         return True
 
     def on_pause(self):
