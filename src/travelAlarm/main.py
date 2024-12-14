@@ -32,17 +32,20 @@ class TravelAlarmApp(MDApp):
 
     def build(self):
         """Build the app."""
-        self.map_widget = MapWidget()
-        self.database = Database('pins.db')
+        try:
+            self.map_widget = MapWidget()
+            self.database = Database('pins.db')
 
-        # Get data from database
-        self.theme_cls.theme_style = self.database.theme_style
-        self.theme_cls.primary_palette = self.database.primary_palette
-        self.alarm_file = self.database.alarm_file
-        self.markers = self.database.get_markers()
+            # Get data from database
+            self.theme_cls.theme_style = self.database.theme_style
+            self.theme_cls.primary_palette = self.database.primary_palette
+            self.alarm_file = self.database.alarm_file
+            self.markers = self.database.get_markers()
 
-        # Request location permissions for android devices
-        request_location_permission()
+            # Request location permissions for android devices
+            request_location_permission()
+        except Exception as e:
+            toast(text=str(e))
 
         return Builder.load_file("main.kv")
 
@@ -69,14 +72,11 @@ class TravelAlarmApp(MDApp):
 
     def add_gps_marker(self):
         """Add gps marker to the map_widget."""
-        try:
-            if check_gps_permission() and self.gps_marker is None:
-                self.gps_marker = GpsMarker()
-                self.map_widget.add_layer(self.gps_marker)
-                return True  # If marker was added
-            return False # If no location permissions have been granted or gps_marker is already on the map_widget
-        except Exception as e:
-            toast(text=str(e))
+        if check_gps_permission() and self.gps_marker is None:
+            self.gps_marker = GpsMarker()
+            self.map_widget.add_layer(self.gps_marker)
+            return True  # If marker was added
+        return False # If no location permissions have been granted or gps_marker is already on the map_widget
 
 
 if __name__ == '__main__':
