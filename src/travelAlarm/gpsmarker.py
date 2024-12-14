@@ -42,8 +42,8 @@ class GpsMarker(MapLayer):
     gps_dialog = ObjectProperty()
     gps_dialog_button = ObjectProperty()
     # User's geographic position
-    latitude = NumericProperty()
-    longitude = NumericProperty()
+    latitude = NumericProperty(None)
+    longitude = NumericProperty(None)
     # Marker's position on the screen
     marker_center = ()
     # Marker geometry attributes

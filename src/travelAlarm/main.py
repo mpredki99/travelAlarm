@@ -48,7 +48,7 @@ class TravelAlarmApp(MDApp):
 
     def on_start(self):
         """Add GPS marker at user's location when the app is started."""
-        # self.add_gps_marker()
+        self.add_gps_marker()
         return True
 
     def on_pause(self):
