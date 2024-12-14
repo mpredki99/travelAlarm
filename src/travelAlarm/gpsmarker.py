@@ -1,11 +1,12 @@
 # Coding: UTF-8
-from kivy.properties import ObjectProperty, NumericProperty, StringProperty
+
 # Copyright (C) 2024 Michał Prędki
 # Licensed under the GNU General Public License v3.0.
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
 
 from kivymd.app import MDApp
 from kivy import platform
+from kivy.properties import ObjectProperty, NumericProperty, StringProperty
 from kivy_garden.mapview import MapLayer
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
@@ -64,7 +65,6 @@ class GpsMarker(MapLayer):
 
         # Wait a second to build UI and then initialize GPS
         Clock.schedule_once(lambda dt: self.initialize_gps(), 1)
-        self.update_marker()
 
     def build_gps_dialog(self):
         """Build dialog window about providing localization service."""
@@ -147,14 +147,14 @@ class GpsMarker(MapLayer):
         self.update_marker_center()
 
         marker_pos = (self.marker_center[0] - self.marker_size[0] / 2, self.marker_center[1] - self.marker_size[1] / 2)
-        with self.canvas.before:
+        with self.canvas:
             Color(*self.app.theme_cls.primary_dark)
             self.inner_marker = Ellipse(size=self.marker_size, pos=marker_pos)
 
         if self.provider_status == 'provider-disabled':
             return True  # Marker has been drawn without blink
 
-        with self.canvas.before:
+        with self.canvas:
             self.blinker_color = Color(*self.app.theme_cls.primary_dark)
             self.blinker = Ellipse(size=self.marker_size, pos=marker_pos)
 
@@ -190,11 +190,10 @@ class GpsMarker(MapLayer):
 
     def cancel_animations(self):
         """Cancel blinker animation and clear marker geometry."""
-        # Cancel blinker animations
         Animation.cancel_all(self.blinker_color)
         Animation.cancel_all(self.blinker)
         # Clear any existing blinker drawing
-        self.canvas.before.clear()
+        self.canvas.clear()
 
     def update_marker(self, *args):
         """Update GPS marker on map_widget."""

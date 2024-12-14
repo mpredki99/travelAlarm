@@ -72,9 +72,8 @@ class TravelAlarmApp(MDApp):
         if check_gps_permission() and self.gps_marker is None:
             self.gps_marker = GpsMarker()
             self.map_widget.add_layer(self.gps_marker)
-            return True
-        # If no location permissions have been granted or gps_marker is already on the map_widget
-        return False
+            return True  # If marker was added
+        return False  # If no location permissions have been granted or gps_marker is already on the map_widget
 
 
 if __name__ == '__main__':
