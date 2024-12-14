@@ -7,24 +7,22 @@
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
+from kivy.clock import Clock
 from plyer import vibrator
 
 
 class Alarm:
     def __init__(self, marker):
-        # Get app instance
         self.app = MDApp.get_running_app()
 
-        # Initialize pin object in alarm
+        # Marker's pin reference
         self.pin = marker.pin
 
         # Deactivate buffer with UI update
         self.pin.on_checkbox_click(False)
-
+        # Refresh UI on ListScreen
         self.refresh_list_screen()
-
         # Build button to close dialog window
         self.alarm_button = MDFlatButton(
             text='OK',
@@ -40,24 +38,26 @@ class Alarm:
         # Bind button event to close dialog window
         self.alarm_button.bind(on_release=lambda x: self.stop_alarm())
 
-        # alarm_1 - 501880__greenworm__cellphone-alarm-_hold_duration_clock
+        # Load alarm file sound
         self.alarm_sound = SoundLoader.load(self.app.alarm_file)
-
         # Open dialog window
         self.alarm_dialog.open()
 
         # Trigger vibrations if device has a vibrator
         self.vibration_event = None
-        try:
+        if vibrator.exists():
             self.vibration_event = Clock.schedule_interval(lambda dt: vibrator.vibrate(1), 2.5)
-        except:
-            pass
 
-        # Sound alarm
-        self.sound()
+        self.sound_alarm()
 
-    def sound(self):
-        # Check if alarm sound exists
+    def refresh_list_screen(self):
+        """Refresh UI on ListScreen."""
+        list_screen = self.app.root.ids.screen_manager.get_screen('ListScreen')
+        list_screen.clear_list_data()
+        list_screen.set_list_data()
+
+    def sound_alarm(self):
+        """Turn on the alarm sound."""
         if self.alarm_sound:
             self.alarm_sound.loop = True
             self.alarm_sound.play()
@@ -65,17 +65,11 @@ class Alarm:
         return False
 
     def stop_alarm(self, *args):
-        # Stop alarm sound if exists
+        """Turn off the alarm and vibrations."""
         if self.alarm_sound:
             self.alarm_sound.stop()
 
-        # Stop the vibration if vibrator exists
         if self.vibration_event:
             Clock.unschedule(self.vibration_event)
 
-        # Close alarm dialog
         self.alarm_dialog.dismiss()
-
-    def refresh_list_screen(self):
-        self.app.root.ids.screen_manager.get_screen('ListScreen').ids.pins_list.data = []
-        self.app.root.ids.screen_manager.get_screen('ListScreen').set_list_data()

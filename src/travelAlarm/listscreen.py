@@ -151,6 +151,9 @@ class ListScreen(Screen):
             for marker in self.app.markers.values()
         ]
 
+    def clear_list_data(self):
+        self.ids.pins_list.data = []
+
     def remove_pin(self, pin_id):
         """Remove pin from the RecycleView data."""
         self.ids.pins_list.data = [item for item in self.ids.pins_list.data if item.get('pin_id') != pin_id]

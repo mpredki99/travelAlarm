@@ -21,7 +21,6 @@ from alarm import Alarm
 
 def check_gps_permission():
     """Check localization permissions for android devices."""
-    return True
     if platform == 'android':
         from android.permissions import Permission, check_permission
         return check_permission(Permission.ACCESS_FINE_LOCATION) and check_permission(Permission.ACCESS_COARSE_LOCATION)
@@ -42,8 +41,8 @@ class GpsMarker(MapLayer):
     gps_dialog = ObjectProperty()
     gps_dialog_button = ObjectProperty()
     # User's geographic position
-    latitude = NumericProperty(50)
-    longitude = NumericProperty(20)
+    latitude = NumericProperty()
+    longitude = NumericProperty()
     # Marker's position on the screen
     marker_center = ()
     # Marker geometry attributes
@@ -153,14 +152,14 @@ class GpsMarker(MapLayer):
             self.inner_marker = Ellipse(size=self.marker_size, pos=marker_pos)
 
         if self.provider_status == 'provider-disabled':
-            return True  # Marker has been drawn
+            return True  # Marker has been drawn without blink
 
         with self.canvas.before:
             self.blinker_color = Color(*self.app.theme_cls.primary_dark)
             self.blinker = Ellipse(size=self.marker_size, pos=marker_pos)
 
         self.blink()  # Run blinking animation
-        return True  # Marker has been drawn
+        return True  # Marker has been drawn with blink
 
     def blink(self):
         """Run blinking animation on GPS marker."""
