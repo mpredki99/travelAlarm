@@ -27,6 +27,11 @@ class MapWidget(MapView):
         self._default_marker_layer = MarkersLayer()
         self.add_layer(self._default_marker_layer)
 
+    @property
+    def marker_layer(self):
+        """Property to get default marker layer."""
+        return self._default_marker_layer
+
     def on_touch_down(self, touch):
         """Update the _is_screen_held flag and start the clock for on_hold event."""
         self._is_screen_held = True

@@ -48,7 +48,7 @@ class Marker(MapMarkerPopup):
             self.pin
         )
 
-        self.buffer = {'ellipse_color': None, 'ellipse': None, 'outline_color': None, 'outline': None}
+        self.buffer = {'ellipse': None, 'outline': None}
 
         self.set_pin_icon()
 

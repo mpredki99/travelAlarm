@@ -61,6 +61,8 @@ class GpsMarker(MapLayer):
         self.app = MDApp.get_running_app()
         self.map_widget = self.app.map_widget
 
+        self.layer = self.app.map_widget.marker_layer
+
         self.build_gps_dialog()
 
         # Wait a second to build UI and then initialize GPS
@@ -147,14 +149,14 @@ class GpsMarker(MapLayer):
         self.update_marker_center()
 
         marker_pos = (self.marker_center[0] - self.marker_size[0] / 2, self.marker_center[1] - self.marker_size[1] / 2)
-        with self.canvas:
+        with self.layer.canvas.before:
             Color(*self.app.theme_cls.primary_dark)
             self.inner_marker = Ellipse(size=self.marker_size, pos=marker_pos)
 
         if self.provider_status == 'provider-disabled':
             return True  # Marker has been drawn without blink
 
-        with self.canvas:
+        with self.layer.canvas.before:
             self.blinker_color = Color(*self.app.theme_cls.primary_dark)
             self.blinker = Ellipse(size=self.marker_size, pos=marker_pos)
 
@@ -192,8 +194,8 @@ class GpsMarker(MapLayer):
         """Cancel blinker animation and clear marker geometry."""
         Animation.cancel_all(self.blinker_color)
         Animation.cancel_all(self.blinker)
-        # Clear any existing blinker drawing
-        self.canvas.clear()
+        # Clear inner marker drawing
+        if self.inner_marker: self.layer.canvas.before.remove(self.inner_marker)
 
     def update_marker(self, *args):
         """Update GPS marker on map_widget."""
