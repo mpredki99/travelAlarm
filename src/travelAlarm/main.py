@@ -1,5 +1,5 @@
 # Coding: UTF-8
-
+from kivymd.toast import toast
 # Copyright (C) 2024 Michał Prędki
 # Licensed under the GNU General Public License v3.0.
 # Full text of the license can be found in the LICENSE and COPYING files in the repository.
@@ -69,11 +69,14 @@ class TravelAlarmApp(MDApp):
 
     def add_gps_marker(self):
         """Add gps marker to the map_widget."""
-        if check_gps_permission() and self.gps_marker is None:
-            self.gps_marker = GpsMarker()
-            self.map_widget.add_layer(self.gps_marker)
-            return True  # If marker was added
-        return False  # If no location permissions have been granted or gps_marker is already on the map_widget
+        try:
+            if check_gps_permission() and self.gps_marker is None:
+                self.gps_marker = GpsMarker()
+                self.map_widget.add_layer(self.gps_marker)
+                return True  # If marker was added
+            return False # If no location permissions have been granted or gps_marker is already on the map_widget
+        except Exception as e:
+            toast(text=str(e))
 
 
 if __name__ == '__main__':
