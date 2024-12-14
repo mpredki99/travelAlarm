@@ -20,6 +20,13 @@ from markerslayer import MarkersLayer
 from alarm import Alarm
 
 
+def request_location_permission():
+    """Request localization permissions for android devices."""
+    if platform == 'android' and not check_gps_permission():
+        from android.permissions import Permission, request_permissions
+        request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
+
+
 def check_gps_permission():
     """Check localization permissions for android devices."""
     if platform == 'android':
@@ -28,13 +35,6 @@ def check_gps_permission():
     elif platform == 'ios':
         return True
     return False
-
-
-def request_location_permission():
-    """Request localization permissions for android devices."""
-    if platform == 'android' and not check_gps_permission():
-        from android.permissions import Permission, request_permissions
-        request_permissions([Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION])
 
 
 class GpsMarker(MapLayer):
