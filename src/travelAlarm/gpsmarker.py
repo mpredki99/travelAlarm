@@ -199,6 +199,7 @@ class GpsMarker(MapLayer):
         Animation.cancel_all(self.blinker)
         # Clear inner marker drawing
         if self.inner_marker: self.layer.canvas.before.remove(self.inner_marker)
+        if self.blinker: self.layer.canvas.before.remove(self.blinker)
 
     def update_marker(self, *args):
         """Update GPS marker on map_widget."""
