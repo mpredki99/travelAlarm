@@ -50,6 +50,7 @@ class GpsMarker(MapLayer):
     base_size = dp(16)
     marker_size = (base_size, base_size)
     inner_marker = ObjectProperty()
+    inner_marker_color = ObjectProperty()
     blinker_color = ObjectProperty()
     blinker = ObjectProperty()
     # Localization provider status
@@ -150,7 +151,7 @@ class GpsMarker(MapLayer):
 
         marker_pos = (self.marker_center[0] - self.marker_size[0] / 2, self.marker_center[1] - self.marker_size[1] / 2)
         with self.layer.canvas.before:
-            Color(*self.app.theme_cls.primary_dark)
+            self.inner_marker_color = Color(*self.app.theme_cls.primary_dark)
             self.inner_marker = Ellipse(size=self.marker_size, pos=marker_pos)
 
         if self.provider_status == 'provider-disabled':
@@ -196,7 +197,9 @@ class GpsMarker(MapLayer):
         Animation.cancel_all(self.blinker)
         # Clear marker drawings
         if self.inner_marker: self.layer.canvas.before.remove(self.inner_marker)
+        if self.inner_marker_color: self.layer.canvas.before.remove(self.inner_marker_color)
         if self.blinker: self.layer.canvas.before.remove(self.blinker)
+        if self.blinker_color: self.layer.canvas.before.remove(self.blinker_color)
 
     def update_marker(self, *args):
         """Update GPS marker on map_widget."""

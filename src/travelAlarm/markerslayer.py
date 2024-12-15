@@ -52,10 +52,10 @@ class MarkersLayer(MarkerMapLayer):
 
         with self.canvas.before:
             # Draw the buffer circle
-            Color(*ellipse_color) if marker.pin.is_active else Color(1, 0, 0, 0.1)
+            marker.buffer['ellipse_color'] = Color(*ellipse_color) if marker.pin.is_active else Color(1, 0, 0, 0.1)
             marker.buffer['ellipse'] = Ellipse(pos=(pos_x, pos_y), size=(buffer_size_dp * 2, buffer_size_dp * 2))
             # Draw the buffer outline
-            Color(*outline_color) if marker.pin.is_active else Color(1, 0, 0, 0.2)
+            marker.buffer['outline_color'] = Color(*outline_color) if marker.pin.is_active else Color(1, 0, 0, 0.2)
             marker.buffer['outline'] = Line(width=1.5, circle=(center_x, center_y, buffer_size_dp))
 
     def calculate_buffer_radius(self, marker):
@@ -78,10 +78,14 @@ class MarkersLayer(MarkerMapLayer):
     def remove_buffer(self, marker):
         """Remove the buffer from the map widget."""
         ellipse = marker.buffer.get('ellipse')
+        ellipse_color = marker.buffer.get('ellipse_color')
         outline = marker.buffer.get('outline')
+        outline_color = marker.buffer.get('outline_color')
 
         if ellipse: self.canvas.before.remove(ellipse)
+        if ellipse_color: self.canvas.before.remove(ellipse_color)
         if outline: self.canvas.before.remove(outline)
+        if outline_color: self.canvas.before.remove(outline_color)
 
     def update_buffer(self, marker):
         """Update buffer position and size."""
