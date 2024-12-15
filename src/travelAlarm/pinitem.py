@@ -183,7 +183,7 @@ class PinItem(BoxLayout, MagicBehavior):
         # Get pin's localization
         latitude, longitude = self.map_marker.lat, self.map_marker.lon
         # Change screen to the MapScreen
-        screen_manager.transition.direction = "left" if screen_manager.current == "ListScreen" else "right"
+        screen_manager.transition.direction = 'left' if screen_manager.current == 'ListScreen' else 'right'
         screen_manager.current = 'MapScreen'
         # Close drop down menu
         self.three_dots_menu.dismiss()

@@ -44,7 +44,7 @@ class TravelAlarmApp(MDApp):
         # Request location permissions for android devices
         request_location_permission()
         # Build the application
-        return Builder.load_file("main.kv")
+        return Builder.load_file('main.kv')
 
     def on_start(self):
         """Add GPS marker at user's location when the app is started."""

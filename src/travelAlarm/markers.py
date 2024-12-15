@@ -55,8 +55,8 @@ class Marker(MapMarkerPopup):
     def build_three_dots_menu(self):
         """Builds drop down menu for delete and show on list screen."""
         three_dots_menu_items = [
-            {"icon": "delete", "viewclass": "MDIconButton", "on_release": lambda x="DEL": self.pin.on_delete_pin()},
-            {"icon": "format-list-checks", "viewclass": "MDIconButton", "on_release": lambda x="LIST": self.on_to_list()}
+            {'icon': 'delete', 'viewclass': 'MDIconButton', 'on_release': lambda x='DEL': self.pin.on_delete_pin()},
+            {'icon': 'format-list-checks', 'viewclass': 'MDIconButton', 'on_release': lambda x='LIST': self.on_to_list()}
         ]
         return MDDropdownMenu(
             caller=self.pin.ids.three_dots_menu_button,
@@ -69,7 +69,7 @@ class Marker(MapMarkerPopup):
         # Determine pin marker color
         marker_color = self.app.theme_cls.primary_palette if self.pin.is_active else 'Red'
 
-        self.source = "icons/" + marker_color + ".png"
+        self.source = f'icons/{marker_color}.png'
 
     def update_buffer(self):
         """Update marker's buffer geometry."""
@@ -113,7 +113,7 @@ class MarkerAdder(MapMarkerPopup):
         self.app = MDApp.get_running_app()
 
         marker_color = self.app.theme_cls.primary_palette
-        self.source = "icons/" + marker_color + ".png"
+        self.source = f'icons/{marker_color}.png'
 
         # Open popup while initialization
         self.is_open = True
@@ -164,10 +164,10 @@ class MarkerAdder(MapMarkerPopup):
             # Remove MarkerAdder
             self.remove_marker()
             # Show information on the screen
-            toast(text="Pin Added")
+            toast(text='Pin Added')
         except:
             # Show information on the screen
-            toast(text="Geocoding Failed")
+            toast(text='Geocoding Failed')
             return False
 
     def remove_marker(self, *args):

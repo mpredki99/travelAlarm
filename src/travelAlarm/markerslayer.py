@@ -25,14 +25,14 @@ class MarkersLayer(MarkerMapLayer):
         """Draw marker's buffer while adding marker to the map."""
         super().add_widget(marker)
         if isinstance(marker, MarkerAdder):
-            return
+            return False
         self.draw_buffer(marker)
 
     def remove_widget(self, marker):
         """Remove marker's buffer while adding marker to the map."""
         super().remove_widget(marker)
         if isinstance(marker, MarkerAdder):
-            return
+            return False
         self.remove_buffer(marker)
 
     def draw_buffer(self, marker):
@@ -91,7 +91,7 @@ class MarkersLayer(MarkerMapLayer):
     def reposition(self):
         """Update markers position while map is repositioning."""
         if not self.markers:
-            return
+            return False
         map_widget = self.parent
         # Reposition the markers depend on the latitude
         markers = sorted(self.markers, key=lambda pin: -pin.lat)

@@ -95,7 +95,7 @@ class Database:
             order_by = list_order[0][0]
         else:
             # Default value while open first time
-            order_by = "insert_datetime"
+            order_by = 'insert_datetime'
 
         return order_by
 
@@ -115,7 +115,7 @@ class Database:
             theme_style = theme_style[0][0]
         else:
             # Default value while open first time
-            theme_style = "Light"
+            theme_style = 'Light'
 
         return theme_style
 
@@ -135,7 +135,7 @@ class Database:
             theme_style = theme_style[0][0]
         else:
             # Default value while open first time
-            theme_style = "LightGreen"
+            theme_style = 'LightGreen'
 
         return theme_style
 
@@ -155,7 +155,7 @@ class Database:
             alarm_file = alarm_file[0][0]
         else:
             # Default value while open first time
-            alarm_file = "alarm_1.mp3"
+            alarm_file = 'alarm_1.mp3'
 
         return f'sounds/{alarm_file}'
 
@@ -186,7 +186,7 @@ class Database:
     def delete_pin_by_id(self, pin_id):
         """Delete pin from the database by provided identifier."""
         # Update database
-        self.cursor.execute("DELETE FROM pins WHERE id = ?", (pin_id,))
+        self.cursor.execute('DELETE FROM pins WHERE id = ?', (pin_id,))
         self.connection.commit()
 
     def add_pin_by_address_lat_lon(self, address, latitude, longitude):
@@ -202,27 +202,27 @@ class Database:
 
     def update_is_active(self, pin_id, new_is_active):
         """Update pin's is active attribute."""
-        self.cursor.execute("UPDATE pins SET is_active = ? WHERE id = ?", (new_is_active, pin_id))
+        self.cursor.execute('UPDATE pins SET is_active = ? WHERE id = ?', (new_is_active, pin_id))
         self.connection.commit()
 
     def update_address(self, pin_id, new_address, new_latitude, new_longitude):
         """Update pin's address attribute."""
-        self.cursor.execute(
-            "UPDATE pins "
-            "SET address = ?, latitude = ?, longitude = ?, insert_datetime = CURRENT_TIMESTAMP "
-            "WHERE id = ?",
-            (new_address, new_latitude, new_longitude, pin_id)
+        self.cursor.execute('''
+            UPDATE pins
+            SET address = ?, latitude = ?, longitude = ?, insert_datetime = CURRENT_TIMESTAMP
+            WHERE id = ?
+            ''', (new_address, new_latitude, new_longitude, pin_id)
         )
         self.connection.commit()
 
     def update_buffer_size(self, pin_id, new_buffer_size):
         """Update pin's buffer_size attribute."""
-        self.cursor.execute("UPDATE pins SET buffer_size = ? WHERE id = ?", (new_buffer_size, pin_id))
+        self.cursor.execute('UPDATE pins SET buffer_size = ? WHERE id = ?', (new_buffer_size, pin_id))
         self.connection.commit()
 
     def update_buffer_unit(self, pin_id, new_buffer_unit):
         """Update pin's buffer_unit attribute."""
-        self.cursor.execute("UPDATE pins SET buffer_unit = ? WHERE id = ?", (new_buffer_unit, pin_id))
+        self.cursor.execute('UPDATE pins SET buffer_unit = ? WHERE id = ?', (new_buffer_unit, pin_id))
         self.connection.commit()
 
     # Manage database connection
