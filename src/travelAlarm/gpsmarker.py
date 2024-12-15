@@ -136,7 +136,7 @@ class GpsMarker(MapLayer):
         self.longitude = kwargs['lon']
 
         # Draw marker if not in map widget yet
-        if self.blinker is None and self.blinker_color is None:
+        if self.blinker is None:
             Clock.schedule_once(lambda dt: self.update_marker(), 0)
 
     def update_marker_center(self):
@@ -207,6 +207,8 @@ class GpsMarker(MapLayer):
 
     def reposition(self, *args):
         """Update marker position while map is moving."""
+        if self.inner_marker is None or self.blinker is None:
+            return False
         self.update_marker_center()
         self.update_inner_marker_position()
         self.update_blinker_position()
