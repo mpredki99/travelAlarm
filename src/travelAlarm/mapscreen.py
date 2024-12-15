@@ -45,10 +45,10 @@ class MapScreen(Screen):
             return False
 
         # Center the map on the user's location
-        self.center_mapview_on_lat_lon(user_lat, user_lon)
+        self.center_map_widget_on_lat_lon(user_lat, user_lon)
         return True
 
-    def center_mapview_on_lat_lon(self, latitude, longitude):
+    def center_map_widget_on_lat_lon(self, latitude, longitude):
         """Center map widget on provided latitude and longitude."""
         self.map_widget.center_on(latitude, longitude)
         self.map_widget.zoom = 11

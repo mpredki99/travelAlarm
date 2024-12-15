@@ -43,7 +43,7 @@ class TravelAlarmApp(MDApp):
 
         # Request location permissions for android devices
         request_location_permission()
-
+        # Build the application
         return Builder.load_file("main.kv")
 
     def on_start(self):

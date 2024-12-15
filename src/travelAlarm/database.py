@@ -183,11 +183,6 @@ class Database:
 
         self.app.markers = self.get_markers()
 
-    def get_pin_by_id(self, pin_id):
-        """Get pin from the database by provided identifier."""
-        self.cursor.execute(f'SELECT * FROM pins WHERE id={pin_id}')
-        return self.cursor.fetchall()[0]
-
     def delete_pin_by_id(self, pin_id):
         """Delete pin from the database by provided identifier."""
         # Update database
