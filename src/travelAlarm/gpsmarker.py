@@ -60,11 +60,8 @@ class GpsMarker(MapLayer):
 
         self.app = MDApp.get_running_app()
         self.map_widget = self.app.map_widget
-        try:
-            self.layer = self.app.map_widget.marker_layer
-        except Exception as e:
-            from kivymd.toast import toast
-            toast(text=str(e))
+
+        self.layer = self.app.map_widget.marker_layer
 
         self.build_gps_dialog()
 
@@ -197,7 +194,7 @@ class GpsMarker(MapLayer):
         """Cancel blinker animation and clear marker geometry."""
         Animation.cancel_all(self.blinker_color)
         Animation.cancel_all(self.blinker)
-        # Clear inner marker drawing
+        # Clear marker drawings
         if self.inner_marker: self.layer.canvas.before.remove(self.inner_marker)
         if self.blinker: self.layer.canvas.before.remove(self.blinker)
 
