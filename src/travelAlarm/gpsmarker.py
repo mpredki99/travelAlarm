@@ -60,8 +60,11 @@ class GpsMarker(MapLayer):
 
         self.app = MDApp.get_running_app()
         self.map_widget = self.app.map_widget
-
-        self.layer = self.app.map_widget.marker_layer
+        try:
+            self.layer = self.app.map_widget.marker_layer
+        except Exception as e:
+            from kivymd.toast import toast
+            toast(text=str(e))
 
         self.build_gps_dialog()
 
