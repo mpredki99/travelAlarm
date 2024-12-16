@@ -130,7 +130,7 @@ class ListScreen(Screen):
         """Switch screen back to list view mode."""
         if self.add_marker_mode:
             # Clean address text field
-            self.ids.add_pin_text_field.text = ""
+            self.ids.add_pin_text_field.text = ''
 
             self.add_marker_mode = False
             # Remove addresses list from screen

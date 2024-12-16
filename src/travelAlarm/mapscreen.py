@@ -13,37 +13,25 @@ class MapScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        # Get app instance
         self.app = MDApp.get_running_app()
-
-        # Get pins database instance
         self.database = self.app.database
-
-        # Get map_widget instance
         self.map_widget = self.app.map_widget
-
-        # Add map_widget to the MapScreen
         self.add_widget(self.map_widget)
 
     def center_map_widget_on_user_location(self):
-        """Center the map widget on user GPS position."""
-        # Add GPS marker if not in mapview
+        """Center the map widget on user's GPS position."""
+        # Add GPS marker if not in map widget
         self.app.add_gps_marker()
 
-        # Get instance of GPS marker
         gps_marker = self.app.gps_marker
 
-        # If no instance of GPS marker
         if gps_marker is None:
             return False
-
-        # Get user location
         user_lat, user_lon = gps_marker.latitude, gps_marker.longitude
 
         # If GPS marker have no location data
         if user_lat is None or user_lon is None:
             return False
-
         # Center the map on the user's location
         self.center_map_widget_on_lat_lon(user_lat, user_lon)
         return True
