@@ -32,7 +32,6 @@ def geocode_by_lat_lon(latitude, longitude):
     """Geocode location by latitude and longitude."""
     try:
         location = geolocator.reverse(f'{latitude}, {longitude}', timeout=10)
-
         return return_one_location(location)
 
     except Exception as err:
@@ -67,5 +66,4 @@ def return_location_list(locations):
         addresses.append(address)
         latitudes.append(latitude)
         longitudes.append(longitude)
-
     return addresses, latitudes, longitudes

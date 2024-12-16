@@ -213,6 +213,7 @@ class GpsMarker(MapLayer):
         self.update_marker_center()
         self.update_inner_marker_position()
         self.update_blinker_position()
+        return True
 
     def is_within_buffer(self, *args):
         """Check if user is within active buffer and trigger alarm if so."""

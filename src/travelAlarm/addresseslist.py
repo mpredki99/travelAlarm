@@ -36,7 +36,7 @@ class AddressesList(Screen):
                     0,
                     {'text': address, 'on_release': lambda args=(address, latitude, longitude): self.add_pin(*args)}
                 )
-
+            return True
         except:
             return False
 

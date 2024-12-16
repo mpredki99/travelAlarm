@@ -27,6 +27,7 @@ class MarkersLayer(MarkerMapLayer):
         if isinstance(marker, MarkerAdder):
             return False
         self.draw_buffer(marker)
+        return True
 
     def remove_widget(self, marker):
         """Remove marker's buffer while adding marker to the map."""
@@ -34,6 +35,7 @@ class MarkersLayer(MarkerMapLayer):
         if isinstance(marker, MarkerAdder):
             return False
         self.remove_buffer(marker)
+        return True
 
     def draw_buffer(self, marker):
         """Draw buffer on map_widget."""
@@ -104,3 +106,4 @@ class MarkersLayer(MarkerMapLayer):
             if isinstance(marker, MarkerAdder):
                 continue
             self.update_buffer(marker)
+        return True

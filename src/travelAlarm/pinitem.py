@@ -78,6 +78,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.map_marker.set_pin_icon()
         # Update the database
         self.database.update_is_active(self.pin_id, self.is_active)
+        return True
 
     def on_address_edit(self, new_address):
         """Update address attribute regarding value of text field."""
@@ -103,7 +104,7 @@ class PinItem(BoxLayout, MagicBehavior):
             self.database.update_address(self.pin_id, address, latitude, longitude)
             # Show information on the screen
             toast(text='Pin Edited')
-
+            return True
         # If geocode failed
         except:
             # Restore text field to previous value
@@ -127,6 +128,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.map_marker.update_buffer()
         # Update the database
         self.database.update_buffer_size(self.pin_id, self.buffer_size)
+        return True
 
     def on_buffer_unit_edit(self, new_buffer_unit):
         """Update buffer_unit attribute regarding value of text field."""
@@ -144,6 +146,7 @@ class PinItem(BoxLayout, MagicBehavior):
         self.buffer_unit_menu.dismiss()
         # Update the database
         self.database.update_buffer_unit(self.pin_id, self.buffer_unit)
+        return True
 
     @staticmethod
     def valid_buffer_size(buffer_size, buffer_unit):

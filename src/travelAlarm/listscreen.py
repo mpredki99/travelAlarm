@@ -136,5 +136,6 @@ class ListScreen(Screen):
             # Remove addresses list from screen
             self.remove_widget(self.addresses_list)
             Animation(y=0, duration=.3).start(self)
+            return True
         else:
             return False

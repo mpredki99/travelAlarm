@@ -165,6 +165,7 @@ class MarkerAdder(MapMarkerPopup):
             self.remove_marker()
             # Show information on the screen
             toast(text='Pin Added')
+            return True
         except:
             # Show information on the screen
             toast(text='Geocoding Failed')
