@@ -82,7 +82,7 @@ class Database:
         self.connection.commit()
 
         # Update pins dictionary
-        self.update_pins()
+        self.update_markers()
 
     @property
     def list_order(self):
@@ -175,7 +175,7 @@ class Database:
             self.cursor.fetchall()
         }
 
-    def update_pins(self):
+    def update_markers(self):
         """Update pins dictionary and map_widget."""
         # Clear the map_widget before initialization new markers
         for marker in self.app.markers.values():
@@ -183,13 +183,13 @@ class Database:
 
         self.app.markers = self.get_markers()
 
-    def delete_pin_by_id(self, pin_id):
+    def delete_marker_by_id(self, pin_id):
         """Delete pin from the database by provided identifier."""
         # Update database
         self.cursor.execute('DELETE FROM pins WHERE id = ?', (pin_id,))
         self.connection.commit()
 
-    def add_pin_by_address_lat_lon(self, address, latitude, longitude):
+    def add_marker_by_address_lat_lon(self, address, latitude, longitude):
         """Add pin to the database by geocoded address."""
         # Add pin to database
         self.cursor.execute(
@@ -198,7 +198,7 @@ class Database:
             ''', (address, latitude, longitude))
         self.connection.commit()
 
-        self.update_pins()
+        self.update_markers()
 
     def update_is_active(self, pin_id, new_is_active):
         """Update pin's is active attribute."""

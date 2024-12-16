@@ -157,7 +157,7 @@ class MarkerAdder(MapMarkerPopup):
             # Geocode address and location
             address, latitude, longitude = geocode_by_lat_lon(self.lat, self.lon)
             # Add new marker to the database
-            self.app.database.add_pin_by_address_lat_lon(address, latitude, longitude)
+            self.app.database.add_marker_by_address_lat_lon(address, latitude, longitude)
             # Refresh pins list on the screen
             list_screen = self.app.root.ids.screen_manager.get_screen('ListScreen')
             list_screen.set_list_data()

@@ -165,13 +165,13 @@ class PinItem(BoxLayout, MagicBehavior):
         """Delete pin from ListScreen, map_widget and database."""
         # Remove item from screen
         list_screen = self.app.root.ids.screen_manager.get_screen('ListScreen')
-        list_screen.remove_pin(self.pin_id)
+        list_screen.remove_marker(self.pin_id)
         # Remove buffer and marker from map_widget
         self.map_marker.erase_from_map_widget()
         # Remove marker from marker dictionary
         self.app.markers.pop(self.pin_id)
         # Update the database
-        self.database.delete_pin_by_id(self.pin_id)
+        self.database.delete_marker_by_id(self.pin_id)
         # Show information on the screen
         toast(text='Pin Deleted')
         # Close drop down menu
